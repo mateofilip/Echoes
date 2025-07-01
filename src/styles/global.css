@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "Glitten";
+  src: url("/Glitten-Regular.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Hedvig Letters Serif";
+  src: url("/Hedvig-Letters-Serif-Variable.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+.Glitten {
+  font-family: "Glitten", sans-serif;
+}
