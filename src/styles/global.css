@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @font-face {
   font-family: "Glitten";
   src: url("/Glitten-Regular.otf") format("opentype");
@@ -17,20 +19,5 @@
 }
 
 .Glitten {
-  font-family: "Glitten", sans-serif;
-}
-
-.animated-btn {
-  transition:
-    transform 0.15s cubic-bezier(0.4, 0, 0.2, 1),
-    box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.04);
-}
-.animated-btn:hover {
-  transform: scale(1.08);
-  box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.1);
-}
-.animated-btn:active {
-  transform: scale(0.96);
-  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.08);
+  font-family: "Glitten", monospace;
 }
