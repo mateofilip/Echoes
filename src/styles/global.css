@@ -18,6 +18,46 @@
   font-display: swap;
 }
 
-.Glitten {
-  font-family: "Glitten", monospace;
+@font-face {
+  font-family: "Redaction";
+  src: url("/Redaction-Regular.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Redaction";
+  src: url("/Redaction-Bold.woff2") format("woff2");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Ortica";
+  src: url("/OrticaLinear-Regular.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Ortica";
+  src: url("/OrticaLinear-Bold.otf") format("opentype");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Ortica";
+  src: url("/OrticaLinear-Light.otf") format("opentype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+.Redaction {
+  font-family: "Redaction", monospace;
 }
