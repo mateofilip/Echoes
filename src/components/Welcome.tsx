@@ -204,7 +204,8 @@ export default function Welcome() {
 
           <button
             onClick={getPreviousQuote}
-            className="w-fit cursor-pointer rounded-sm border-1 border-gray-300 p-3"
+            className="w-fit cursor-pointer rounded-sm border-1 border-gray-300 p-3 transition-all duration-300 ease-in-out disabled:cursor-not-allowed disabled:text-gray-300"
+            disabled={currentIndex === quotes.length - 1}
           >
             <svg
               width="20"
@@ -225,7 +226,8 @@ export default function Welcome() {
 
           <button
             onClick={getNextQuote}
-            className="w-fit cursor-pointer rounded-sm border-1 border-gray-300 p-3"
+            className="w-fit cursor-pointer rounded-sm border-1 border-gray-300 p-3 transition-all duration-300 ease-in-out disabled:cursor-not-allowed disabled:text-gray-300"
+            disabled={currentIndex === 0}
           >
             <svg
               width="20"
