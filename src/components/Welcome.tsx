@@ -137,7 +137,7 @@ export default function Welcome() {
         <div className="fixed right-0 bottom-0 left-0 mb-15 flex justify-center gap-2">
           <button
             onClick={getQuote}
-            className="w-fit cursor-pointer rounded-sm border-1 border-gray-300 p-3"
+            className="group relative w-fit cursor-pointer rounded-sm border-1 border-gray-300 p-3"
           >
             <svg
               width="20"
@@ -154,10 +154,14 @@ export default function Welcome() {
                 clipRule="evenodd"
               ></path>
             </svg>
+            <span className="absolute -top-15 left-1/2 z-10 -translate-x-1/2 rounded-2xl border border-stone-700 bg-stone-900 p-3 text-sm whitespace-nowrap text-orange-50 opacity-0 shadow-xl transition-all delay-200 duration-300 ease-in-out group-hover:opacity-100">
+              Reload Quote!
+              <span className="absolute top-full left-1/2 h-0 w-0 -translate-x-1/2 border-x-8 border-t-8 border-b-0 border-x-transparent border-t-stone-900"></span>
+            </span>
           </button>
 
           <button
-            className="w-fit cursor-pointer rounded-sm border-1 border-gray-300 p-3"
+            className="group relative w-fit cursor-pointer rounded-sm border-1 border-gray-300 p-3"
             onClick={toggleTheme}
           >
             <span className="relative block h-5 w-5">
@@ -200,11 +204,15 @@ export default function Welcome() {
                 ></path>
               </svg>
             </span>
+            <span className="absolute -top-15 left-1/2 z-10 -translate-x-1/2 rounded-2xl border border-stone-700 bg-stone-900 p-3 text-sm whitespace-nowrap text-orange-50 opacity-0 shadow-xl transition-all delay-200 duration-300 ease-in-out group-hover:opacity-100">
+              Toggle Dark Mode!
+              <span className="absolute top-full left-1/2 h-0 w-0 -translate-x-1/2 border-x-8 border-t-8 border-b-0 border-x-transparent border-t-stone-900"></span>
+            </span>
           </button>
 
           <button
             onClick={getPreviousQuote}
-            className="w-fit cursor-pointer rounded-sm border-1 border-gray-300 p-3 transition-all duration-300 ease-in-out disabled:cursor-not-allowed disabled:text-gray-300"
+            className="group relative w-fit cursor-pointer rounded-sm border-1 border-gray-300 p-3 transition-all duration-300 ease-in-out disabled:cursor-not-allowed disabled:text-gray-300"
             disabled={currentIndex === quotes.length - 1}
           >
             <svg
@@ -222,11 +230,15 @@ export default function Welcome() {
                 clip-rule="evenodd"
               ></path>
             </svg>
+            <span className="absolute -top-15 left-1/2 z-10 -translate-x-1/2 rounded-2xl border border-stone-700 bg-stone-900 p-3 text-sm whitespace-nowrap text-orange-50 opacity-0 shadow-xl transition-all delay-200 duration-300 ease-in-out group-hover:opacity-100">
+              Previous Quote!
+              <span className="absolute top-full left-1/2 h-0 w-0 -translate-x-1/2 border-x-8 border-t-8 border-b-0 border-x-transparent border-t-stone-900"></span>
+            </span>
           </button>
 
           <button
             onClick={getNextQuote}
-            className="w-fit cursor-pointer rounded-sm border-1 border-gray-300 p-3 transition-all duration-300 ease-in-out disabled:cursor-not-allowed disabled:text-gray-300"
+            className="group relative w-fit cursor-pointer rounded-sm border-1 border-gray-300 p-3 transition-all duration-300 ease-in-out disabled:cursor-not-allowed disabled:text-gray-300"
             disabled={currentIndex === 0}
           >
             <svg
@@ -244,6 +256,11 @@ export default function Welcome() {
                 clip-rule="evenodd"
               ></path>
             </svg>
+
+            <span className="absolute -top-15 left-1/2 z-10 -translate-x-1/2 rounded-2xl border border-stone-700 bg-stone-900 p-3 text-sm whitespace-nowrap text-orange-50 opacity-0 shadow-xl transition-all delay-200 duration-300 ease-in-out group-hover:opacity-100">
+              Next Quote!
+              <span className="absolute top-full left-1/2 h-0 w-0 -translate-x-1/2 border-x-8 border-t-8 border-b-0 border-x-transparent border-t-stone-900"></span>
+            </span>
           </button>
         </div>
       </main>
