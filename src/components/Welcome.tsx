@@ -10,7 +10,7 @@ export default function Welcome() {
 
   const getQuote = async () => {
     try {
-      const response = await fetch("http://api.quotable.io/quotes/random");
+      const response = await fetch("https://api.quotable.io/quotes/random");
       const { statusCode, statusMessage, ...data } = await response.json();
       if (!response.ok) throw new Error(`${statusCode} ${statusMessage}`);
       setTimeout(() => {
