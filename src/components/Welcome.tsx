@@ -3,19 +3,31 @@ import type { Quote } from "../types/Quote";
 
 export default function Welcome() {
   const [quotes, setQuotes] = useState<Quote[]>([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [dark, isDark] = useState(
     document.documentElement.classList.contains("dark"),
   );
   const [reloading, isReloading] = useState(false);
+  const [isReloadingButton, setIsReloadingButton] = useState(false);
+  const [isNextAnimating, setIsNextAnimating] = useState(false);
+  const [isPrevAnimating, setIsPrevAnimating] = useState(false);
 
   const getQuote = async () => {
     try {
+      isReloading(true); // Set reloading to true to trigger animation
+      setIsReloadingButton(true); // Trigger reload button animation
       const response = await fetch("https://api.quotable.io/quotes/random");
       const { statusCode, statusMessage, ...data } = await response.json();
       if (!response.ok) throw new Error(`${statusCode} ${statusMessage}`);
       setTimeout(() => {
-        setQuotes([{ content: data.content, author: data.author }, ...quotes]);
+        setQuotes([
+          { content: data[0].content, author: data[0].author },
+          ...quotes,
+        ]);
+        setCurrentIndex(0);
         isReloading(false);
+        setIsReloadingButton(false); // Stop reload button animation
+        console.log(quotes);
       }, 500);
     } catch (error) {
       // If the API request failed, log the error to console and update state
@@ -25,6 +37,8 @@ export default function Welcome() {
         { content: "Oops... Something went wrong", author: "Unknown" },
         ...quotes,
       ]);
+      isReloading(false);
+      setIsReloadingButton(false); // Stop reload button animation on error
     }
   };
 
@@ -35,6 +49,30 @@ export default function Welcome() {
       localStorage.getItem("theme") === "light" ? "dark" : "light",
     );
     document.body.classList.toggle("dark");
+  };
+
+  const getPreviousQuote = () => {
+    if (currentIndex < quotes.length - 1) {
+      isReloading(true);
+      setIsPrevAnimating(true); // Trigger previous button animation
+      setTimeout(() => {
+        setCurrentIndex(currentIndex + 1);
+        isReloading(false);
+        setIsPrevAnimating(false); // Stop previous button animation
+      }, 500);
+    }
+  };
+
+  const getNextQuote = () => {
+    if (currentIndex > 0) {
+      isReloading(true);
+      setIsNextAnimating(true); // Trigger next button animation
+      setTimeout(() => {
+        setCurrentIndex(currentIndex - 1);
+        isReloading(false);
+        setIsNextAnimating(false); // Stop next button animation
+      }, 500);
+    }
   };
 
   useEffect(() => {
@@ -69,12 +107,12 @@ export default function Welcome() {
             <p
               className={`text-center text-4xl font-light transition-all duration-500 ease-in-out ${reloading ? "opacity-0" : "opacity-100"}`}
             >
-              {"« " + quotes[0]?.content + " »" || "Loading..."}
+              {"« " + quotes[currentIndex]?.content + " »" || "Loading..."}
             </p>
             <h2
               className={`text-right text-[1.33rem] font-bold transition-all duration-500 ease-in-out ${reloading ? "opacity-0" : "opacity-100"}`}
             >
-              — {quotes[0]?.author || "Loading..."}
+              — {quotes[currentIndex]?.author || "Loading..."}
             </h2>
           </div>
 
@@ -107,9 +145,7 @@ export default function Welcome() {
               viewBox="0 0 15 15"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              className={`${
-                reloading ? "rotate-240" : ""
-              } transition-all duration-500`}
+              className={`${isReloadingButton ? "rotate-240" : ""} transition-all duration-500`}
             >
               <path
                 d="M1.84998 7.49998C1.84998 4.66458 4.05979 1.84998 7.49998 1.84998C10.2783 1.84998 11.6515 3.9064 12.2367 5H10.5C10.2239 5 10 5.22386 10 5.5C10 5.77614 10.2239 6 10.5 6H13.5C13.7761 6 14 5.77614 14 5.5V2.5C14 2.22386 13.7761 2 13.5 2C13.2239 2 13 2.22386 13 2.5V4.31318C12.2955 3.07126 10.6659 0.849976 7.49998 0.849976C3.43716 0.849976 0.849976 4.18537 0.849976 7.49998C0.849976 10.8146 3.43716 14.15 7.49998 14.15C9.44382 14.15 11.0622 13.3808 12.2145 12.2084C12.8315 11.5806 13.3133 10.839 13.6418 10.0407C13.7469 9.78536 13.6251 9.49315 13.3698 9.38806C13.1144 9.28296 12.8222 9.40478 12.7171 9.66014C12.4363 10.3425 12.0251 10.9745 11.5013 11.5074C10.5295 12.4963 9.16504 13.15 7.49998 13.15C4.05979 13.15 1.84998 10.3354 1.84998 7.49998Z"
@@ -164,6 +200,48 @@ export default function Welcome() {
                 ></path>
               </svg>
             </span>
+          </button>
+
+          <button
+            onClick={getPreviousQuote}
+            className="w-fit cursor-pointer rounded-sm border-1 border-gray-300 p-3"
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 15 15"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              className={`transition-transform duration-300 ${isPrevAnimating ? "scale-125" : "scale-100"}`}
+            >
+              <path
+                d="M4.85355 2.14645C5.04882 2.34171 5.04882 2.65829 4.85355 2.85355L3.70711 4H9C11.4853 4 13.5 6.01472 13.5 8.5C13.5 10.9853 11.4853 13 9 13H5C4.72386 13 4.5 12.7761 4.5 12.5C4.5 12.2239 4.72386 12 5 12H9C10.933 12 12.5 10.433 12.5 8.5C12.5 6.567 10.933 5 9 5H3.70711L4.85355 6.14645C5.04882 6.34171 5.04882 6.65829 4.85355 6.85355C4.65829 7.04882 4.34171 7.04882 4.14645 6.85355L2.14645 4.85355C1.95118 4.65829 1.95118 4.34171 2.14645 4.14645L4.14645 2.14645C4.34171 1.95118 4.65829 1.95118 4.85355 2.14645Z"
+                fill="currentColor"
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+              ></path>
+            </svg>
+          </button>
+
+          <button
+            onClick={getNextQuote}
+            className="w-fit cursor-pointer rounded-sm border-1 border-gray-300 p-3"
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 15 15"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              className={`transition-transform duration-300 ${isNextAnimating ? "scale-125" : "scale-100"}`}
+            >
+              <path
+                d="M8.14645 3.14645C8.34171 2.95118 8.65829 2.95118 8.85355 3.14645L12.8536 7.14645C13.0488 7.34171 13.0488 7.65829 12.8536 7.85355L8.85355 11.8536C8.65829 12.0488 8.34171 12.0488 8.14645 11.8536C7.95118 11.6583 7.95118 11.3417 8.14645 11.1464L11.2929 8H2.5C2.22386 8 2 7.77614 2 7.5C2 7.22386 2.22386 7 2.5 7H11.2929L8.14645 3.85355C7.95118 3.65829 7.95118 3.34171 8.14645 3.14645Z"
+                fill="currentColor"
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+              ></path>
+            </svg>
           </button>
         </div>
       </main>
