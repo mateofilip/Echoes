@@ -16,7 +16,7 @@ export default function Welcome() {
     try {
       isReloading(true); // Set reloading to true to trigger animation
       setIsReloadingButton(true); // Trigger reload button animation
-      const response = await fetch("https://api.quotable.io/quotes/random");
+      const response = await fetch("http://api.quotable.io/quotes/random");
       const { statusCode, statusMessage, ...data } = await response.json();
       if (!response.ok) throw new Error(`${statusCode} ${statusMessage}`);
       setTimeout(() => {
@@ -34,7 +34,7 @@ export default function Welcome() {
       // so that the error will be reflected in the UI.
       console.error(error);
       setQuotes([
-        { content: "Oops... Something went wrong", author: "Unknown" },
+        { content: "Oops... Something went wrong.", author: "Unknown" },
       ]);
       isReloading(false);
       setIsReloadingButton(false); // Stop reload button animation on error
@@ -153,8 +153,8 @@ export default function Welcome() {
                 clipRule="evenodd"
               ></path>
             </svg>
-            <span className="absolute -top-15 left-1/2 z-10 -translate-x-1/2 translate-y-2 rounded-2xl border border-stone-700 bg-stone-900 p-3 text-xs whitespace-nowrap text-orange-50 opacity-0 shadow-xl transition-all duration-300 ease-in-out group-hover:-translate-y-0 group-hover:opacity-100">
-              Reload Quote!
+            <span className="Alte absolute -top-15 left-1/2 z-10 -translate-x-1/2 translate-y-2 rounded-2xl border border-stone-700 bg-stone-900 p-3 text-xs whitespace-nowrap text-orange-50 opacity-0 shadow-xl transition-all duration-300 ease-in-out group-hover:-translate-y-0 group-hover:opacity-100">
+              Get a New Quote
               <span className="absolute top-full left-1/2 h-0 w-0 -translate-x-1/2 border-x-8 border-t-8 border-b-0 border-x-transparent border-t-stone-900"></span>
             </span>
           </button>
@@ -203,8 +203,8 @@ export default function Welcome() {
                 ></path>
               </svg>
             </span>
-            <span className="absolute -top-15 left-1/2 z-10 -translate-x-1/2 translate-y-2 rounded-2xl border border-stone-700 bg-stone-900 p-3 text-xs whitespace-nowrap text-orange-50 opacity-0 shadow-xl transition-all duration-300 ease-in-out group-hover:-translate-y-0 group-hover:opacity-100">
-              Toggle Dark Mode!
+            <span className="Alte absolute -top-15 left-1/2 z-10 -translate-x-1/2 translate-y-2 rounded-2xl border border-stone-700 bg-stone-900 p-3 text-xs whitespace-nowrap text-orange-50 opacity-0 shadow-xl transition-all duration-300 ease-in-out group-hover:-translate-y-0 group-hover:opacity-100">
+              Toggle Dark Mode
               <span className="absolute top-full left-1/2 h-0 w-0 -translate-x-1/2 border-x-8 border-t-8 border-b-0 border-x-transparent border-t-stone-900"></span>
             </span>
           </button>
@@ -229,8 +229,8 @@ export default function Welcome() {
                 clip-rule="evenodd"
               ></path>
             </svg>
-            <span className="absolute -top-15 left-1/2 z-10 -translate-x-1/2 translate-y-2 rounded-2xl border border-stone-700 bg-stone-900 p-3 text-xs whitespace-nowrap text-orange-50 opacity-0 shadow-xl transition-all duration-300 ease-in-out group-hover:-translate-y-0 group-hover:opacity-100">
-              Previous Quote!
+            <span className="Alte absolute -top-15 left-1/2 z-10 -translate-x-1/2 translate-y-2 rounded-2xl border border-stone-700 bg-stone-900 p-3 text-xs whitespace-nowrap text-orange-50 opacity-0 shadow-xl transition-all duration-300 ease-in-out group-hover:-translate-y-0 group-hover:opacity-100">
+              Go Back to Previous Quote
               <span className="absolute top-full left-1/2 h-0 w-0 -translate-x-1/2 border-x-8 border-t-8 border-b-0 border-x-transparent border-t-stone-900"></span>
             </span>
           </button>
@@ -256,8 +256,8 @@ export default function Welcome() {
               ></path>
             </svg>
 
-            <span className="absolute -top-15 left-1/2 z-10 -translate-x-1/2 translate-y-2 rounded-2xl border border-stone-700 bg-stone-900 p-3 text-xs whitespace-nowrap text-orange-50 opacity-0 shadow-xl transition-all duration-300 ease-in-out group-hover:-translate-y-0 group-hover:opacity-100">
-              Next Quote!
+            <span className="Alte absolute -top-15 left-1/2 z-10 -translate-x-1/2 translate-y-2 rounded-2xl border border-stone-700 bg-stone-900 p-3 text-xs whitespace-nowrap text-orange-50 opacity-0 shadow-xl transition-all duration-300 ease-in-out group-hover:-translate-y-0 group-hover:opacity-100">
+              Go to the Next Quote
               <span className="absolute top-full left-1/2 h-0 w-0 -translate-x-1/2 border-x-8 border-t-8 border-b-0 border-x-transparent border-t-stone-900"></span>
             </span>
           </button>
