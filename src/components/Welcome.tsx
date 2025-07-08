@@ -16,12 +16,14 @@ export default function Welcome() {
     try {
       isReloading(true); // Set reloading to true to trigger animation
       setIsReloadingButton(true); // Trigger reload button animation
-      const response = await fetch("http://api.quotable.io/quotes/random");
+      const response = await fetch(
+        "https://api.quotable.kurokeita.dev/api/quotes/random",
+      );
       const { statusCode, statusMessage, ...data } = await response.json();
       if (!response.ok) throw new Error(`${statusCode} ${statusMessage}`);
       setTimeout(() => {
         setQuotes([
-          { content: data[0].content, author: data[0].author },
+          { content: data.quote.content, author: data.quote.author.name },
           ...quotes,
         ]);
         setCurrentIndex(0);
