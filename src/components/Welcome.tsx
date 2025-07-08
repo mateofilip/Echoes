@@ -35,7 +35,6 @@ export default function Welcome() {
       console.error(error);
       setQuotes([
         { content: "Oops... Something went wrong", author: "Unknown" },
-        ...quotes,
       ]);
       isReloading(false);
       setIsReloadingButton(false); // Stop reload button animation on error
@@ -84,7 +83,7 @@ export default function Welcome() {
       <h1 className="Redaction fixed top-0 right-0 left-0 mt-15 text-center text-4xl font-bold">
         Quote App
       </h1>
-      <main className="flex h-dvh w-dvw flex-col justify-center px-120">
+      <main className="flex h-dvh w-dvw flex-col justify-center px-5 sm:px-16 md:px-28 lg:px-52 xl:px-96 2xl:px-120">
         <div className="flex h-dvh flex-col justify-center gap-30">
           {/* <span className="flex scale-x-[-1] justify-end text-8xl">
           <svg
@@ -103,7 +102,7 @@ export default function Welcome() {
             ></path>
           </svg>
         </span> */}
-          <div className="flex flex-col justify-between gap-20 px-20">
+          <div className="flex flex-col justify-between gap-20">
             <p
               className={`text-center text-4xl font-light transition-all duration-500 ease-in-out ${reloading ? "opacity-0" : "opacity-100"}`}
             >
