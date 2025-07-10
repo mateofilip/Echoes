@@ -101,7 +101,7 @@ export default function Welcome() {
               {"« " + quotes[currentIndex]?.quote + " »" || "Loading..."}
             </p>
             <h2
-              className={`text-right text-xl font-bold transition-all duration-500 ease-in-out md:text-3xl ${reloading ? "opacity-0" : "opacity-100"}`}
+              className={`text-right text-xl font-bold transition-all duration-500 ease-in-out md:text-2xl ${reloading ? "opacity-0" : "opacity-100"}`}
             >
               — {quotes[currentIndex]?.author || "Loading..."}
             </h2>
