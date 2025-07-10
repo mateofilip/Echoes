@@ -98,7 +98,9 @@ export default function Welcome() {
             <p
               className={`pr-3 text-center text-3xl font-light transition-all duration-500 ease-in-out md:pr-0 md:text-4xl ${reloading ? "opacity-0" : "opacity-100"}`}
             >
-              {"« " + quotes[currentIndex]?.quote + " »" || "Loading..."}
+              {quotes[currentIndex]?.quote
+                ? `« ${quotes[currentIndex].quote} »`
+                : "Loading..."}
             </p>
             <h2
               className={`pr-10 text-right text-xl font-bold transition-all duration-500 ease-in-out md:pr-0 md:text-2xl ${reloading ? "opacity-0" : "opacity-100"}`}
