@@ -15,39 +15,39 @@ export default function Welcome() {
 
   const getQuote = async () => {
     try {
-      isReloading(true); // Set reloading to true to trigger animation
-      setIsReloadingButton(true); // Trigger reload button animation
+      isReloading(true);
+      setIsReloadingButton(true);
 
       const { data, error } = await supabase
         .rpc("get_random_quote")
         .single<{ quote: string; author: string }>();
 
-      console.log(data);
       if (!data) throw new Error(error?.message || "Unknown error");
+
+      // Check for duplicate
+      const isDuplicate = quotes.some(
+        (q) => q.quote === data.quote && q.author === data.author,
+      );
+
+      if (isDuplicate) {
+        return getQuote();
+      }
+
       setTimeout(() => {
         setQuotes([{ quote: data.quote, author: data.author }, ...quotes]);
         setCurrentIndex(0);
         isReloading(false);
-        setIsReloadingButton(false); // Stop reload button animation
-        console.log(data);
+        setIsReloadingButton(false);
       }, 500);
+      console.log(quotes);
     } catch (error) {
-      // If the API request failed, log the error to console and update state
-      // so that the error will be reflected in the UI.
       console.error(error);
       setQuotes([
         { quote: "Oops... Something went wrong.", author: "Unknown" },
       ]);
       isReloading(false);
-      setIsReloadingButton(false); // Stop reload button animation on error
+      setIsReloadingButton(false);
     }
-
-    // const { data: quote } = await supabase.from("quotes").select("*");
-    // console.log(quote);
-
-    // if (quote && quote.length > 1) {
-    //   setQuotes(quote);
-    // }
   };
 
   const toggleTheme = () => {
@@ -199,8 +199,8 @@ export default function Welcome() {
               <path
                 d="M4.85355 2.14645C5.04882 2.34171 5.04882 2.65829 4.85355 2.85355L3.70711 4H9C11.4853 4 13.5 6.01472 13.5 8.5C13.5 10.9853 11.4853 13 9 13H5C4.72386 13 4.5 12.7761 4.5 12.5C4.5 12.2239 4.72386 12 5 12H9C10.933 12 12.5 10.433 12.5 8.5C12.5 6.567 10.933 5 9 5H3.70711L4.85355 6.14645C5.04882 6.34171 5.04882 6.65829 4.85355 6.85355C4.65829 7.04882 4.34171 7.04882 4.14645 6.85355L2.14645 4.85355C1.95118 4.65829 1.95118 4.34171 2.14645 4.14645L4.14645 2.14645C4.34171 1.95118 4.65829 1.95118 4.85355 2.14645Z"
                 fill="currentColor"
-                fill-rule="evenodd"
-                clip-rule="evenodd"
+                fillRule="evenodd"
+                clipRule="evenodd"
               ></path>
             </svg>
             <span className="Alte absolute -top-15 left-1/2 z-10 -translate-x-1/2 translate-y-2 rounded-2xl border border-stone-700 bg-stone-900 p-3 text-xs whitespace-nowrap text-orange-50 opacity-0 shadow-xl transition-all duration-300 ease-in-out group-hover:-translate-y-0 group-hover:opacity-100">
@@ -225,8 +225,8 @@ export default function Welcome() {
               <path
                 d="M8.14645 3.14645C8.34171 2.95118 8.65829 2.95118 8.85355 3.14645L12.8536 7.14645C13.0488 7.34171 13.0488 7.65829 12.8536 7.85355L8.85355 11.8536C8.65829 12.0488 8.34171 12.0488 8.14645 11.8536C7.95118 11.6583 7.95118 11.3417 8.14645 11.1464L11.2929 8H2.5C2.22386 8 2 7.77614 2 7.5C2 7.22386 2.22386 7 2.5 7H11.2929L8.14645 3.85355C7.95118 3.65829 7.95118 3.34171 8.14645 3.14645Z"
                 fill="currentColor"
-                fill-rule="evenodd"
-                clip-rule="evenodd"
+                fillRule="evenodd"
+                clipRule="evenodd"
               ></path>
             </svg>
 
