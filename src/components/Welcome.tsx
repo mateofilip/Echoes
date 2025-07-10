@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import type { Quote } from "../types/Quote";
+import { supabase } from "../db/supabase";
 
 export default function Welcome() {
   const [quotes, setQuotes] = useState<Quote[]>([]);
@@ -16,31 +17,37 @@ export default function Welcome() {
     try {
       isReloading(true); // Set reloading to true to trigger animation
       setIsReloadingButton(true); // Trigger reload button animation
-      const response = await fetch(
-        "https://api.quotable.kurokeita.dev/api/quotes/random",
-      );
-      const { statusCode, statusMessage, ...data } = await response.json();
-      if (!response.ok) throw new Error(`${statusCode} ${statusMessage}`);
+
+      const { data, error } = await supabase
+        .rpc("get_random_quote")
+        .single<{ quote: string; author: string }>();
+
+      console.log(data);
+      if (!data) throw new Error(error?.message || "Unknown error");
       setTimeout(() => {
-        setQuotes([
-          { content: data.quote.content, author: data.quote.author.name },
-          ...quotes,
-        ]);
+        setQuotes([{ quote: data.quote, author: data.author }, ...quotes]);
         setCurrentIndex(0);
         isReloading(false);
         setIsReloadingButton(false); // Stop reload button animation
-        console.log(quotes);
+        console.log(data);
       }, 500);
     } catch (error) {
       // If the API request failed, log the error to console and update state
       // so that the error will be reflected in the UI.
       console.error(error);
       setQuotes([
-        { content: "Oops... Something went wrong.", author: "Unknown" },
+        { quote: "Oops... Something went wrong.", author: "Unknown" },
       ]);
       isReloading(false);
       setIsReloadingButton(false); // Stop reload button animation on error
     }
+
+    // const { data: quote } = await supabase.from("quotes").select("*");
+    // console.log(quote);
+
+    // if (quote && quote.length > 1) {
+    //   setQuotes(quote);
+    // }
   };
 
   const toggleTheme = () => {
@@ -91,7 +98,7 @@ export default function Welcome() {
             <p
               className={`text-center text-4xl font-light transition-all duration-500 ease-in-out ${reloading ? "opacity-0" : "opacity-100"}`}
             >
-              {"« " + quotes[currentIndex]?.content + " »" || "Loading..."}
+              {"« " + quotes[currentIndex]?.quote + " »" || "Loading..."}
             </p>
             <h2
               className={`text-right text-[1.33rem] font-bold transition-all duration-500 ease-in-out ${reloading ? "opacity-0" : "opacity-100"}`}

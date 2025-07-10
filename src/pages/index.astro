@@ -3,10 +3,29 @@ import Welcome from "../components/Welcome.js";
 import Layout from "../layouts/Layout.astro";
 import "../styles/global.css";
 
+// import { supabase } from "../db/supabase";
+// import type { Quote } from "../types/Quote";
+
+// const { data, error } = await supabase.from("Quotes").select("*");
+
+// export const prerender = false
+
+// console.log(data)
+
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
 // Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
 
 <Layout>
+  <!-- {
+    (
+      <ul>
+        {data.map((data: Quote) => (
+          <li>{data.author}</li>
+          <li>data.quote</li>
+        ))}
+      </ul>
+    )
+  } -->
   <Welcome client:only="react" />
 </Layout>
