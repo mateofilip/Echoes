@@ -3,41 +3,9 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @font-face {
-  font-family: "Glitten";
-  src: url("/Glitten-Regular.otf") format("opentype");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Hedvig Letters Serif";
-  src: url("/Hedvig-Letters-Serif-Variable.ttf") format("truetype");
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Redaction";
-  src: url("/Redaction-Regular.woff2") format("woff2");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
   font-family: "Redaction";
   src: url("/Redaction-Bold.woff2") format("woff2");
   font-weight: bold;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Ortica";
-  src: url("/OrticaLinear-Regular.otf") format("opentype");
-  font-weight: normal;
   font-style: normal;
   font-display: swap;
 }

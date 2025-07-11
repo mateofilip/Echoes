@@ -5,13 +5,34 @@ import { supabase } from "../db/supabase";
 export default function Welcome() {
   const [quotes, setQuotes] = useState<Quote[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [dark, isDark] = useState(
-    document.documentElement.classList.contains("dark"),
-  );
+  const [isDark, setIsDark] = useState(false);
   const [reloading, isReloading] = useState(false);
   const [isReloadingButton, setIsReloadingButton] = useState(false);
   const [isNextAnimating, setIsNextAnimating] = useState(false);
   const [isPrevAnimating, setIsPrevAnimating] = useState(false);
+
+  // Initialize theme on mount
+  useEffect(() => {
+    // Check localStorage first
+    const storedTheme = localStorage.getItem("theme");
+    let dark = false;
+    if (storedTheme === "dark") {
+      dark = true;
+    } else if (storedTheme === "light") {
+      dark = false;
+    } else {
+      // Fallback to system preference
+      dark =
+        window.matchMedia &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches;
+    }
+    setIsDark(dark);
+    if (dark) {
+      document.body.classList.add("dark");
+    } else {
+      document.body.classList.remove("dark");
+    }
+  }, []);
 
   const getQuote = async () => {
     try {
@@ -51,12 +72,17 @@ export default function Welcome() {
   };
 
   const toggleTheme = () => {
-    isDark(!dark);
-    localStorage.setItem(
-      "theme",
-      localStorage.getItem("theme") === "light" ? "dark" : "light",
-    );
-    document.body.classList.toggle("dark");
+    setIsDark((prev) => {
+      const newIsDark = !prev;
+      if (newIsDark) {
+        document.body.classList.add("dark");
+        localStorage.setItem("theme", "dark");
+      } else {
+        document.body.classList.remove("dark");
+        localStorage.setItem("theme", "light");
+      }
+      return newIsDark;
+    });
   };
 
   const getPreviousQuote = () => {
@@ -109,7 +135,7 @@ export default function Welcome() {
             </h2>
           </div>
         </div>
-        <div className="fixed right-0 bottom-0 left-0 mb-15 flex justify-center gap-2">
+        <div className="fixed right-0 bottom-0 left-0 mb-30 flex justify-center gap-2">
           <button
             onClick={getQuote}
             className="group relative w-fit cursor-pointer rounded-lg border-1 border-gray-700 p-3 dark:border-orange-200"
@@ -147,7 +173,7 @@ export default function Welcome() {
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
                 className={`absolute top-0 left-0 transition-all duration-500 ${
-                  dark
+                  isDark
                     ? "scale-75 rotate-90 opacity-0"
                     : "scale-100 rotate-0 opacity-100"
                 }`}
@@ -166,7 +192,7 @@ export default function Welcome() {
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
                 className={`absolute top-0 left-0 transition-all duration-500 ${
-                  dark
+                  isDark
                     ? "scale-100 rotate-0 opacity-100"
                     : "scale-75 -rotate-90 opacity-0"
                 }`}

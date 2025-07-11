@@ -1,6 +1,7 @@
 ---
-import Welcome from "../components/Welcome.js";
 import Layout from "../layouts/Layout.astro";
+import Welcome from "../components/Welcome.tsx";
+import Footer from "../components/Footer.tsx";
 import "../styles/global.css";
 
 // import { supabase } from "../db/supabase";
@@ -28,4 +29,5 @@ import "../styles/global.css";
     )
   } -->
   <Welcome client:only="react" />
+  <Footer client:only="react" />
 </Layout>
