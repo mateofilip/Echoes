@@ -1,62 +1,53 @@
 export default function Footer() {
   return (
     <footer className="Alte absolute right-0 bottom-0 left-0 flex flex-col items-center px-4 pb-6 sm:px-8 sm:pb-4 md:px-12 lg:px-16 xl:px-20 2xl:px-32">
-      <p className="max-w-4xl pb-4 text-center text-xs text-slate-800 sm:pb-6 sm:text-sm md:text-base lg:text-sm xl:text-base dark:text-slate-200">
-        Built in{" "}
+      <p className="max-w-4xl pb-4 text-center text-xs sm:pb-6 sm:text-sm md:text-base lg:text-sm xl:text-base">
+        Crafted in{" "}
         <a
           href="https://code.visualstudio.com/"
           target="_blank"
           rel="noreferrer noopener"
-          className="relative cursor-pointer font-semibold text-slate-700 transition-all duration-300 ease-in-out after:absolute after:bottom-0 after:left-0 after:h-1/15 after:w-0 after:rounded-full after:bg-slate-700 after:transition-all after:duration-300 hover:after:w-full dark:text-slate-300 dark:after:bg-slate-300"
+          className="relative cursor-pointer font-bold transition-all duration-300 ease-in-out after:absolute after:bottom-0 after:left-0 after:h-1/15 after:w-0 after:rounded-full after:bg-gray-700 after:transition-all after:duration-300 hover:after:w-full dark:after:bg-orange-200"
         >
           Visual Studio Code,
         </a>{" "}
-        powered by{" "}
+        with{" "}
         <a
           href="https://astro.build/"
           target="_blank"
           rel="noreferrer noopener"
-          className="relative cursor-pointer font-semibold text-slate-700 transition-all duration-300 ease-in-out after:absolute after:bottom-0 after:left-0 after:h-1/15 after:w-0 after:rounded-full after:bg-slate-700 after:transition-all after:duration-300 hover:after:w-full dark:text-slate-300 dark:after:bg-slate-300"
+          className="relative cursor-pointer font-bold transition-all duration-300 ease-in-out after:absolute after:bottom-0 after:left-0 after:h-1/15 after:w-0 after:rounded-full after:bg-gray-700 after:transition-all after:duration-300 hover:after:w-full dark:after:bg-orange-200"
         >
           Astro
-        </a>
-        , styled using{" "}
+        </a>{" "}
+        magic,{" "}
         <a
           href="https://tailwindcss.com/"
           target="_blank"
           rel="noreferrer noopener"
-          className="relative cursor-pointer font-semibold text-slate-700 transition-all duration-300 ease-in-out after:absolute after:bottom-0 after:left-0 after:h-1/15 after:w-0 after:rounded-full after:bg-slate-700 after:transition-all after:duration-300 hover:after:w-full dark:text-slate-300 dark:after:bg-slate-300"
+          className="relative cursor-pointer font-bold transition-all duration-300 ease-in-out after:absolute after:bottom-0 after:left-0 after:h-1/15 after:w-0 after:rounded-full after:bg-gray-700 after:transition-all after:duration-300 hover:after:w-full dark:after:bg-orange-200"
         >
           Tailwind CSS
-        </a>
-        , and delivered by{" "}
+        </a>{" "}
+        flair, and{" "}
         <a
           href="https://vercel.com/"
           target="_blank"
           rel="noreferrer noopener"
-          className="relative cursor-pointer font-semibold text-slate-700 transition-all duration-300 ease-in-out after:absolute after:bottom-0 after:left-0 after:h-1/15 after:w-0 after:rounded-full after:bg-slate-700 after:transition-all after:duration-300 hover:after:w-full dark:text-slate-300 dark:after:bg-slate-300"
+          className="relative cursor-pointer font-bold transition-all duration-300 ease-in-out after:absolute after:bottom-0 after:left-0 after:h-1/15 after:w-0 after:rounded-full after:bg-gray-700 after:transition-all after:duration-300 hover:after:w-full dark:after:bg-orange-200"
         >
           Vercel
-        </a>
-        . All encapsulated within the{" "}
-        <a
-          href="https://www.fontshare.com/fonts/satoshi"
-          target="_blank"
-          rel="noreferrer noopener"
-          className="relative cursor-pointer font-semibold text-slate-700 transition-all duration-300 ease-in-out after:absolute after:bottom-0 after:left-0 after:h-1/15 after:w-0 after:rounded-full after:bg-slate-700 after:transition-all after:duration-300 hover:after:w-full dark:text-slate-300 dark:after:bg-slate-300"
-        >
-          Satoshi
         </a>{" "}
-        font with the help of some AI generated icons. Data is brought by{" "}
+        speed.{" "}
         <a
-          href="https://openweathermap.org/api"
+          href="https://supabase.com/"
           target="_blank"
           rel="noreferrer noopener"
-          className="relative cursor-pointer font-semibold text-slate-700 transition-all duration-300 ease-in-out after:absolute after:bottom-0 after:left-0 after:h-1/15 after:w-0 after:rounded-full after:bg-slate-700 after:transition-all after:duration-300 hover:after:w-full dark:text-slate-300 dark:after:bg-slate-300"
+          className="relative cursor-pointer font-bold transition-all duration-300 ease-in-out after:absolute after:bottom-0 after:left-0 after:h-1/15 after:w-0 after:rounded-full after:bg-gray-700 after:transition-all after:duration-300 hover:after:w-full dark:after:bg-orange-200"
         >
-          OpenWeatherMap API
-        </a>
-        .
+          Supabase
+        </a>{" "}
+        handles the backend while the data is delivered by an API of my own.
       </p>
     </footer>
   );

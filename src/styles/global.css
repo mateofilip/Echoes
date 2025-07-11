@@ -34,6 +34,14 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: "Alte Haas Grotesk";
+  src: url("/AlteHaasGroteskBold.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
 .Redaction {
   font-family: "Redaction", monospace;
 }

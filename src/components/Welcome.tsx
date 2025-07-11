@@ -116,7 +116,7 @@ export default function Welcome() {
   return (
     <>
       <h1 className="Redaction fixed top-0 right-0 left-0 mt-15 text-center text-4xl font-bold">
-        Quote App
+        Echoes
       </h1>
       <main className="flex h-dvh w-dvw flex-col justify-center px-5 sm:px-16 md:px-28 lg:px-52 xl:px-96 2xl:px-120">
         <div className="flex h-dvh flex-col justify-center gap-30">
