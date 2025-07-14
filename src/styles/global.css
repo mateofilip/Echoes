@@ -49,3 +49,7 @@
 .Alte {
   font-family: "Alte Haas Grotesk", monospace;
 }
+
+.variableSize {
+  font-size: clamp(1rem, 2vw + 1rem, 2.25rem);
+}
