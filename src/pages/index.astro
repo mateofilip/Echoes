@@ -1,11 +1,11 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Welcome from "../components/Welcome.tsx";
-import Footer from "../components/Footer.tsx";
+import Footer from "../components/Footer.astro";
 import "../styles/global.css";
 ---
 
 <Layout>
   <Welcome client:only="react" />
-  <Footer client:only="react" />
+  <Footer />
 </Layout>

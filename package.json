@@ -8,16 +8,21 @@
     "preview": "astro preview",
     "astro": "astro"
   },
+  "description": "Echoes – Discover and share inspiring quotes. Beautiful, modern, and responsive web app built with Astro, React, and Supabase.",
+  "author": "Mateo Filip mateofernandofilip@gmail.com",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mateofilip/echoes.git"
+  },
   "dependencies": {
     "@astrojs/react": "^4.3.0",
     "@astrojs/vercel": "^8.2.1",
-    "@formkit/auto-animate": "^0.8.2",
     "@supabase/supabase-js": "^2.50.4",
     "@tailwindcss/vite": "^4.1.11",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "astro": "^5.10.1",
-    "framer-motion": "^12.22.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "tailwindcss": "^4.1.11"

@@ -1,48 +1,65 @@
-# Astro Starter Kit: Basics
+# Echoes
 
-```sh
-npm create astro@latest -- --template basics
-```
+Echoes is a modern web app for discovering and sharing inspiring quotes. Built with Astro, React, TailwindCSS, and Supabase, it features a beautiful, responsive UI with dark mode, smooth animations, and a curated collection of quotes.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/basics)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/basics)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/basics/devcontainer.json)
+## ✨ Features
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+- Get a random quote from a curated collection
+- Dark mode toggle with system preference support
+- Animated transitions and smooth UI
+- Responsive design for all devices
+- Powered by Supabase for backend and data
 
-![just-the-basics](https://github.com/withastro/astro/assets/2244813/a0a5533c-a856-4198-8470-2d67b1d7c554)
+## 🚀 Tech Stack
 
-## 🚀 Project Structure
+- [Astro](https://astro.build/) (with React integration)
+- [React](https://react.dev/)
+- [TailwindCSS](https://tailwindcss.com/)
+- [Supabase](https://supabase.com/)
 
-Inside of your Astro project, you'll see the following folders and files:
+## 📦 Setup & Installation
 
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src/
-│   ├── layouts/
-│   │   └── Layout.astro
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+1. **Clone the repo:**
+   ```sh
+   git clone <your-repo-url>
+   cd Echoes
+   ```
+2. **Install dependencies:**
+   ```sh
+   npm install
+   ```
+3. **Configure environment variables:**
+   - Copy `.env.example` to `.env` and fill in your Supabase credentials:
+     ```env
+     PUBLIC_SUPABASE_URL=your-supabase-url
+     PUBLIC_SUPABASE_KEY=your-supabase-key
+     ```
+4. **Run the development server:**
+   ```sh
+   npm run dev
+   ```
+   The app will be available at [http://localhost:4321](http://localhost:4321).
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+## 🛠 Usage
 
-## 🧞 Commands
+- Click "Get a New Quote" to fetch a random quote.
+- Use the dark mode toggle for your preferred theme.
+- Navigate through previous/next quotes using the arrow buttons.
 
-All commands are run from the root of the project, from a terminal:
+## 🗃 Deployment
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+- The project is ready for deployment on [Vercel](https://vercel.com/) or any platform supporting Astro SSR.
+- To build for production:
+  ```sh
+  npm run build
+  npm run preview
+  ```
+- For Vercel, connect your repo and set the required environment variables.
 
-## 👀 Want to learn more?
+## 👤 Author
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+- [Mateo Filip](https://github.com/mateofilip)
+
+## 📄 License
+
+This project is for personal or educational use. Contact the author for other uses.
