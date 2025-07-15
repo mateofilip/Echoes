@@ -122,7 +122,7 @@ export default function Welcome() {
         <div className="flex h-dvh flex-col justify-center gap-30">
           <div className="flex flex-col justify-between gap-20">
             <p
-              className={`variableSize text-center font-light transition-all duration-500 ease-in-out ${reloading ? "opacity-0" : "opacity-100"}`}
+              className={`variableSize text-center transition-all duration-500 ease-in-out ${reloading ? "opacity-0" : "opacity-100"}`}
             >
               <span>«&nbsp;</span>
               {quotes[currentIndex]?.quote
@@ -131,7 +131,7 @@ export default function Welcome() {
               <span>&nbsp;»</span>
             </p>
             <h2
-              className={`text-right text-xl font-bold transition-all duration-500 ease-in-out md:text-2xl ${reloading ? "opacity-0" : "opacity-100"}`}
+              className={`text-right text-xl transition-all duration-500 ease-in-out md:text-2xl ${reloading ? "opacity-0" : "opacity-100"}`}
             >
               — {quotes[currentIndex]?.author || "Loading..."}
             </h2>

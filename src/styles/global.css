@@ -11,22 +11,6 @@
 }
 
 @font-face {
-  font-family: "Ortica";
-  src: url("/OrticaLinear-Bold.otf") format("opentype");
-  font-weight: bold;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Ortica";
-  src: url("/OrticaLinear-Light.otf") format("opentype");
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
   font-family: "Alte Haas Grotesk";
   src: url("/AlteHaasGroteskRegular.ttf") format("truetype");
   font-weight: normal;
@@ -38,6 +22,14 @@
   font-family: "Alte Haas Grotesk";
   src: url("/AlteHaasGroteskBold.ttf") format("truetype");
   font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Prata";
+  src: url("/Prata-Regular.ttf") format("truetype");
+  font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
