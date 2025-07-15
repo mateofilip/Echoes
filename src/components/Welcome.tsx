@@ -140,7 +140,7 @@ export default function Welcome() {
         <div className="fixed right-0 bottom-0 left-0 mb-30 flex justify-center gap-2">
           <button
             onClick={getQuote}
-            className="group relative w-fit cursor-pointer rounded-lg border-1 border-gray-700 p-3 dark:border-orange-200"
+            className="group relative w-fit cursor-pointer rounded-lg border-1 border-gray-700 p-3 shadow-none transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg dark:border-orange-200"
           >
             <svg
               width="20"
@@ -164,7 +164,7 @@ export default function Welcome() {
           </button>
 
           <button
-            className="group relative w-fit cursor-pointer rounded-lg border-1 border-gray-700 p-3 dark:border-orange-200"
+            className="group relative w-fit cursor-pointer rounded-lg border-1 border-gray-700 p-3 shadow-none transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg dark:border-orange-200"
             onClick={toggleTheme}
           >
             <span className="relative block h-5 w-5">
@@ -215,7 +215,7 @@ export default function Welcome() {
 
           <button
             onClick={getPreviousQuote}
-            className="group relative w-fit cursor-pointer rounded-lg border-1 border-gray-700 p-3 transition-all duration-300 ease-in-out disabled:cursor-not-allowed disabled:border-gray-400 disabled:text-gray-400 dark:border-orange-200"
+            className="group relative w-fit cursor-pointer rounded-lg border-1 border-gray-700 p-3 shadow-none transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg disabled:cursor-not-allowed disabled:border-gray-400 disabled:text-gray-400 disabled:hover:scale-none disabled:hover:shadow-none dark:border-orange-200"
             disabled={currentIndex === quotes.length - 1}
           >
             <svg
@@ -241,7 +241,7 @@ export default function Welcome() {
 
           <button
             onClick={getNextQuote}
-            className="group relative w-fit cursor-pointer rounded-lg border-1 border-gray-700 p-3 transition-all duration-300 ease-in-out disabled:cursor-not-allowed disabled:border-gray-400 disabled:text-gray-400 dark:border-orange-200"
+            className="group relative w-fit cursor-pointer rounded-lg border-1 border-gray-700 p-3 shadow-none transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg disabled:cursor-not-allowed disabled:border-gray-400 disabled:text-gray-400 disabled:hover:scale-none disabled:hover:shadow-none dark:border-orange-200"
             disabled={currentIndex === 0}
           >
             <svg
