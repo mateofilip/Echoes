@@ -26,6 +26,29 @@ export default function Welcome() {
     }
   }, []);
 
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.repeat) return;
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        getPreviousQuote();
+      } else if (e.key === "ArrowRight") {
+        e.preventDefault();
+        getNextQuote();
+      } else if (e.key.toLowerCase() === "t") {
+        e.preventDefault();
+        toggleTheme();
+      } else if (e.key.toLowerCase() === "r") {
+        e.preventDefault();
+        getQuote();
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [currentIndex, quotes, isDark]);
+
   const getQuote = async () => {
     try {
       isReloading(true);
@@ -141,8 +164,11 @@ export default function Welcome() {
                 clipRule="evenodd"
               ></path>
             </svg>
-            <span className="Alte absolute -top-15 left-1/2 z-10 -translate-x-1/2 translate-y-2 rounded-2xl border border-stone-700 bg-stone-900 p-3 text-xs whitespace-nowrap text-orange-50 opacity-0 shadow-xl transition-all duration-200 ease-out group-hover:-translate-y-0 group-hover:opacity-100 group-hover:delay-300">
-              Get a New Quote
+            <span className="Alte absolute -top-15 left-1/2 z-10 -translate-x-1/2 translate-y-2 rounded-2xl border border-stone-700/60 bg-stone-900/95 p-3 text-xs whitespace-nowrap text-orange-50 opacity-0 shadow-2xl ring-1 ring-stone-600/40 backdrop-blur-md transition-all duration-200 ease-out group-hover:-translate-y-0 group-hover:opacity-100 group-hover:delay-300 group-focus:-translate-y-0 group-focus:opacity-100 group-focus:delay-300">
+              <span className="mr-2">New Quote</span>
+              <span className="inline-flex min-w-6 items-center justify-center rounded-md border-1 border-stone-600 bg-stone-800 px-2 py-1 font-mono text-[10px] text-orange-50">
+                R
+              </span>
               <span className="absolute top-full left-1/2 h-0 w-0 -translate-x-1/2 border-x-8 border-t-8 border-b-0 border-x-transparent border-t-stone-900"></span>
             </span>
           </button>
@@ -191,8 +217,11 @@ export default function Welcome() {
                 ></path>
               </svg>
             </span>
-            <span className="Alte absolute -top-15 left-1/2 z-10 -translate-x-1/2 translate-y-2 rounded-2xl border border-stone-700 bg-stone-900 p-3 text-xs whitespace-nowrap text-orange-50 opacity-0 shadow-xl transition-all duration-200 ease-out group-hover:-translate-y-0 group-hover:opacity-100 group-hover:delay-300">
-              Toggle Dark Mode
+            <span className="Alte absolute -top-15 left-1/2 z-10 -translate-x-1/2 translate-y-2 rounded-2xl border border-stone-700/60 bg-stone-900/95 p-3 text-xs whitespace-nowrap text-orange-50 opacity-0 shadow-2xl ring-1 ring-stone-600/40 backdrop-blur-md transition-all duration-200 ease-out group-hover:-translate-y-0 group-hover:opacity-100 group-hover:delay-300 group-focus:-translate-y-0 group-focus:opacity-100 group-focus:delay-300">
+              <span className="mr-2">Toggle Theme</span>
+              <span className="inline-flex min-w-6 items-center justify-center rounded-md border-1 border-stone-600 bg-stone-800 px-2 py-1 font-mono text-[10px] text-orange-50">
+                T
+              </span>
               <span className="absolute top-full left-1/2 h-0 w-0 -translate-x-1/2 border-x-8 border-t-8 border-b-0 border-x-transparent border-t-stone-900"></span>
             </span>
           </button>
@@ -217,8 +246,11 @@ export default function Welcome() {
                 clipRule="evenodd"
               ></path>
             </svg>
-            <span className="Alte absolute -top-15 left-1/2 z-10 -translate-x-1/2 translate-y-2 rounded-2xl border border-stone-700 bg-stone-900 p-3 text-xs whitespace-nowrap text-orange-50 opacity-0 shadow-xl transition-all duration-200 ease-out group-hover:-translate-y-0 group-hover:opacity-100 group-hover:delay-300">
-              Go Back to Previous Quote
+            <span className="Alte absolute -top-15 left-1/2 z-10 -translate-x-1/2 translate-y-2 rounded-2xl border border-stone-700/60 bg-stone-900/95 p-3 text-xs whitespace-nowrap text-orange-50 opacity-0 shadow-2xl ring-1 ring-stone-600/40 backdrop-blur-md transition-all duration-200 ease-out group-hover:-translate-y-0 group-hover:opacity-100 group-hover:delay-300 group-focus:-translate-y-0 group-focus:opacity-100 group-focus:delay-300">
+              <span className="mr-2">Previous Quote</span>
+              <span className="inline-flex min-w-6 items-center justify-center rounded-md border-1 border-stone-600 bg-stone-800 px-2 py-1 font-mono text-[10px] text-orange-50">
+                ←
+              </span>
               <span className="absolute top-full left-1/2 h-0 w-0 -translate-x-1/2 border-x-8 border-t-8 border-b-0 border-x-transparent border-t-stone-900"></span>
             </span>
           </button>
@@ -244,8 +276,11 @@ export default function Welcome() {
               ></path>
             </svg>
 
-            <span className="Alte absolute -top-15 left-1/2 z-10 -translate-x-1/2 translate-y-2 rounded-2xl border border-stone-700 bg-stone-900 p-3 text-xs whitespace-nowrap text-orange-50 opacity-0 shadow-xl transition-all duration-200 ease-out group-hover:-translate-y-0 group-hover:opacity-100 group-hover:delay-300">
-              Go to the Next Quote
+            <span className="Alte absolute -top-15 left-1/2 z-10 -translate-x-1/2 translate-y-2 rounded-2xl border border-stone-700/60 bg-stone-900/95 p-3 text-xs whitespace-nowrap text-orange-50 opacity-0 shadow-2xl ring-1 ring-stone-600/40 backdrop-blur-md transition-all duration-200 ease-out group-hover:-translate-y-0 group-hover:opacity-100 group-hover:delay-300 group-focus:-translate-y-0 group-focus:opacity-100 group-focus:delay-300">
+              <span className="mr-2">Next Quote</span>
+              <span className="inline-flex min-w-6 items-center justify-center rounded-md border-1 border-stone-600 bg-stone-800 px-2 py-1 font-mono text-[10px] text-orange-50">
+                →
+              </span>
               <span className="absolute top-full left-1/2 h-0 w-0 -translate-x-1/2 border-x-8 border-t-8 border-b-0 border-x-transparent border-t-stone-900"></span>
             </span>
           </button>
