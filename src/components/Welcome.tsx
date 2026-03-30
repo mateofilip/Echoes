@@ -147,7 +147,7 @@ export default function Welcome() {
         <div className="fixed right-0 bottom-0 left-0 mb-30 flex justify-center gap-2">
           <button
             onClick={getQuote}
-            className="group relative w-fit cursor-pointer rounded-lg border-1 border-gray-700 p-3 shadow-none transition-all duration-200 ease-out hover:scale-105 hover:shadow-lg dark:border-orange-200"
+            className="group relative w-fit cursor-pointer rounded-lg border-2 border-gray-700 p-3 shadow-none transition-all duration-200 ease-out hover:scale-105 hover:shadow-lg dark:border-orange-200"
           >
             <svg
               width="20"
@@ -164,7 +164,7 @@ export default function Welcome() {
                 clipRule="evenodd"
               ></path>
             </svg>
-            <span className="Alte absolute -top-15 left-1/2 z-10 -translate-x-1/2 translate-y-2 rounded-2xl border border-stone-700/60 bg-stone-900/95 p-3 text-xs whitespace-nowrap text-orange-50 opacity-0 shadow-2xl ring-1 ring-stone-600/40 backdrop-blur-md transition-all duration-200 ease-out group-hover:-translate-y-0 group-hover:opacity-100 group-hover:delay-300 group-focus:-translate-y-0 group-focus:opacity-100 group-focus:delay-300">
+            <span className="Alte absolute -top-15 left-1/2 z-10 -translate-x-1/2 translate-y-2 rounded-2xl border border-stone-700/60 bg-stone-900/95 p-3 text-xs whitespace-nowrap text-orange-50 opacity-0 shadow-2xl ring-1 ring-stone-600/40 backdrop-blur-md transition-all duration-200 ease-out group-hover:-translate-y-0 group-hover:opacity-100 group-hover:delay-300 group-focus-visible:-translate-y-0 group-focus-visible:opacity-100 group-focus-visible:delay-300">
               <span className="mr-2">New Quote</span>
               <span className="inline-flex min-w-6 items-center justify-center rounded-md border-1 border-stone-600 bg-stone-800 px-2 py-1 font-mono text-[10px] text-orange-50">
                 R
@@ -174,7 +174,7 @@ export default function Welcome() {
           </button>
 
           <button
-            className="group relative w-fit cursor-pointer rounded-lg border-1 border-gray-700 p-3 shadow-none transition-all duration-200 ease-out hover:scale-105 hover:shadow-lg dark:border-orange-200"
+            className="group relative w-fit cursor-pointer rounded-lg border-2 border-gray-700 p-3 shadow-none transition-all duration-200 ease-out hover:scale-105 hover:shadow-lg dark:border-orange-200"
             onClick={toggleTheme}
           >
             <span className="relative block h-5 w-5">
@@ -217,7 +217,7 @@ export default function Welcome() {
                 ></path>
               </svg>
             </span>
-            <span className="Alte absolute -top-15 left-1/2 z-10 -translate-x-1/2 translate-y-2 rounded-2xl border border-stone-700/60 bg-stone-900/95 p-3 text-xs whitespace-nowrap text-orange-50 opacity-0 shadow-2xl ring-1 ring-stone-600/40 backdrop-blur-md transition-all duration-200 ease-out group-hover:-translate-y-0 group-hover:opacity-100 group-hover:delay-300 group-focus:-translate-y-0 group-focus:opacity-100 group-focus:delay-300">
+            <span className="Alte absolute -top-15 left-1/2 z-10 -translate-x-1/2 translate-y-2 rounded-2xl border border-stone-700/60 bg-stone-900/95 p-3 text-xs whitespace-nowrap text-orange-50 opacity-0 shadow-2xl ring-1 ring-stone-600/40 backdrop-blur-md transition-all duration-200 ease-out group-hover:-translate-y-0 group-hover:opacity-100 group-hover:delay-300 group-focus-visible:-translate-y-0 group-focus-visible:opacity-100 group-focus-visible:delay-300">
               <span className="mr-2">Toggle Theme</span>
               <span className="inline-flex min-w-6 items-center justify-center rounded-md border-1 border-stone-600 bg-stone-800 px-2 py-1 font-mono text-[10px] text-orange-50">
                 T
@@ -228,7 +228,7 @@ export default function Welcome() {
 
           <button
             onClick={getPreviousQuote}
-            className="group relative w-fit cursor-pointer rounded-lg border-1 border-gray-700 p-3 shadow-none transition-all duration-200 ease-out hover:scale-105 hover:shadow-lg disabled:cursor-not-allowed disabled:border-gray-400 disabled:text-gray-400 disabled:hover:scale-none disabled:hover:shadow-none dark:border-orange-200"
+            className="group relative w-fit cursor-pointer rounded-lg border-2 border-gray-700 p-3 shadow-none transition-all duration-200 ease-out hover:scale-105 hover:shadow-lg disabled:cursor-not-allowed disabled:border-gray-400 disabled:text-gray-400 disabled:hover:scale-none disabled:hover:shadow-none dark:border-orange-200"
             disabled={currentIndex === quotes.length - 1}
           >
             <svg
@@ -246,7 +246,7 @@ export default function Welcome() {
                 clipRule="evenodd"
               ></path>
             </svg>
-            <span className="Alte absolute -top-15 left-1/2 z-10 -translate-x-1/2 translate-y-2 rounded-2xl border border-stone-700/60 bg-stone-900/95 p-3 text-xs whitespace-nowrap text-orange-50 opacity-0 shadow-2xl ring-1 ring-stone-600/40 backdrop-blur-md transition-all duration-200 ease-out group-hover:-translate-y-0 group-hover:opacity-100 group-hover:delay-300 group-focus:-translate-y-0 group-focus:opacity-100 group-focus:delay-300">
+            <span className="Alte absolute -top-15 left-1/2 z-10 -translate-x-1/2 translate-y-2 rounded-2xl border border-stone-700/60 bg-stone-900/95 p-3 text-xs whitespace-nowrap text-orange-50 opacity-0 shadow-2xl ring-1 ring-stone-600/40 backdrop-blur-md transition-all duration-200 ease-out group-hover:-translate-y-0 group-hover:opacity-100 group-hover:delay-300 group-focus-visible:-translate-y-0 group-focus-visible:opacity-100 group-focus-visible:delay-300">
               <span className="mr-2">Previous Quote</span>
               <span className="inline-flex min-w-6 items-center justify-center rounded-md border-1 border-stone-600 bg-stone-800 px-2 py-1 font-mono text-[10px] text-orange-50">
                 ←
@@ -257,7 +257,7 @@ export default function Welcome() {
 
           <button
             onClick={getNextQuote}
-            className="group relative w-fit cursor-pointer rounded-lg border-1 border-gray-700 p-3 shadow-none transition-all duration-200 ease-out hover:scale-105 hover:shadow-lg disabled:cursor-not-allowed disabled:border-gray-400 disabled:text-gray-400 disabled:hover:scale-none disabled:hover:shadow-none dark:border-orange-200"
+            className="group relative w-fit cursor-pointer rounded-lg border-2 border-gray-700 p-3 shadow-none transition-all duration-200 ease-out hover:scale-105 hover:shadow-lg disabled:cursor-not-allowed disabled:border-gray-400 disabled:text-gray-400 disabled:hover:scale-none disabled:hover:shadow-none dark:border-orange-200"
             disabled={currentIndex === 0}
           >
             <svg
@@ -276,7 +276,7 @@ export default function Welcome() {
               ></path>
             </svg>
 
-            <span className="Alte absolute -top-15 left-1/2 z-10 -translate-x-1/2 translate-y-2 rounded-2xl border border-stone-700/60 bg-stone-900/95 p-3 text-xs whitespace-nowrap text-orange-50 opacity-0 shadow-2xl ring-1 ring-stone-600/40 backdrop-blur-md transition-all duration-200 ease-out group-hover:-translate-y-0 group-hover:opacity-100 group-hover:delay-300 group-focus:-translate-y-0 group-focus:opacity-100 group-focus:delay-300">
+            <span className="Alte absolute -top-15 left-1/2 z-10 -translate-x-1/2 translate-y-2 rounded-2xl border border-stone-700/60 bg-stone-900/95 p-3 text-xs whitespace-nowrap text-orange-50 opacity-0 shadow-2xl ring-1 ring-stone-600/40 backdrop-blur-md transition-all duration-200 ease-out group-hover:-translate-y-0 group-hover:opacity-100 group-hover:delay-300 group-focus-visible:-translate-y-0 group-focus-visible:opacity-100 group-focus-visible:delay-300">
               <span className="mr-2">Next Quote</span>
               <span className="inline-flex min-w-6 items-center justify-center rounded-md border-1 border-stone-600 bg-stone-800 px-2 py-1 font-mono text-[10px] text-orange-50">
                 →
