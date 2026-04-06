@@ -26,20 +26,12 @@
   font-display: swap;
 }
 
-@font-face {
-  font-family: "Prata";
-  src: url("/Prata-Regular.ttf") format("truetype");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
 .Redaction {
-  font-family: "Redaction", monospace;
+  font-family: "Redaction", Times, serif;
 }
 
 .Alte {
-  font-family: "Alte Haas Grotesk", monospace;
+  font-family: "Alte Haas Grotesk", system-ui, sans-serif;
 }
 
 .variableSize {
