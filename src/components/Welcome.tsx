@@ -3,6 +3,7 @@ import type { Quote } from "../types/Quote";
 import { supabase } from "../db/supabase";
 import StackInfo from "./StackInfo.tsx";
 import Toolbar from "./Toolbar.tsx";
+import Ornaments from "./Ornaments.tsx";
 
 const authorImages: Record<string, string> = {
   dostoevsky: "dostoevsky.jpg",
@@ -32,8 +33,19 @@ export default function Welcome() {
   const [isDark, setIsDark] = useState(false);
   const [reloading, isReloading] = useState(false);
   const [isAuthorHovered, setIsAuthorHovered] = useState(false);
-
   const currentAuthorImage = getAuthorImage(quotes[currentIndex]?.author);
+  const [currentImageSrc, setCurrentImageSrc] = useState(currentAuthorImage);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
+  useEffect(() => {
+    if (currentAuthorImage !== currentImageSrc) {
+      setIsTransitioning(true);
+      setTimeout(() => {
+        setCurrentImageSrc(currentAuthorImage);
+        setIsTransitioning(false);
+      }, 200);
+    }
+  }, [currentAuthorImage]);
 
   useEffect(() => {
     getQuote();
@@ -119,11 +131,13 @@ export default function Welcome() {
 
       <main className="flex h-dvh w-dvw flex-col justify-center px-5 sm:px-16 md:px-28 lg:px-52 xl:px-96 2xl:px-120">
         <div className="relative flex h-2/3 flex-col justify-center gap-10 p-10">
-          <img
-            src={currentAuthorImage}
-            alt={quotes[currentIndex]?.author || "Author"}
-            className={`absolute inset-0 -z-10 h-full w-full rounded-2xl object-cover transition-all duration-300 ${isAuthorHovered ? "blur-none" : "blur-3xl"}`}
-          />
+          <div className="absolute inset-0 -z-10 rounded-3xl">
+            <img
+              src={currentImageSrc}
+              alt={quotes[currentIndex]?.author || "Author"}
+              className={`absolute inset-0 h-full w-full rounded-3xl object-cover shadow-[inset_0_0_80px_40px_rgba(0,0,0,0.3)] transition-all duration-200 ${isTransitioning ? "opacity-0" : "opacity-100"} ${isAuthorHovered ? "blur-none" : "blur-3xl"}`}
+            />
+          </div>
 
           <p
             className={`variableSize text-center transition-all duration-200 ease-out text-shadow-lg/30 ${reloading || isAuthorHovered ? "opacity-0" : "opacity-100"}`}
@@ -135,7 +149,7 @@ export default function Welcome() {
             <span>&nbsp;»</span>
           </p>
           <a
-            href={`https://www.google.com/search?q=${encodeURIComponent(quotes[currentIndex]?.quote || "")}`}
+            href={`https://www.google.com/search?q=${encodeURIComponent(quotes[currentIndex]?.author || "")}`}
             target="_blank"
             rel="noopener noreferrer"
             onMouseEnter={() => setIsAuthorHovered(true)}
@@ -143,7 +157,7 @@ export default function Welcome() {
             className={`ml-auto w-fit rounded-lg px-3 py-2 text-xl transition-all duration-200 ease-out text-shadow-lg/30 hover:backdrop-blur-xs md:text-2xl ${reloading ? "opacity-0" : "opacity-100"}`}
           >
             —{" "}
-            <span className="underline">
+            <span className="underline decoration-1">
               {quotes[currentIndex]?.author || "Loading..."}
             </span>
           </a>
@@ -159,6 +173,7 @@ export default function Welcome() {
       </main>
 
       <StackInfo />
+      {/*<Ornaments />*/}
     </>
   );
 }

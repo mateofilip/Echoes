@@ -18,7 +18,10 @@ export default function StackInfo() {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as Node)
+      ) {
         handleClose();
       }
     };
@@ -44,7 +47,7 @@ export default function StackInfo() {
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="animate-in fade-in slide-in-from-bottom-4 fixed right-4 bottom-4 z-[60] flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-neutral-700 bg-neutral-800 text-white shadow-lg transition-transform hover:scale-110 hover:bg-neutral-700 active:scale-95"
+        className="animate-in fade-in slide-in-from-bottom-4 fixed right-4 bottom-4 z-[60] flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 text-white shadow-lg transition-all hover:scale-110 hover:bg-stone-800 active:scale-95"
         aria-label="View Tech Stack"
         title="View Tech Stack"
       >
@@ -67,13 +70,13 @@ export default function StackInfo() {
 
       {isOpen && (
         <div
-          className={`Alte fixed inset-0 z-[70] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm transition-opacity duration-200 ${
+          className={`Alte fixed inset-0 z-[70] flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm transition-opacity duration-200 ${
             isAnimating ? "opacity-100" : "opacity-0"
           }`}
         >
           <div
             ref={modalRef}
-            className={`w-full max-w-sm rounded-2xl border border-neutral-700 bg-neutral-900/95 p-6 shadow-2xl transition-all duration-200 ${
+            className={`w-full max-w-sm rounded-2xl border border-stone-800 bg-stone-950/50 p-6 shadow-2xl backdrop-blur-2xl transition-all duration-200 ${
               isAnimating ? "scale-100 opacity-100" : "scale-95 opacity-0"
             }`}
           >
@@ -81,7 +84,7 @@ export default function StackInfo() {
               <h2 className="text-xl font-bold text-white">Tech Stack</h2>
               <button
                 onClick={handleClose}
-                className="cursor-pointer rounded-full p-1 text-neutral-400 transition-colors hover:bg-neutral-800 hover:text-white"
+                className="cursor-pointer rounded-full p-1 text-white transition-all hover:bg-stone-800 active:scale-95"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -103,12 +106,12 @@ export default function StackInfo() {
               {stack.map((item) => (
                 <li
                   key={item.name}
-                  className="flex items-center justify-between rounded-xl border border-neutral-700/50 bg-neutral-800/50 p-3 transition-colors hover:bg-neutral-800"
+                  className="flex items-center justify-between rounded-xl border border-stone-800 bg-stone-900/50 p-3 transition-all hover:bg-stone-800/50"
                 >
                   <span className="font-semibold text-slate-100">
                     {item.name}
                   </span>
-                  <span className="rounded-full bg-orange-400/10 px-2 py-1 text-xs font-medium text-orange-400">
+                  <span className="rounded-full bg-orange-200/10 px-2 py-1 text-xs font-medium text-orange-200">
                     {item.description}
                   </span>
                 </li>
