@@ -1,7 +1,5 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:where(.dark, .dark *));
-
 @font-face {
   font-family: "Redaction";
   src: url("/Redaction-Bold.woff2") format("woff2");
