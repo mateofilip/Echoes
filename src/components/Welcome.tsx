@@ -3,13 +3,37 @@ import type { Quote } from "../types/Quote";
 import { supabase } from "../db/supabase";
 import StackInfo from "./StackInfo.tsx";
 import Toolbar from "./Toolbar.tsx";
-import Dostoevsky from "../assets/dostoevsky.jpg?url";
+
+const authorImages: Record<string, string> = {
+  dostoevsky: "dostoevsky.jpg",
+  nietzsche: "nietzsche.jpg",
+  shakespeare: "shakespeare.jpg",
+  aristotle: "aristotle.jpg",
+  confucius: "confucius.jpg",
+  einstein: "einstein.jpg",
+  huxley: "huxley.jpg",
+  orwell: "orwell.jpg",
+  plato: "plato.jpg",
+  socrates: "socrates.jpg",
+  tolstoy: "tolstoy.jpg",
+};
+
+const getAuthorImage = (author: string | undefined) => {
+  const authorLower = author?.toLowerCase() || "";
+  const matched = Object.keys(authorImages).find((name) =>
+    authorLower.includes(name),
+  );
+  return matched ? `/${authorImages[matched]}` : "/unknown.jpg";
+};
 
 export default function Welcome() {
   const [quotes, setQuotes] = useState<Quote[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isDark, setIsDark] = useState(false);
   const [reloading, isReloading] = useState(false);
+  const [isAuthorHovered, setIsAuthorHovered] = useState(false);
+
+  const currentAuthorImage = getAuthorImage(quotes[currentIndex]?.author);
 
   useEffect(() => {
     getQuote();
@@ -94,15 +118,15 @@ export default function Welcome() {
       </h1>
 
       <main className="flex h-dvh w-dvw flex-col justify-center px-5 sm:px-16 md:px-28 lg:px-52 xl:px-96 2xl:px-120">
-        <div className="relative flex h-2/3 flex-col justify-center gap-20 p-10">
+        <div className="relative flex h-2/3 flex-col justify-center gap-10 p-10">
           <img
-            src={Dostoevsky}
-            alt="Dostoevsky"
-            className="absolute inset-0 -z-10 h-full w-full rounded-md object-cover blur-md"
+            src={currentAuthorImage}
+            alt={quotes[currentIndex]?.author || "Author"}
+            className={`absolute inset-0 -z-10 h-full w-full rounded-2xl object-cover transition-all duration-300 ${isAuthorHovered ? "blur-none" : "blur-3xl"}`}
           />
 
           <p
-            className={`variableSize text-center transition-all duration-200 ease-out text-shadow-lg/30 ${reloading ? "opacity-0" : "opacity-100"}`}
+            className={`variableSize text-center transition-all duration-200 ease-out text-shadow-lg/30 ${reloading || isAuthorHovered ? "opacity-0" : "opacity-100"}`}
           >
             <span>«&nbsp;</span>
             {quotes[currentIndex]?.quote
@@ -110,19 +134,19 @@ export default function Welcome() {
               : "Loading..."}
             <span>&nbsp;»</span>
           </p>
-          <h2
-            className={`text-right text-xl transition-all duration-200 ease-out md:text-2xl ${reloading ? "opacity-0" : "opacity-100"}`}
+          <a
+            href={`https://www.google.com/search?q=${encodeURIComponent(quotes[currentIndex]?.quote || "")}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            onMouseEnter={() => setIsAuthorHovered(true)}
+            onMouseLeave={() => setIsAuthorHovered(false)}
+            className={`ml-auto w-fit rounded-lg px-3 py-2 text-xl transition-all duration-200 ease-out text-shadow-lg/30 hover:backdrop-blur-xs md:text-2xl ${reloading ? "opacity-0" : "opacity-100"}`}
           >
             —{" "}
-            <a
-              href={`https://www.google.com/search?q=${encodeURIComponent(quotes[currentIndex]?.author || "")}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:underline"
-            >
+            <span className="underline">
               {quotes[currentIndex]?.author || "Loading..."}
-            </a>
-          </h2>
+            </span>
+          </a>
         </div>
 
         <Toolbar
