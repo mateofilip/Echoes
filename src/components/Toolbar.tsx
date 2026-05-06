@@ -45,7 +45,7 @@ export default function QuoteToolbar({
     <div className="absolute right-1/2 bottom-4 left-1/2 flex justify-center gap-2">
       <button
         onClick={handleNewQuote}
-        className="group relative w-fit cursor-pointer rounded-lg border-2 border-gray-700 p-3 shadow-none transition-all duration-200 ease-out hover:scale-105 hover:shadow-lg dark:border-orange-200"
+        className="group relative w-fit cursor-pointer rounded-lg border border-stone-800 bg-stone-900 p-3 shadow-none transition-all duration-200 ease-out hover:scale-105 hover:shadow-lg"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -62,18 +62,17 @@ export default function QuoteToolbar({
             clipRule="evenodd"
           />
         </svg>
-        <span className="Alte absolute -top-15 left-1/2 z-10 -translate-x-1/2 translate-y-2 rounded-2xl border border-stone-700/60 bg-stone-900/95 p-3 text-xs whitespace-nowrap text-orange-50 opacity-0 shadow-2xl ring-1 ring-stone-600/40 backdrop-blur-md transition-all duration-200 ease-out group-hover:-translate-y-0 group-hover:opacity-100 group-hover:delay-300 group-focus-visible:-translate-y-0 group-focus-visible:opacity-100 group-focus-visible:delay-300">
-          <span className="mr-2">New Quote</span>
-          <span className="inline-flex min-w-6 items-center justify-center rounded-md border-1 border-stone-600 bg-stone-800 px-2 py-1 font-mono text-[10px] text-orange-50">
+        <span className="Alte absolute -top-15 left-1/2 z-10 flex -translate-x-1/2 translate-y-2 items-center justify-center gap-2 rounded-2xl bg-stone-900 p-3 text-xs whitespace-nowrap text-orange-200 opacity-0 shadow-2xl transition-all duration-200 ease-out group-hover:-translate-y-0 group-hover:opacity-100 group-hover:delay-300 group-focus-visible:-translate-y-0 group-focus-visible:opacity-100 group-focus-visible:delay-300 before:absolute before:top-full before:left-1/2 before:h-2 before:w-2 before:-translate-x-1/2 before:-translate-y-1/2 before:rotate-45 before:rounded-br-sm before:bg-stone-900 before:shadow-xl before:content-['']">
+          New Quote
+          <span className="inline-flex min-w-6 items-center justify-center rounded-md border border-stone-700 bg-stone-800 px-2 py-1 font-mono text-[10px]">
             R
           </span>
-          <span className="absolute top-full left-1/2 h-0 w-0 -translate-x-1/2 border-x-8 border-t-8 border-b-0 border-x-transparent border-t-stone-900"></span>
         </span>
       </button>
 
       <button
         onClick={handlePreviousQuote}
-        className="group relative w-fit cursor-pointer rounded-lg border-2 border-gray-700 p-3 shadow-none transition-all duration-200 ease-out hover:scale-105 hover:shadow-lg disabled:cursor-not-allowed disabled:border-gray-400 disabled:text-gray-400 disabled:hover:scale-none disabled:hover:shadow-none dark:border-orange-200"
+        className="group relative w-fit cursor-pointer rounded-lg border border-stone-800 bg-stone-900 p-3 shadow-none transition-all duration-200 ease-out hover:scale-105 hover:shadow-lg disabled:cursor-not-allowed disabled:border-stone-700 disabled:text-stone-600 disabled:hover:scale-none disabled:hover:shadow-none"
         disabled={!canGoPrevious}
       >
         <svg
@@ -91,18 +90,17 @@ export default function QuoteToolbar({
             clipRule="evenodd"
           />
         </svg>
-        <span className="Alte absolute -top-15 left-1/2 z-10 -translate-x-1/2 translate-y-2 rounded-2xl border border-stone-700/60 bg-stone-900/95 p-3 text-xs whitespace-nowrap text-orange-50 opacity-0 shadow-2xl ring-1 ring-stone-600/40 backdrop-blur-md transition-all duration-200 ease-out group-hover:-translate-y-0 group-hover:opacity-100 group-hover:delay-300 group-focus-visible:-translate-y-0 group-focus-visible:opacity-100 group-focus-visible:delay-300">
+        <span className="Alte absolute -top-15 left-1/2 z-10 -translate-x-1/2 translate-y-2 rounded-2xl bg-stone-900 p-3 text-xs whitespace-nowrap text-orange-200 opacity-0 shadow-2xl transition-all duration-200 ease-out group-hover:-translate-y-0 group-hover:opacity-100 group-hover:delay-300 group-focus-visible:-translate-y-0 group-focus-visible:opacity-100 group-focus-visible:delay-300 before:absolute before:top-full before:left-1/2 before:h-2 before:w-2 before:-translate-x-1/2 before:-translate-y-1/2 before:rotate-45 before:rounded-br-sm before:bg-stone-900 before:shadow-xl before:content-['']">
           <span className="mr-2">Previous Quote</span>
-          <span className="inline-flex min-w-6 items-center justify-center rounded-md border-1 border-stone-600 bg-stone-800 px-2 py-1 font-mono text-[10px] text-orange-50">
+          <span className="inline-flex min-w-6 items-center justify-center rounded-md border border-stone-700 bg-stone-800 px-2 py-1 font-mono text-[10px]">
             ←
           </span>
-          <span className="absolute top-full left-1/2 h-0 w-0 -translate-x-1/2 border-x-8 border-t-8 border-b-0 border-x-transparent border-t-stone-900"></span>
         </span>
       </button>
 
       <button
         onClick={handleNextQuote}
-        className="group relative w-fit cursor-pointer rounded-lg border-2 border-gray-700 p-3 shadow-none transition-all duration-200 ease-out hover:scale-105 hover:shadow-lg disabled:cursor-not-allowed disabled:border-gray-400 disabled:text-gray-400 disabled:hover:scale-none disabled:hover:shadow-none dark:border-orange-200"
+        className="group relative w-fit cursor-pointer rounded-lg border border-stone-800 bg-stone-900 p-3 shadow-none transition-all duration-200 ease-out hover:scale-105 hover:shadow-lg disabled:cursor-not-allowed disabled:border-stone-700 disabled:text-stone-600 disabled:hover:scale-none disabled:hover:shadow-none"
         disabled={!canGoNext}
       >
         <svg
@@ -121,12 +119,11 @@ export default function QuoteToolbar({
           />
         </svg>
 
-        <span className="Alte absolute -top-15 left-1/2 z-10 -translate-x-1/2 translate-y-2 rounded-2xl border border-stone-700/60 bg-stone-900/95 p-3 text-xs whitespace-nowrap text-orange-50 opacity-0 shadow-2xl ring-1 ring-stone-600/40 backdrop-blur-md transition-all duration-200 ease-out group-hover:-translate-y-0 group-hover:opacity-100 group-hover:delay-300 group-focus-visible:-translate-y-0 group-focus-visible:opacity-100 group-focus-visible:delay-300">
+        <span className="Alte absolute -top-15 left-1/2 z-10 -translate-x-1/2 translate-y-2 rounded-2xl bg-stone-900 p-3 text-xs whitespace-nowrap text-orange-200 opacity-0 shadow-2xl transition-all duration-200 ease-out group-hover:-translate-y-0 group-hover:opacity-100 group-hover:delay-300 group-focus-visible:-translate-y-0 group-focus-visible:opacity-100 group-focus-visible:delay-300 before:absolute before:top-full before:left-1/2 before:h-2 before:w-2 before:-translate-x-1/2 before:-translate-y-1/2 before:rotate-45 before:rounded-br-sm before:bg-stone-900 before:shadow-xl before:content-['']">
           <span className="mr-2">Next Quote</span>
-          <span className="inline-flex min-w-6 items-center justify-center rounded-md border-1 border-stone-600 bg-stone-800 px-2 py-1 font-mono text-[10px] text-orange-50">
+          <span className="inline-flex min-w-6 items-center justify-center rounded-md border border-stone-700 bg-stone-800 px-2 py-1 font-mono text-[10px]">
             →
           </span>
-          <span className="absolute top-full left-1/2 h-0 w-0 -translate-x-1/2 border-x-8 border-t-8 border-b-0 border-x-transparent border-t-stone-900"></span>
         </span>
       </button>
     </div>

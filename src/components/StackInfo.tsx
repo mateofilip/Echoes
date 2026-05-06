@@ -76,7 +76,7 @@ export default function StackInfo() {
         >
           <div
             ref={modalRef}
-            className={`w-full max-w-sm rounded-2xl border border-stone-800 bg-stone-950/50 p-6 shadow-2xl backdrop-blur-2xl transition-all duration-200 ${
+            className={`w-full max-w-sm rounded-2xl border border-stone-800 bg-stone-950/50 p-6 shadow-2xl backdrop-blur-3xl transition-all duration-200 ${
               isAnimating ? "scale-100 opacity-100" : "scale-95 opacity-0"
             }`}
           >
