@@ -131,11 +131,11 @@ export default function Welcome() {
 
       <main className="flex h-dvh w-dvw flex-col justify-center px-5 sm:px-16 md:px-28 lg:px-52 xl:px-96 2xl:px-120">
         <div className="relative flex h-2/3 flex-col justify-center gap-10 p-10">
-          <div className="absolute inset-0 -z-10 rounded-3xl">
+          <div className={`absolute inset-0 -z-10 rounded-3xl transition-all duration-200 ${isAuthorHovered ? "" : "blur-2xl"}`}>
             <img
               src={currentImageSrc}
               alt={quotes[currentIndex]?.author || "Author"}
-              className={`absolute inset-0 h-full w-full rounded-3xl object-cover shadow-[inset_0_0_80px_40px_rgba(0,0,0,0.3)] transition-all duration-200 ${isTransitioning ? "opacity-0" : "opacity-100"} ${isAuthorHovered ? "blur-none" : "blur-2xl"}`}
+              className={`absolute inset-0 h-full w-full rounded-3xl mask-[url(./mask.webp)] mask-cover mask-center object-cover shadow-[inset_0_0_80px_40px_rgba(0,0,0,0.3)] transition-all duration-200 ${isTransitioning ? "opacity-0" : "opacity-100"}`}
             />
           </div>
 
