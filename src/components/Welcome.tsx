@@ -6,17 +6,17 @@ import Toolbar from "./Toolbar.tsx";
 import Ornaments from "./Ornaments.jsx";
 
 const authorImages: Record<string, string> = {
-  dostoevsky: "dostoevsky.jpg",
-  nietzsche: "nietzsche.jpg",
-  shakespeare: "shakespeare.jpg",
-  aristotle: "aristotle.jpg",
-  confucius: "confucius.jpg",
-  einstein: "einstein.jpg",
-  huxley: "huxley.jpg",
-  orwell: "orwell.jpg",
-  plato: "plato.jpg",
-  socrates: "socrates.jpg",
-  tolstoy: "tolstoy.jpg",
+  dostoevsky: "dostoevsky.avif",
+  nietzsche: "nietzsche.avif",
+  shakespeare: "shakespeare.avif",
+  aristotle: "aristotle.avif",
+  confucius: "confucius.avif",
+  einstein: "einstein.avif",
+  huxley: "huxley.avif",
+  orwell: "orwell.avif",
+  plato: "plato.avif",
+  socrates: "socrates.avif",
+  tolstoy: "tolstoy.avif",
 };
 
 const getAuthorImage = (author: string | undefined) => {
@@ -24,7 +24,7 @@ const getAuthorImage = (author: string | undefined) => {
   const matched = Object.keys(authorImages).find((name) =>
     authorLower.includes(name),
   );
-  return matched ? `/${authorImages[matched]}` : "/unknown.jpg";
+  return matched ? `/authors/${authorImages[matched]}` : "/unknown.jpg";
 };
 
 export default function Welcome() {
@@ -36,12 +36,18 @@ export default function Welcome() {
   const currentAuthorImage = getAuthorImage(quotes[currentIndex]?.author);
   const [currentImageSrc, setCurrentImageSrc] = useState(currentAuthorImage);
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [maskRotation, setMaskRotation] = useState(0);
+  const maskFlips = [
+    { mask: "", img: "" },
+    { mask: "scale-x-[-1]", img: "scale-x-[-1]" },
+    { mask: "scale-y-[-1]", img: "scale-y-[-1]" },
+    { mask: "scale-x-[-1] scale-y-[-1]", img: "scale-x-[-1] scale-y-[-1]" },
+  ];
+  const [flipIndex, setFlipIndex] = useState(0);
 
   useEffect(() => {
     if (currentAuthorImage !== currentImageSrc) {
       setIsTransitioning(true);
-      setMaskRotation([0, 90, 180, 270][Math.floor(Math.random() * 4)]);
+      setFlipIndex(Math.floor(Math.random() * 4));
       setTimeout(() => {
         setCurrentImageSrc(currentAuthorImage);
         setIsTransitioning(false);
@@ -134,17 +140,15 @@ export default function Welcome() {
       <main className="flex h-dvh w-dvw flex-col justify-center px-5 sm:px-16 md:px-28 lg:px-52 xl:px-96 2xl:px-120">
         <div className="relative flex h-2/3 flex-col justify-center gap-10 p-10">
           <div
-            className={`absolute inset-0 -z-10 overflow-hidden rounded-3xl p-4 transition-all duration-200 ${isAuthorHovered ? "" : "blur-2xl"}`}
+            className={`absolute inset-0 -z-10 overflow-hidden rounded-3xl p-4 transition-all duration-200 ${isAuthorHovered ? "" : "blur-3xl"}`}
           >
             <div
-              className="absolute inset-0 mask-[url(/mask.png)] mask-cover mask-center mask-no-repeat"
-              style={{ transform: `rotate(${maskRotation}deg)` }}
+              className={`absolute inset-0 mask-[url(/mask.png)] mask-cover mask-center mask-no-repeat ${maskFlips[flipIndex].mask}`}
             >
               <img
                 src={currentImageSrc}
                 alt={quotes[currentIndex]?.author || "Author"}
-                className={`h-full w-full object-cover transition-opacity duration-200 ${isTransitioning ? "opacity-0" : "opacity-100"}`}
-                style={{ transform: `rotate(-${maskRotation}deg)` }}
+                className={`h-full w-full object-cover transition-opacity duration-200 ${isTransitioning ? "opacity-0" : "opacity-100"} ${maskFlips[flipIndex].img}`}
               />
             </div>
           </div>
