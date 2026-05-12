@@ -3,7 +3,6 @@ import type { Quote } from "../types/Quote";
 import { supabase } from "../db/supabase";
 import StackInfo from "./StackInfo.tsx";
 import QuoteToolbar, { type ToolbarRef } from "./Toolbar.tsx";
-import Ornaments from "./Ornaments.jsx";
 
 const authorImages: Record<string, string> = {
   dostoevsky: "dostoevsky.avif",
@@ -24,7 +23,7 @@ const getAuthorImage = (author: string | undefined) => {
   const matched = Object.keys(authorImages).find((name) =>
     authorLower.includes(name),
   );
-  return matched ? `/authors/${authorImages[matched]}` : "/authors/nietzsche.avif";
+  return matched ? `/authors/${authorImages[matched]}` : "";
 };
 
 export default function Welcome() {
@@ -35,7 +34,7 @@ export default function Welcome() {
   const [isAuthorHovered, setIsAuthorHovered] = useState(false);
   const currentAuthorImage = getAuthorImage(quotes[currentIndex]?.author);
   const [currentImageSrc, setCurrentImageSrc] = useState(currentAuthorImage);
-  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(true);
   const maskFlips = [
     { mask: "", img: "" },
     { mask: "scale-x-[-1]", img: "scale-x-[-1]" },
@@ -51,8 +50,10 @@ export default function Welcome() {
       setFlipIndex(Math.floor(Math.random() * 4));
       setTimeout(() => {
         setCurrentImageSrc(currentAuthorImage);
-        setIsTransitioning(false);
       }, 200);
+      setTimeout(() => {
+        setIsTransitioning(false);
+      }, 400);
     }
   }, [currentAuthorImage]);
 
@@ -89,6 +90,11 @@ export default function Welcome() {
         .single<{ quote: string; author: string }>();
 
       if (!data) throw new Error(error?.message || "Unknown error");
+
+      const authorImage = getAuthorImage(data.author);
+      if (!authorImage) {
+        return getQuote();
+      }
 
       const isDuplicate = quotes.some(
         (q) => q.quote === data.quote && q.author === data.author,
@@ -146,14 +152,18 @@ export default function Welcome() {
             <div
               className={`absolute inset-0 mask-[url(/mask.png)] mask-cover mask-center mask-no-repeat ${maskFlips[flipIndex].mask}`}
             >
-              <img
-                src={currentImageSrc}
-                alt={quotes[currentIndex]?.author || "Author"}
-                className={`h-full w-full object-cover transition-opacity duration-200 ${isTransitioning ? "opacity-0" : "opacity-100"} ${maskFlips[flipIndex].img}`}
-                loading="eager"
-                fetchPriority="high"
-                decoding="async"
-              />
+              {currentImageSrc ? (
+                <img
+                  src={currentImageSrc}
+                  alt={quotes[currentIndex]?.author || "Author"}
+                  className={`h-full w-full object-cover transition-opacity duration-200 ${isTransitioning ? "opacity-0" : "opacity-100"} ${maskFlips[flipIndex].img}`}
+                  loading="eager"
+                  fetchPriority="high"
+                  decoding="async"
+                />
+              ) : (
+                <div className={`h-full w-full transition-opacity duration-200 ${isTransitioning ? "opacity-0" : "opacity-100"}`} />
+              )}
             </div>
           </div>
 
@@ -192,7 +202,6 @@ export default function Welcome() {
       </main>
 
       <StackInfo />
-      {/*<Ornaments />*/}
     </>
   );
 }
