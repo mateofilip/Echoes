@@ -22,6 +22,15 @@
 		{
 			"src": "^/$",
 			"dest": "_render"
+		},
+		{
+			"src": "^/404/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/.*$",
+			"dest": "_render",
+			"status": 404
 		}
 	]
 }
