@@ -1,50 +1,55 @@
-import { useState } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 
 interface QuoteToolbarProps {
-  onNewQuote: () => void;
-  onPreviousQuote: () => void;
-  onNextQuote: () => void;
   canGoPrevious: boolean;
   canGoNext: boolean;
+  onNewQuote?: () => void;
+  onPreviousQuote?: () => void;
+  onNextQuote?: () => void;
 }
 
-export default function QuoteToolbar({
-  onNewQuote,
-  onPreviousQuote,
-  onNextQuote,
-  canGoPrevious,
-  canGoNext,
-}: QuoteToolbarProps) {
+interface ToolbarRef {
+  triggerReload: () => void;
+  triggerPrev: () => void;
+  triggerNext: () => void;
+}
+
+const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(({ canGoPrevious, canGoNext, onNewQuote, onPreviousQuote, onNextQuote }, ref) => {
   const [isReloadingButton, setIsReloadingButton] = useState(false);
   const [isPrevAnimating, setIsPrevAnimating] = useState(false);
   const [isNextAnimating, setIsNextAnimating] = useState(false);
 
-  const handleNewQuote = () => {
-    setIsReloadingButton(true);
-    onNewQuote();
-    setTimeout(() => setIsReloadingButton(false), 500);
-  };
+  useImperativeHandle(ref, () => ({
+    triggerReload: () => setIsReloadingButton(true),
+    triggerPrev: () => canGoPrevious && setIsPrevAnimating(true),
+    triggerNext: () => canGoNext && setIsNextAnimating(true),
+  }));
 
-  const handlePreviousQuote = () => {
-    if (canGoPrevious) {
-      setIsPrevAnimating(true);
-      onPreviousQuote();
+  useEffect(() => {
+    if (isReloadingButton) {
+      onNewQuote?.();
+      setTimeout(() => setIsReloadingButton(false), 500);
+    }
+  }, [isReloadingButton]);
+
+  useEffect(() => {
+    if (isPrevAnimating) {
+      onPreviousQuote?.();
       setTimeout(() => setIsPrevAnimating(false), 500);
     }
-  };
+  }, [isPrevAnimating]);
 
-  const handleNextQuote = () => {
-    if (canGoNext) {
-      setIsNextAnimating(true);
-      onNextQuote();
+  useEffect(() => {
+    if (isNextAnimating) {
+      onNextQuote?.();
       setTimeout(() => setIsNextAnimating(false), 500);
     }
-  };
+  }, [isNextAnimating]);
 
   return (
     <div className="absolute right-1/2 bottom-4 left-1/2 flex justify-center gap-2">
       <button
-        onClick={handleNewQuote}
+        onClick={() => setIsReloadingButton(true)}
         className="group relative w-fit cursor-pointer rounded-lg border border-stone-800 bg-stone-900 p-3 shadow-none transition-all duration-200 ease-out hover:scale-105 hover:shadow-lg"
       >
         <svg
@@ -74,7 +79,7 @@ export default function QuoteToolbar({
       </button>
 
       <button
-        onClick={handlePreviousQuote}
+        onClick={() => canGoPrevious && setIsPrevAnimating(true)}
         className="group relative w-fit cursor-pointer rounded-lg border border-stone-800 bg-stone-900 p-3 shadow-none transition-all duration-200 ease-out hover:scale-105 hover:shadow-lg disabled:cursor-not-allowed disabled:border-stone-700 disabled:text-stone-600 disabled:hover:scale-none disabled:hover:shadow-none"
         disabled={!canGoPrevious}
       >
@@ -105,7 +110,7 @@ export default function QuoteToolbar({
       </button>
 
       <button
-        onClick={handleNextQuote}
+        onClick={() => canGoNext && setIsNextAnimating(true)}
         className="group relative w-fit cursor-pointer rounded-lg border border-stone-800 bg-stone-900 p-3 shadow-none transition-all duration-200 ease-out hover:scale-105 hover:shadow-lg disabled:cursor-not-allowed disabled:border-stone-700 disabled:text-stone-600 disabled:hover:scale-none disabled:hover:shadow-none"
         disabled={!canGoNext}
       >
@@ -137,4 +142,8 @@ export default function QuoteToolbar({
       </button>
     </div>
   );
-}
+});
+
+export type { ToolbarRef };
+
+export default QuoteToolbar;

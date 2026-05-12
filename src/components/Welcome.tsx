@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import type { Quote } from "../types/Quote";
 import { supabase } from "../db/supabase";
 import StackInfo from "./StackInfo.tsx";
-import Toolbar from "./Toolbar.tsx";
+import QuoteToolbar, { type ToolbarRef } from "./Toolbar.tsx";
 import Ornaments from "./Ornaments.jsx";
 
 const authorImages: Record<string, string> = {
@@ -24,7 +24,7 @@ const getAuthorImage = (author: string | undefined) => {
   const matched = Object.keys(authorImages).find((name) =>
     authorLower.includes(name),
   );
-  return matched ? `/authors/${authorImages[matched]}` : "/unknown.jpg";
+  return matched ? `/authors/${authorImages[matched]}` : "/authors/nietzsche.avif";
 };
 
 export default function Welcome() {
@@ -43,6 +43,7 @@ export default function Welcome() {
     { mask: "scale-x-[-1] scale-y-[-1]", img: "scale-x-[-1] scale-y-[-1]" },
   ];
   const [flipIndex, setFlipIndex] = useState(0);
+  const toolbarRef = useRef<ToolbarRef>(null);
 
   useEffect(() => {
     if (currentAuthorImage !== currentImageSrc) {
@@ -64,20 +65,20 @@ export default function Welcome() {
       if (e.repeat) return;
       if (e.key === "ArrowLeft") {
         e.preventDefault();
-        getPreviousQuote();
+        toolbarRef.current?.triggerPrev();
       } else if (e.key === "ArrowRight") {
         e.preventDefault();
-        getNextQuote();
+        toolbarRef.current?.triggerNext();
       } else if (e.key.toLowerCase() === "r") {
         e.preventDefault();
-        getQuote();
+        toolbarRef.current?.triggerReload();
       }
     };
     window.addEventListener("keydown", onKeyDown);
     return () => {
       window.removeEventListener("keydown", onKeyDown);
     };
-  }, [currentIndex, quotes, isDark]);
+  }, []);
 
   const getQuote = async () => {
     try {
@@ -149,6 +150,9 @@ export default function Welcome() {
                 src={currentImageSrc}
                 alt={quotes[currentIndex]?.author || "Author"}
                 className={`h-full w-full object-cover transition-opacity duration-200 ${isTransitioning ? "opacity-0" : "opacity-100"} ${maskFlips[flipIndex].img}`}
+                loading="eager"
+                fetchPriority="high"
+                decoding="async"
               />
             </div>
           </div>
@@ -177,7 +181,8 @@ export default function Welcome() {
           </a>
         </div>
 
-        <Toolbar
+        <QuoteToolbar
+          ref={toolbarRef}
           onNewQuote={getQuote}
           onPreviousQuote={getPreviousQuote}
           onNextQuote={getNextQuote}
