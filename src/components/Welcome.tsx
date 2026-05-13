@@ -30,7 +30,7 @@ export default function Welcome() {
   const [quotes, setQuotes] = useState<Quote[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isDark, setIsDark] = useState(false);
-  const [reloading, isReloading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [isAuthorHovered, setIsAuthorHovered] = useState(false);
   const currentAuthorImage = getAuthorImage(quotes[currentIndex]?.author);
   const [currentImageSrc, setCurrentImageSrc] = useState(currentAuthorImage);
@@ -81,9 +81,9 @@ export default function Welcome() {
     };
   }, []);
 
-  const getQuote = async () => {
+const getQuote = async () => {
     try {
-      isReloading(true);
+      setIsLoading(true);
 
       const { data, error } = await supabase
         .rpc("get_random_quote")
@@ -104,37 +104,31 @@ export default function Welcome() {
         return getQuote();
       }
 
-      setTimeout(() => {
-        setQuotes([{ quote: data.quote, author: data.author }, ...quotes]);
-        setCurrentIndex(0);
-        isReloading(false);
-      }, 500);
+      setQuotes([{ quote: data.quote, author: data.author }, ...quotes]);
+      setCurrentIndex(0);
+      setTimeout(() => setIsLoading(false), 450);
     } catch (error) {
       console.error(error);
       setQuotes([
         { quote: "Oops... Something went wrong.", author: "Unknown" },
       ]);
-      isReloading(false);
+      setIsLoading(false);
     }
   };
 
-  const getPreviousQuote = () => {
+const getPreviousQuote = () => {
     if (currentIndex < quotes.length - 1) {
-      isReloading(true);
-      setTimeout(() => {
-        setCurrentIndex(currentIndex + 1);
-        isReloading(false);
-      }, 500);
+      setIsLoading(true);
+      setCurrentIndex(currentIndex + 1);
+      setIsLoading(false);
     }
   };
 
   const getNextQuote = () => {
     if (currentIndex > 0) {
-      isReloading(true);
-      setTimeout(() => {
-        setCurrentIndex(currentIndex - 1);
-        isReloading(false);
-      }, 500);
+      setIsLoading(true);
+      setCurrentIndex(currentIndex - 1);
+      setIsLoading(false);
     }
   };
 
@@ -170,7 +164,7 @@ export default function Welcome() {
           </div>
 
           <p
-            className={`variableSize text-center transition-all duration-200 ease-out text-shadow-lg/30 ${reloading || isAuthorHovered ? "opacity-0" : "opacity-100"}`}
+            className={`variableSize text-center transition-all duration-200 ease-out text-shadow-lg/30 ${isLoading || isAuthorHovered ? "opacity-0" : "opacity-100"}`}
           >
             <span>«&nbsp;</span>
             {quotes[currentIndex]?.quote
@@ -184,7 +178,7 @@ export default function Welcome() {
             rel="noopener noreferrer"
             onMouseEnter={() => setIsAuthorHovered(true)}
             onMouseLeave={() => setIsAuthorHovered(false)}
-            className={`ml-auto w-fit rounded-lg px-3 py-2 text-xl transition-all duration-200 ease-out text-shadow-lg/30 hover:backdrop-blur-xs md:text-2xl ${reloading ? "opacity-0" : "opacity-100"}`}
+            className={`ml-auto w-fit rounded-lg px-3 py-2 text-xl transition-all duration-200 ease-out text-shadow-lg/30 hover:backdrop-blur-xs md:text-2xl ${isLoading ? "opacity-0" : "opacity-100"}`}
           >
             —{" "}
             <span className="underline decoration-1">
