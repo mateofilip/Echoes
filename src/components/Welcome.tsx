@@ -150,7 +150,7 @@ export default function Welcome() {
             className={`absolute inset-0 -z-10 overflow-hidden rounded-3xl p-4 transition-all duration-200 ${isAuthorHovered ? "" : "blur-3xl"}`}
           >
             <div
-              className={`absolute inset-0 mask-[url(/mask.png)] mask-cover mask-center mask-no-repeat ${maskFlips[flipIndex].mask}`}
+              className={`absolute inset-0 h-full mask-[url(/mask.png)] mask-contain mask-center mask-no-repeat ${maskFlips[flipIndex].mask}`}
             >
               {currentImageSrc ? (
                 <img
@@ -162,7 +162,9 @@ export default function Welcome() {
                   decoding="async"
                 />
               ) : (
-                <div className={`h-full w-full transition-opacity duration-200 ${isTransitioning ? "opacity-0" : "opacity-100"}`} />
+                <div
+                  className={`h-full w-full transition-opacity duration-200 ${isTransitioning ? "opacity-0" : "opacity-100"}`}
+                />
               )}
             </div>
           </div>
