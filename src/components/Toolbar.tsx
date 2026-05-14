@@ -50,7 +50,7 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(({ canGoPrevious,
     <div className="absolute right-1/2 bottom-4 left-1/2 flex justify-center gap-2">
       <button
         onClick={() => setIsReloadingButton(true)}
-        className="group relative w-fit cursor-pointer rounded-lg border border-stone-800 bg-stone-900 p-3 shadow-none transition-all duration-200 ease-out hover:scale-105 hover:shadow-lg"
+        className={`group relative w-fit cursor-pointer rounded-lg border border-stone-800 bg-stone-900 p-3 shadow-none transition-all duration-200 ease-out hover:scale-105 hover:shadow-lg ${isReloadingButton ? "scale-110" : ""}`}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -80,7 +80,7 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(({ canGoPrevious,
 
       <button
         onClick={() => canGoPrevious && setIsPrevAnimating(true)}
-        className="group relative w-fit cursor-pointer rounded-lg border border-stone-800 bg-stone-900 p-3 shadow-none transition-all duration-200 ease-out hover:scale-105 hover:shadow-lg disabled:cursor-not-allowed disabled:border-stone-700 disabled:text-stone-600 disabled:hover:scale-none disabled:hover:shadow-none"
+        className={`group relative w-fit cursor-pointer rounded-lg border border-stone-800 bg-stone-900 p-3 shadow-none transition-all duration-200 ease-out hover:scale-105 hover:shadow-lg disabled:cursor-not-allowed disabled:border-stone-700 disabled:text-stone-600 disabled:hover:scale-none disabled:hover:shadow-none ${isPrevAnimating ? "scale-110" : ""}`}
         disabled={!canGoPrevious}
       >
         <svg
@@ -111,7 +111,7 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(({ canGoPrevious,
 
       <button
         onClick={() => canGoNext && setIsNextAnimating(true)}
-        className="group relative w-fit cursor-pointer rounded-lg border border-stone-800 bg-stone-900 p-3 shadow-none transition-all duration-200 ease-out hover:scale-105 hover:shadow-lg disabled:cursor-not-allowed disabled:border-stone-700 disabled:text-stone-600 disabled:hover:scale-none disabled:hover:shadow-none"
+        className={`group relative w-fit cursor-pointer rounded-lg border border-stone-800 bg-stone-900 p-3 shadow-none transition-all duration-200 ease-out hover:scale-105 hover:shadow-lg disabled:cursor-not-allowed disabled:border-stone-700 disabled:text-stone-600 disabled:hover:scale-none disabled:hover:shadow-none ${isNextAnimating ? "scale-110" : ""}`}
         disabled={!canGoNext}
       >
         <svg

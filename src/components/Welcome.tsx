@@ -111,7 +111,10 @@ export default function Welcome() {
               className={`absolute inset-0 h-full mask-[url(mask.avif)] mask-contain mask-center mask-no-repeat ${maskFlips[flipIndex].mask}`}
             >
               <img
-                src={`authors/${quotes[currentIndex]?.author?.toLowerCase().replace(/\s+/g, "-")}.avif`}
+                src={`authors/${quotes[currentIndex]?.author?.toLowerCase().replace(/\s+/g, "-")}-placeholder.avif`}
+                onLoad={(e) => {
+                  e.currentTarget.src = `authors/${quotes[currentIndex]?.author?.toLowerCase().replace(/\s+/g, "-")}.avif`;
+                }}
                 alt={quotes[currentIndex]?.author || "Author"}
                 className={`h-full w-full object-cover transition-opacity duration-200 ${isTransitioning ? "opacity-0" : "opacity-100"} ${maskFlips[flipIndex].img}`}
                 loading="eager"
