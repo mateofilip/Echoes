@@ -4,36 +4,12 @@ import { supabase } from "../db/supabase";
 import StackInfo from "./StackInfo.tsx";
 import QuoteToolbar, { type ToolbarRef } from "./Toolbar.tsx";
 
-const authorImages: Record<string, string> = {
-  dostoevsky: "dostoevsky.avif",
-  nietzsche: "nietzsche.avif",
-  shakespeare: "shakespeare.avif",
-  aristotle: "aristotle.avif",
-  confucius: "confucius.avif",
-  einstein: "einstein.avif",
-  huxley: "huxley.avif",
-  orwell: "orwell.avif",
-  plato: "plato.avif",
-  socrates: "socrates.avif",
-  tolstoy: "tolstoy.avif",
-};
-
-const getAuthorImage = (author: string | undefined) => {
-  const authorLower = author?.toLowerCase() || "";
-  const matched = Object.keys(authorImages).find((name) =>
-    authorLower.includes(name),
-  );
-  return matched ? `/authors/${authorImages[matched]}` : "";
-};
-
 export default function Welcome() {
   const [quotes, setQuotes] = useState<Quote[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isDark, setIsDark] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthorHovered, setIsAuthorHovered] = useState(false);
-  const currentAuthorImage = getAuthorImage(quotes[currentIndex]?.author);
-  const [currentImageSrc, setCurrentImageSrc] = useState(currentAuthorImage);
   const [isTransitioning, setIsTransitioning] = useState(true);
   const maskFlips = [
     { mask: "", img: "" },
@@ -43,19 +19,6 @@ export default function Welcome() {
   ];
   const [flipIndex, setFlipIndex] = useState(0);
   const toolbarRef = useRef<ToolbarRef>(null);
-
-  useEffect(() => {
-    if (currentAuthorImage !== currentImageSrc) {
-      setIsTransitioning(true);
-      setFlipIndex(Math.floor(Math.random() * 4));
-      setTimeout(() => {
-        setCurrentImageSrc(currentAuthorImage);
-      }, 200);
-      setTimeout(() => {
-        setIsTransitioning(false);
-      }, 400);
-    }
-  }, [currentAuthorImage]);
 
   useEffect(() => {
     getQuote();
@@ -81,20 +44,16 @@ export default function Welcome() {
     };
   }, []);
 
-const getQuote = async () => {
+  const getQuote = async () => {
     try {
       setIsLoading(true);
+      setIsTransitioning(true);
 
       const { data, error } = await supabase
         .rpc("get_random_quote")
         .single<{ quote: string; author: string }>();
 
       if (!data) throw new Error(error?.message || "Unknown error");
-
-      const authorImage = getAuthorImage(data.author);
-      if (!authorImage) {
-        return getQuote();
-      }
 
       const isDuplicate = quotes.some(
         (q) => q.quote === data.quote && q.author === data.author,
@@ -106,6 +65,7 @@ const getQuote = async () => {
 
       setQuotes([{ quote: data.quote, author: data.author }, ...quotes]);
       setCurrentIndex(0);
+      setIsTransitioning(false);
       setTimeout(() => setIsLoading(false), 450);
     } catch (error) {
       console.error(error);
@@ -116,10 +76,12 @@ const getQuote = async () => {
     }
   };
 
-const getPreviousQuote = () => {
+  const getPreviousQuote = () => {
     if (currentIndex < quotes.length - 1) {
       setIsLoading(true);
+      setIsTransitioning(true);
       setCurrentIndex(currentIndex + 1);
+      setTimeout(() => setIsTransitioning(false), 200);
       setIsLoading(false);
     }
   };
@@ -127,7 +89,9 @@ const getPreviousQuote = () => {
   const getNextQuote = () => {
     if (currentIndex > 0) {
       setIsLoading(true);
+      setIsTransitioning(true);
       setCurrentIndex(currentIndex - 1);
+      setTimeout(() => setIsTransitioning(false), 200);
       setIsLoading(false);
     }
   };
@@ -141,25 +105,19 @@ const getPreviousQuote = () => {
       <main className="flex h-dvh w-dvw flex-col justify-center px-5 sm:px-16 md:px-28 lg:px-52 xl:px-96 2xl:px-120">
         <div className="relative flex h-2/3 flex-col justify-center gap-10 p-10">
           <div
-            className={`absolute inset-0 -z-10 overflow-hidden rounded-3xl p-4 transition-all duration-200 ${isAuthorHovered ? "" : "blur-3xl"}`}
+            className={`absolute inset-0 -z-10 overflow-hidden rounded-3xl p-4 transition-all duration-300 ${isAuthorHovered || isTransitioning ? "blur-none" : "blur-3xl"}`}
           >
             <div
-              className={`absolute inset-0 h-full mask-[url(/mask.png)] mask-contain mask-center mask-no-repeat ${maskFlips[flipIndex].mask}`}
+              className={`absolute inset-0 h-full mask-[url(mask.avif)] mask-contain mask-center mask-no-repeat ${maskFlips[flipIndex].mask}`}
             >
-              {currentImageSrc ? (
-                <img
-                  src={currentImageSrc}
-                  alt={quotes[currentIndex]?.author || "Author"}
-                  className={`h-full w-full object-cover transition-opacity duration-200 ${isTransitioning ? "opacity-0" : "opacity-100"} ${maskFlips[flipIndex].img}`}
-                  loading="eager"
-                  fetchPriority="high"
-                  decoding="async"
-                />
-              ) : (
-                <div
-                  className={`h-full w-full transition-opacity duration-200 ${isTransitioning ? "opacity-0" : "opacity-100"}`}
-                />
-              )}
+              <img
+                src={`authors/${quotes[currentIndex]?.author?.toLowerCase().replace(/\s+/g, "-")}.avif`}
+                alt={quotes[currentIndex]?.author || "Author"}
+                className={`h-full w-full object-cover transition-opacity duration-200 ${isTransitioning ? "opacity-0" : "opacity-100"} ${maskFlips[flipIndex].img}`}
+                loading="eager"
+                fetchPriority="high"
+                decoding="async"
+              />
             </div>
           </div>
 
