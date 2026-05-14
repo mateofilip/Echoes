@@ -108,7 +108,7 @@ export default function Welcome() {
             className={`absolute inset-0 -z-10 overflow-hidden rounded-3xl p-4 transition-all duration-300 ${isAuthorHovered || isTransitioning ? "blur-none" : "blur-3xl"}`}
           >
             <div
-              className={`absolute inset-0 h-full mask-[url(mask.avif)] mask-contain mask-center mask-no-repeat ${maskFlips[flipIndex].mask}`}
+              className={`absolute inset-0 h-full mask-[url(/mask.avif)] mask-contain mask-center mask-no-repeat ${maskFlips[flipIndex].mask}`}
             >
               <img
                 src={`/authors/${quotes[currentIndex]?.author?.toLowerCase().replace(/\s+/g, "-")}-placeholder.avif`}
