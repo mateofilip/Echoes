@@ -3,6 +3,7 @@ import type { Quote } from "../types/Quote";
 import { supabase } from "../db/supabase";
 import StackInfo from "./StackInfo.tsx";
 import QuoteToolbar, { type ToolbarRef } from "./Toolbar.tsx";
+import { motion, AnimatePresence } from "motion/react";
 
 export default function Welcome() {
   const [quotes, setQuotes] = useState<Quote[]>([]);
@@ -110,42 +111,58 @@ export default function Welcome() {
             <div
               className={`absolute inset-0 h-full mask-[url(/mask.avif)] mask-contain mask-center mask-no-repeat ${maskFlips[flipIndex].mask}`}
             >
-              <img
-                src={`/authors/${quotes[currentIndex]?.author?.toLowerCase().replace(/\s+/g, "-")}-placeholder.avif`}
-                onLoad={(e) => {
-                  e.currentTarget.src = `/authors/${quotes[currentIndex]?.author?.toLowerCase().replace(/\s+/g, "-")}.avif`;
-                }}
-                alt={quotes[currentIndex]?.author || "Author"}
-                className={`h-full w-full object-cover transition-opacity duration-200 ${isTransitioning ? "opacity-0" : "opacity-100"} ${maskFlips[flipIndex].img}`}
-                loading="eager"
-                fetchPriority="high"
-                decoding="async"
-              />
+<motion.img
+                  key={quotes[currentIndex]?.author}
+                  src={`/authors/${quotes[currentIndex]?.author?.toLowerCase().replace(/\s+/g, "-")}-placeholder.avif`}
+                  onLoad={(e) => {
+                    e.currentTarget.src = `/authors/${quotes[currentIndex]?.author?.toLowerCase().replace(/\s+/g, "-")}.avif`;
+                  }}
+                  alt={quotes[currentIndex]?.author || "Author"}
+                  initial={{ opacity: 0, scale: 1.1 }}
+                  animate={{ opacity: isTransitioning ? 0 : 1, scale: 1 }}
+                  transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+                  className={`h-full w-full object-cover ${maskFlips[flipIndex].img}`}
+                  loading="eager"
+                  fetchPriority="high"
+                  decoding="async"
+                />
             </div>
           </div>
 
-          <p
-            className={`variableSize text-center transition-all duration-200 ease-out text-shadow-lg/30 ${isLoading || isAuthorHovered ? "opacity-0" : "opacity-100"}`}
-          >
-            <span>«&nbsp;</span>
-            {quotes[currentIndex]?.quote
-              ? `${quotes[currentIndex].quote}`
-              : "Loading..."}
-            <span>&nbsp;»</span>
-          </p>
-          <a
-            href={`https://www.google.com/search?q=${encodeURIComponent(quotes[currentIndex]?.author || "")}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            onMouseEnter={() => setIsAuthorHovered(true)}
-            onMouseLeave={() => setIsAuthorHovered(false)}
-            className={`ml-auto w-fit rounded-lg px-3 py-2 text-xl transition-all duration-200 ease-out text-shadow-lg/30 hover:backdrop-blur-xs md:text-2xl ${isLoading ? "opacity-0" : "opacity-100"}`}
-          >
-            —{" "}
-            <span className="underline decoration-1">
-              {quotes[currentIndex]?.author || "Loading..."}
-            </span>
-          </a>
+          <AnimatePresence mode="wait">
+            <motion.p
+              key={quotes[currentIndex]?.quote}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: isLoading ? 0 : 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+              className="variableSize text-center text-shadow-lg/30"
+            >
+              <span>«&nbsp;</span>
+              {quotes[currentIndex]?.quote || "Loading..."}
+              <span>&nbsp;»</span>
+            </motion.p>
+          </AnimatePresence>
+          <AnimatePresence mode="wait">
+            <motion.a
+              key={quotes[currentIndex]?.author}
+              href={`https://www.google.com/search?q=${encodeURIComponent(quotes[currentIndex]?.author || "")}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: isLoading ? 0 : 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+              onMouseEnter={() => setIsAuthorHovered(true)}
+              onMouseLeave={() => setIsAuthorHovered(false)}
+              className={`ml-auto w-fit rounded-lg px-3 py-2 text-xl text-shadow-lg/30 hover:backdrop-blur-xs md:text-2xl ${isAuthorHovered ? "backdrop-blur-sm" : ""}`}
+            >
+              —{" "}
+              <span className="underline decoration-1">
+                {quotes[currentIndex]?.author || "Loading..."}
+              </span>
+            </motion.a>
+          </AnimatePresence>
         </div>
 
         <QuoteToolbar
