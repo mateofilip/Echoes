@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import type { Quote } from "../types/Quote";
 import { supabase } from "../db/supabase";
 import StackInfo from "./StackInfo.tsx";
@@ -8,22 +8,27 @@ import { motion, AnimatePresence } from "motion/react";
 export default function Welcome() {
   const [quotes, setQuotes] = useState<Quote[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isDark, setIsDark] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthorHovered, setIsAuthorHovered] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(true);
-  const maskFlips = [
+  const maskFlips = useMemo(() => [
     { mask: "", img: "" },
     { mask: "scale-x-[-1]", img: "scale-x-[-1]" },
     { mask: "scale-y-[-1]", img: "scale-y-[-1]" },
     { mask: "scale-x-[-1] scale-y-[-1]", img: "scale-x-[-1] scale-y-[-1]" },
-  ];
+  ], []);
   const [flipIndex, setFlipIndex] = useState(0);
   const toolbarRef = useRef<ToolbarRef>(null);
 
   useEffect(() => {
     getQuote();
   }, []);
+
+  useEffect(() => {
+    if (quotes[currentIndex]?.author) {
+      setFlipIndex(Math.floor(Math.random() * 4));
+    }
+  }, [quotes[currentIndex]?.author]);
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
