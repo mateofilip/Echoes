@@ -138,7 +138,7 @@ export default function Welcome() {
             <motion.p
               key={quotes[currentIndex]?.quote}
               initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: isLoading ? 0 : 1, y: 0 }}
+              animate={{ opacity: isLoading || isAuthorHovered ? 0 : 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
               className="variableSize text-center text-shadow-lg/30"
