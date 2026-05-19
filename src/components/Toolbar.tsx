@@ -13,6 +13,8 @@ interface QuoteToolbarProps {
   onNewQuote?: () => void;
   onPreviousQuote?: () => void;
   onNextQuote?: () => void;
+  onToggleSaveQuote?: () => void;
+  isSaved?: boolean;
 }
 
 interface ToolbarRef {
@@ -23,12 +25,21 @@ interface ToolbarRef {
 
 const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
   (
-    { canGoPrevious, canGoNext, onNewQuote, onPreviousQuote, onNextQuote },
+    {
+      canGoPrevious,
+      canGoNext,
+      onNewQuote,
+      onPreviousQuote,
+      onNextQuote,
+      onToggleSaveQuote,
+      isSaved,
+    },
     ref,
   ) => {
     const [isReloadingButton, setIsReloadingButton] = useState(false);
     const [isPrevAnimating, setIsPrevAnimating] = useState(false);
     const [isNextAnimating, setIsNextAnimating] = useState(false);
+    const [isSaveAnimating, setIsSaveAnimating] = useState(false);
 
     useImperativeHandle(ref, () => ({
       triggerReload: () => setIsReloadingButton(true),
@@ -160,6 +171,54 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
               Next Quote
               <span className="inline-flex min-w-6 items-center justify-center rounded-md border border-stone-700 bg-stone-800 px-2 py-1 font-mono text-[10px]">
                 →
+              </span>
+            </div>
+            <div className="absolute top-full left-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1 rotate-45 rounded-br-sm bg-stone-900 shadow-xl"></div>
+          </div>
+        </motion.button>
+
+        <motion.button
+          onClick={() => {
+            setIsSaveAnimating(true);
+            onToggleSaveQuote?.();
+            setTimeout(() => setIsSaveAnimating(false), 500);
+          }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="group relative w-fit cursor-pointer rounded-lg border border-stone-800 bg-stone-900 p-3"
+        >
+          <motion.svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            fill="none"
+            animate={{
+              scale: isSaveAnimating ? 1.25 : 1,
+            }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            viewBox="0 0 15 15"
+          >
+            {isSaved ? (
+              <path
+                d="M3.5 2C3.22386 2 3 2.22386 3 2.5V13.5C3 13.6818 3.09864 13.8492 3.25762 13.9373C3.41659 14.0254 3.61087 14.0203 3.765 13.924L7.5 11.5896L11.235 13.924C11.3891 14.0203 11.5834 14.0254 11.7424 13.9373C11.9014 13.8492 12 13.6818 12 13.5V2.5C12 2.22386 11.7761 2 11.5 2H3.5Z"
+                fill="currentColor"
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+              ></path>
+            ) : (
+              <path
+                d="M3 2.5C3 2.22386 3.22386 2 3.5 2H11.5C11.7761 2 12 2.22386 12 2.5V13.5C12 13.6818 11.9014 13.8492 11.7424 13.9373C11.5834 14.0254 11.3891 14.0203 11.235 13.924L7.5 11.5896L3.765 13.924C3.61087 14.0203 3.41659 14.0254 3.25762 13.9373C3.09864 13.8492 3 13.6818 3 13.5V2.5ZM4 3V12.5979L6.97 10.7416C7.29427 10.539 7.70573 10.539 8.03 10.7416L11 12.5979V3H4Z"
+                fill="currentColor"
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+              ></path>
+            )}
+          </motion.svg>
+          <div className="Alte invisible absolute -top-16 left-1/2 -translate-x-1/2 translate-y-2 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-hover:delay-300">
+            <div className="flex items-center gap-2 rounded-2xl bg-stone-900 p-3 text-xs whitespace-nowrap text-orange-200 shadow-2xl">
+              {isSaved ? "Remove" : "Save"}
+              <span className="inline-flex min-w-6 items-center justify-center rounded-md border border-stone-700 bg-stone-800 px-2 py-1 font-mono text-[10px]">
+                S
               </span>
             </div>
             <div className="absolute top-full left-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1 rotate-45 rounded-br-sm bg-stone-900 shadow-xl"></div>

@@ -3,7 +3,11 @@ import type { Quote } from "../types/Quote";
 import { supabase } from "../db/supabase";
 import StackInfo from "./StackInfo.tsx";
 import QuoteToolbar, { type ToolbarRef } from "./Toolbar.tsx";
+import VaulDrawer from "./Drawer.tsx";
+
 import { motion, AnimatePresence } from "motion/react";
+
+const STORAGE_KEY = "echoes-saved-quotes";
 
 export default function Welcome() {
   const [quotes, setQuotes] = useState<Quote[]>([]);
@@ -11,12 +15,57 @@ export default function Welcome() {
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthorHovered, setIsAuthorHovered] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(true);
-  const maskFlips = useMemo(() => [
-    { mask: "", img: "" },
-    { mask: "scale-x-[-1]", img: "scale-x-[-1]" },
-    { mask: "scale-y-[-1]", img: "scale-y-[-1]" },
-    { mask: "scale-x-[-1] scale-y-[-1]", img: "scale-x-[-1] scale-y-[-1]" },
-  ], []);
+  const [savedQuotes, setSavedQuotes] = useState<Quote[]>(() => {
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      return stored ? JSON.parse(stored) : [];
+    }
+    return [];
+  });
+
+  const toggleSaveQuote = () => {
+    const currentQuote = quotes[currentIndex];
+    if (!currentQuote) return;
+
+    const isAlreadySaved = savedQuotes.some(
+      (q) => q.quote === currentQuote.quote && q.author === currentQuote.author,
+    );
+
+    let newSaved: Quote[];
+    if (isAlreadySaved) {
+      newSaved = savedQuotes.filter(
+        (q) => !(q.quote === currentQuote.quote && q.author === currentQuote.author),
+      );
+    } else {
+      newSaved = [...savedQuotes, currentQuote];
+    }
+    setSavedQuotes(newSaved);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(newSaved));
+  };
+
+  const removeQuote = (index: number) => {
+    const newSaved = savedQuotes.filter((_, i) => i !== index);
+    setSavedQuotes(newSaved);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(newSaved));
+  };
+
+  const isCurrentQuoteSaved = quotes[currentIndex]
+    ? savedQuotes.some(
+        (q) =>
+          q.quote === quotes[currentIndex].quote &&
+          q.author === quotes[currentIndex].author,
+      )
+    : false;
+
+  const maskFlips = useMemo(
+    () => [
+      { mask: "", img: "" },
+      { mask: "scale-x-[-1]", img: "scale-x-[-1]" },
+      { mask: "scale-y-[-1]", img: "scale-y-[-1]" },
+      { mask: "scale-x-[-1] scale-y-[-1]", img: "scale-x-[-1] scale-y-[-1]" },
+    ],
+    [],
+  );
   const [flipIndex, setFlipIndex] = useState(0);
   const toolbarRef = useRef<ToolbarRef>(null);
 
@@ -116,21 +165,21 @@ export default function Welcome() {
             <div
               className={`absolute inset-0 h-full mask-[url(/mask.avif)] mask-contain mask-center mask-no-repeat ${maskFlips[flipIndex].mask}`}
             >
-<motion.img
-                  key={quotes[currentIndex]?.author}
-                  src={`/authors/${quotes[currentIndex]?.author?.toLowerCase().replace(/\s+/g, "-")}-placeholder.avif`}
-                  onLoad={(e) => {
-                    e.currentTarget.src = `/authors/${quotes[currentIndex]?.author?.toLowerCase().replace(/\s+/g, "-")}.avif`;
-                  }}
-                  alt={quotes[currentIndex]?.author || "Author"}
-                  initial={{ opacity: 0, scale: 1.1 }}
-                  animate={{ opacity: isTransitioning ? 0 : 1, scale: 1 }}
-                  transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
-                  className={`h-full w-full object-cover ${maskFlips[flipIndex].img}`}
-                  loading="eager"
-                  fetchPriority="high"
-                  decoding="async"
-                />
+              <motion.img
+                key={quotes[currentIndex]?.author}
+                src={`/authors/${quotes[currentIndex]?.author?.toLowerCase().replace(/\s+/g, "-")}-placeholder.avif`}
+                onLoad={(e) => {
+                  e.currentTarget.src = `/authors/${quotes[currentIndex]?.author?.toLowerCase().replace(/\s+/g, "-")}.avif`;
+                }}
+                alt={quotes[currentIndex]?.author || "Author"}
+                initial={{ opacity: 0, scale: 1.1 }}
+                animate={{ opacity: isTransitioning ? 0 : 1, scale: 1 }}
+                transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+                className={`h-full w-full object-cover ${maskFlips[flipIndex].img}`}
+                loading="eager"
+                fetchPriority="high"
+                decoding="async"
+              />
             </div>
           </div>
 
@@ -175,12 +224,15 @@ export default function Welcome() {
           onNewQuote={getQuote}
           onPreviousQuote={getPreviousQuote}
           onNextQuote={getNextQuote}
+          onToggleSaveQuote={toggleSaveQuote}
+          isSaved={isCurrentQuoteSaved}
           canGoPrevious={currentIndex < quotes.length - 1}
           canGoNext={currentIndex > 0}
         />
       </main>
 
       <StackInfo />
+      <VaulDrawer savedQuotes={savedQuotes} onRemoveQuote={removeQuote} />
     </>
   );
 }
