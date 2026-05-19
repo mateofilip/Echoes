@@ -47,7 +47,7 @@ export default function StackInfo() {
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="animate-in fade-in slide-in-from-bottom-4 fixed right-4 bottom-4 z-[60] flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 text-white shadow-lg transition-all hover:scale-110 hover:bg-stone-800 active:scale-95"
+        className="animate-in fade-in slide-in-from-bottom-4 fixed right-4 bottom-4 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 text-white shadow-lg transition-all hover:scale-110 hover:bg-stone-800 active:scale-95"
         aria-label="View Tech Stack"
         title="View Tech Stack"
       >
@@ -70,7 +70,7 @@ export default function StackInfo() {
 
       {isOpen && (
         <div
-          className={`Alte fixed inset-0 z-[70] flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm transition-opacity duration-200 ${
+          className={`Alte fixed inset-0 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm transition-opacity duration-200 ${
             isAnimating ? "opacity-100" : "opacity-0"
           }`}
         >
@@ -106,7 +106,7 @@ export default function StackInfo() {
               {stack.map((item) => (
                 <li
                   key={item.name}
-                  className="flex items-center justify-between rounded-xl border border-stone-800 bg-stone-900/50 p-3 transition-all hover:bg-stone-800/50"
+                  className="flex items-center justify-between rounded-xl border border-stone-800 bg-stone-900/50 p-3 transition-all duration-200 ease-out hover:bg-stone-800/50"
                 >
                   <span className="font-semibold text-slate-100">
                     {item.name}
