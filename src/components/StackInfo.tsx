@@ -47,9 +47,8 @@ export default function StackInfo() {
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="animate-in fade-in slide-in-from-bottom-4 fixed right-4 bottom-4 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 text-white shadow-lg transition-all hover:scale-110 hover:bg-stone-800 active:scale-95"
+        className="group fixed right-4 bottom-4 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 text-white shadow-lg transition-all hover:scale-110 hover:bg-stone-800 active:scale-95"
         aria-label="View Tech Stack"
-        title="View Tech Stack"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -66,11 +65,17 @@ export default function StackInfo() {
           <path d="M12 16v-4" />
           <path d="M12 8h.01" />
         </svg>
+        <div className="Geist invisible absolute -top-16 left-1/2 -translate-x-1/2 translate-y-2 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-hover:delay-300">
+          <div className="flex items-center gap-2 rounded-2xl bg-stone-900 p-3 text-xs whitespace-nowrap text-orange-200 shadow-2xl">
+            Tech Stack
+          </div>
+          <div className="absolute top-full left-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1 rotate-45 rounded-br-sm bg-stone-900 shadow-xl"></div>
+        </div>
       </button>
 
       {isOpen && (
         <div
-          className={`Alte fixed inset-0 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm transition-opacity duration-200 ${
+          className={`Geist fixed inset-0 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm transition-opacity duration-200 ${
             isAnimating ? "opacity-100" : "opacity-0"
           }`}
         >

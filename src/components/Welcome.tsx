@@ -43,8 +43,10 @@ export default function Welcome() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(newSaved));
   };
 
-  const removeQuote = (index: number) => {
-    const newSaved = savedQuotes.filter((_, i) => i !== index);
+  const removeQuote = (quote: Quote) => {
+    const newSaved = savedQuotes.filter(
+      (q) => !(q.quote === quote.quote && q.author === quote.author),
+    );
     setSavedQuotes(newSaved);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(newSaved));
   };

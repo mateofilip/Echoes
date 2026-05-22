@@ -74,7 +74,7 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
           onClick={() => setIsReloadingButton(true)}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className={`group relative w-fit cursor-pointer rounded-lg border border-stone-800 bg-stone-900 p-3`}
+          className={`group relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 p-3 text-white shadow-lg transition-all hover:scale-110 hover:bg-stone-800 active:scale-95`}
         >
           <motion.svg
             xmlns="http://www.w3.org/2000/svg"
@@ -95,7 +95,7 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
               clipRule="evenodd"
             />
           </motion.svg>
-          <div className="Alte invisible absolute -top-16 left-1/2 -translate-x-1/2 translate-y-2 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-hover:delay-300">
+          <div className="Geist invisible absolute -top-16 left-1/2 -translate-x-1/2 translate-y-2 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-hover:delay-300">
             <div className="flex items-center gap-2 rounded-2xl bg-stone-900 p-3 text-xs whitespace-nowrap text-orange-200 shadow-2xl">
               New Quote
               <span className="inline-flex min-w-6 items-center justify-center rounded-md border border-stone-700 bg-stone-800 px-2 py-1 font-mono text-[10px]">
@@ -110,7 +110,7 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
           onClick={() => canGoPrevious && setIsPrevAnimating(true)}
           whileHover={canGoPrevious ? { scale: 1.05 } : undefined}
           whileTap={canGoPrevious ? { scale: 0.95 } : undefined}
-          className="group relative w-fit cursor-pointer rounded-lg border border-stone-800 bg-stone-900 p-3 disabled:cursor-not-allowed disabled:border-stone-700 disabled:text-stone-600"
+          className="group relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 p-3 text-white shadow-lg transition-all hover:scale-110 hover:bg-stone-800 active:scale-95 disabled:cursor-not-allowed disabled:border-stone-700 disabled:text-stone-600 disabled:hover:scale-100 disabled:hover:bg-stone-900"
           disabled={!canGoPrevious}
         >
           <motion.svg
@@ -131,7 +131,7 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
               clipRule="evenodd"
             />
           </motion.svg>
-          <div className="Alte invisible absolute -top-16 left-1/2 -translate-x-1/2 translate-y-2 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-hover:delay-300">
+          <div className="Geist invisible absolute -top-16 left-1/2 -translate-x-1/2 translate-y-2 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-hover:delay-300">
             <div className="flex items-center gap-2 rounded-2xl bg-stone-900 p-3 text-xs whitespace-nowrap text-orange-200 shadow-2xl">
               Previous Quote
               <span className="inline-flex min-w-6 items-center justify-center rounded-md border border-stone-700 bg-stone-800 px-2 py-1 font-mono text-[10px]">
@@ -146,7 +146,7 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
           onClick={() => canGoNext && setIsNextAnimating(true)}
           whileHover={canGoNext ? { scale: 1.05 } : undefined}
           whileTap={canGoNext ? { scale: 0.95 } : undefined}
-          className="group relative w-fit cursor-pointer rounded-lg border border-stone-800 bg-stone-900 p-3 disabled:cursor-not-allowed disabled:border-stone-700 disabled:text-stone-600"
+          className="group relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 p-3 text-white shadow-lg transition-all hover:scale-110 hover:bg-stone-800 active:scale-95 disabled:cursor-not-allowed disabled:border-stone-700 disabled:text-stone-600 disabled:hover:scale-100 disabled:hover:bg-stone-900"
           disabled={!canGoNext}
         >
           <motion.svg
@@ -166,7 +166,7 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
             />
           </motion.svg>
 
-          <div className="Alte invisible absolute -top-16 left-1/2 -translate-x-1/2 translate-y-2 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-hover:delay-300">
+          <div className="Geist invisible absolute -top-16 left-1/2 -translate-x-1/2 translate-y-2 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-hover:delay-300">
             <div className="flex items-center gap-2 rounded-2xl bg-stone-900 p-3 text-xs whitespace-nowrap text-orange-200 shadow-2xl">
               Next Quote
               <span className="inline-flex min-w-6 items-center justify-center rounded-md border border-stone-700 bg-stone-800 px-2 py-1 font-mono text-[10px]">
@@ -185,7 +185,7 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
           }}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className="group relative w-fit cursor-pointer rounded-lg border border-stone-800 bg-stone-900 p-3"
+          className="group relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 p-3 text-white shadow-lg transition-all hover:scale-110 hover:bg-stone-800 active:scale-95"
         >
           <motion.svg
             xmlns="http://www.w3.org/2000/svg"
@@ -214,7 +214,7 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
               ></path>
             )}
           </motion.svg>
-          <div className="Alte invisible absolute -top-16 left-1/2 -translate-x-1/2 translate-y-2 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-hover:delay-300">
+          <div className="Geist invisible absolute -top-16 left-1/2 -translate-x-1/2 translate-y-2 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-hover:delay-300">
             <div className="flex items-center gap-2 rounded-2xl bg-stone-900 p-3 text-xs whitespace-nowrap text-orange-200 shadow-2xl">
               {isSaved ? "Remove" : "Save"}
               <span className="inline-flex min-w-6 items-center justify-center rounded-md border border-stone-700 bg-stone-800 px-2 py-1 font-mono text-[10px]">

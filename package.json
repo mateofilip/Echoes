@@ -26,7 +26,8 @@
     "motion": "^12.38.0",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
-    "tailwindcss": "^4.3.0"
+    "tailwindcss": "^4.3.0",
+    "vaul": "^1.1.2"
   },
   "devDependencies": {
     "prettier": "^3.8.3",

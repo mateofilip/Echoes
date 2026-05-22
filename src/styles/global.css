@@ -7,19 +7,10 @@
   font-style: normal;
   font-display: swap;
 }
-
 @font-face {
-  font-family: "Alte Haas Grotesk";
-  src: url("/AlteHaasGroteskRegular.ttf") format("truetype");
+  font-family: "Geist";
+  src: url("/Geist.ttf") format("truetype");
   font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Alte Haas Grotesk";
-  src: url("/AlteHaasGroteskBold.ttf") format("truetype");
-  font-weight: bold;
   font-style: normal;
   font-display: swap;
 }
@@ -36,8 +27,12 @@
   font-family: "Redaction", Times, serif;
 }
 
-.Alte {
-  font-family: "Alte Haas Grotesk", Arial, system-ui, sans-serif;
+.Geist {
+  font-family: "Geist", Times, Arial, system-ui, sans-serif;
+}
+
+.Prata {
+  font-family: "Prata", Times, serif;
 }
 
 .variableSize {
