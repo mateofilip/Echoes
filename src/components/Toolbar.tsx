@@ -95,14 +95,14 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
               clipRule="evenodd"
             />
           </motion.svg>
-          <div className="Geist invisible absolute -top-16 left-1/2 -translate-x-1/2 translate-y-2 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-hover:delay-300">
-            <div className="flex items-center gap-2 rounded-2xl bg-stone-900 p-3 text-xs whitespace-nowrap text-orange-200 shadow-2xl">
+          <div className="Geist invisible absolute bottom-12 translate-y-2 text-xs opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-hover:delay-300">
+            <div className="flex items-center gap-2 rounded-xl border border-stone-800 bg-stone-950 p-3 whitespace-nowrap text-white shadow-lg">
               New Quote
               <span className="inline-flex min-w-6 items-center justify-center rounded-md border border-stone-700 bg-stone-800 px-2 py-1 font-mono text-[10px]">
                 R
               </span>
             </div>
-            <div className="absolute top-full left-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1 rotate-45 rounded-br-sm bg-stone-900 shadow-xl"></div>
+            <div className="absolute left-1/2 h-2 w-2 -translate-y-1 rotate-45 rounded-br-sm border-r border-b border-stone-800 bg-stone-950 shadow-lg"></div>
           </div>
         </motion.button>
 
@@ -131,14 +131,15 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
               clipRule="evenodd"
             />
           </motion.svg>
-          <div className="Geist invisible absolute -top-16 left-1/2 -translate-x-1/2 translate-y-2 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-hover:delay-300">
-            <div className="flex items-center gap-2 rounded-2xl bg-stone-900 p-3 text-xs whitespace-nowrap text-orange-200 shadow-2xl">
+
+          <div className="Geist invisible absolute bottom-12 translate-y-2 text-xs opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-hover:delay-300">
+            <div className="flex items-center gap-2 rounded-xl border border-stone-800 bg-stone-950 p-3 whitespace-nowrap text-white shadow-lg">
               Previous Quote
               <span className="inline-flex min-w-6 items-center justify-center rounded-md border border-stone-700 bg-stone-800 px-2 py-1 font-mono text-[10px]">
                 ←
               </span>
             </div>
-            <div className="absolute top-full left-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1 rotate-45 rounded-br-sm bg-stone-900 shadow-xl"></div>
+            <div className="absolute left-1/2 h-2 w-2 -translate-y-1 rotate-45 rounded-br-sm border-r border-b border-stone-800 bg-stone-950 shadow-lg"></div>
           </div>
         </motion.button>
 
@@ -166,14 +167,14 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
             />
           </motion.svg>
 
-          <div className="Geist invisible absolute -top-16 left-1/2 -translate-x-1/2 translate-y-2 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-hover:delay-300">
-            <div className="flex items-center gap-2 rounded-2xl bg-stone-900 p-3 text-xs whitespace-nowrap text-orange-200 shadow-2xl">
+          <div className="Geist invisible absolute bottom-12 translate-y-2 text-xs opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-hover:delay-300">
+            <div className="flex items-center gap-2 rounded-xl border border-stone-800 bg-stone-950 p-3 whitespace-nowrap text-white shadow-lg">
               Next Quote
               <span className="inline-flex min-w-6 items-center justify-center rounded-md border border-stone-700 bg-stone-800 px-2 py-1 font-mono text-[10px]">
                 →
               </span>
             </div>
-            <div className="absolute top-full left-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1 rotate-45 rounded-br-sm bg-stone-900 shadow-xl"></div>
+            <div className="absolute left-1/2 h-2 w-2 -translate-y-1 rotate-45 rounded-br-sm border-r border-b border-stone-800 bg-stone-950 shadow-lg"></div>
           </div>
         </motion.button>
 
@@ -214,14 +215,14 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
               ></path>
             )}
           </motion.svg>
-          <div className="Geist invisible absolute -top-16 left-1/2 -translate-x-1/2 translate-y-2 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-hover:delay-300">
-            <div className="flex items-center gap-2 rounded-2xl bg-stone-900 p-3 text-xs whitespace-nowrap text-orange-200 shadow-2xl">
+          <div className="Geist invisible absolute bottom-12 translate-y-2 text-xs opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-hover:delay-300">
+            <div className="flex items-center gap-2 rounded-xl border border-stone-800 bg-stone-950 p-3 whitespace-nowrap text-white shadow-lg">
               {isSaved ? "Remove" : "Save"}
               <span className="inline-flex min-w-6 items-center justify-center rounded-md border border-stone-700 bg-stone-800 px-2 py-1 font-mono text-[10px]">
                 S
               </span>
             </div>
-            <div className="absolute top-full left-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1 rotate-45 rounded-br-sm bg-stone-900 shadow-xl"></div>
+            <div className="absolute left-1/2 h-2 w-2 -translate-y-1 rotate-45 rounded-br-sm border-r border-b border-stone-800 bg-stone-950 shadow-lg"></div>
           </div>
         </motion.button>
       </div>

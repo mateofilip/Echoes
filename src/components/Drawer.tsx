@@ -29,11 +29,11 @@ export default function VaulDrawer({
               clip-rule="evenodd"
             ></path>
           </svg>
-          <div className="Geist invisible absolute -top-16 left-1/2 -translate-x-1/2 translate-y-2 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-hover:delay-300">
-            <div className="flex items-center gap-2 rounded-2xl bg-stone-900 p-3 text-xs whitespace-nowrap text-orange-200 shadow-2xl">
+          <div className="Geist invisible absolute bottom-12 left-1 translate-y-2 text-xs opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-hover:delay-300">
+            <div className="flex items-center gap-2 rounded-xl border border-stone-800 bg-stone-950 p-3 whitespace-nowrap text-white shadow-lg">
               Saved Quotes
             </div>
-            <div className="absolute top-full left-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1 rotate-45 rounded-br-sm bg-stone-900 shadow-xl"></div>
+            <div className="absolute top-full left-3 h-2 w-2 -translate-y-1 rotate-45 rounded-br-sm border-r border-b border-stone-800 bg-stone-950 shadow-lg"></div>
           </div>
         </button>
       </Drawer.Trigger>
