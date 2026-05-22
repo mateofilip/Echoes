@@ -65,11 +65,14 @@ export default function StackInfo() {
           <path d="M12 16v-4" />
           <path d="M12 8h.01" />
         </svg>
-        <div className="Geist invisible absolute right-1 bottom-12 translate-y-2 text-xs opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-hover:delay-300">
-          <div className="flex items-center gap-2 rounded-xl border border-stone-800 bg-stone-950 p-3 whitespace-nowrap text-white shadow-lg">
+        <div className="Geist visible absolute -right-1 bottom-10 flex translate-y-2 flex-col items-end opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-hover:delay-300">
+          <div className="flex items-center gap-2 rounded-full border border-stone-800 bg-stone-950 px-3 py-2 text-[10px] whitespace-nowrap text-white">
             Tech Stack
+            <span className="float-end inline-grid w-fit place-items-center rounded-lg border border-stone-700 bg-stone-800 px-2 py-1 font-mono">
+              I
+            </span>
           </div>
-          <div className="absolute top-full right-3 h-2 w-2 -translate-y-1 rotate-45 rounded-br-sm border-r border-b border-stone-800 bg-stone-950 shadow-lg"></div>
+          <div className="mr-5 h-2 w-2 -translate-y-1 rotate-45 rounded-br-sm border-r border-b border-stone-800 bg-stone-950 shadow-lg"></div>
         </div>
       </button>
 
