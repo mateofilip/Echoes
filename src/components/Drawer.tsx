@@ -47,19 +47,19 @@ export default function VaulDrawer({
       <Drawer.Portal>
         <Drawer.Overlay className="fixed inset-0 bg-black/90" />
         <Drawer.Content
-          className="fixed top-2 right-2 bottom-2 z-10 flex w-[310px] outline-none"
+          className="fixed top-4 right-4 bottom-4 z-10 flex w-[310px] outline-none"
           style={
             { "--initial-transform": "calc(100% + 8px)" } as React.CSSProperties
           }
         >
-          <div className="flex h-full w-full grow flex-col rounded-2xl bg-stone-900 p-5">
+          <div className="flex h-full w-full grow flex-col rounded-2xl bg-stone-950 p-5">
             <Drawer.Title className="Geist mb-4 text-xl font-semibold text-orange-200">
               Saved Quotes ({savedQuotes.length})
             </Drawer.Title>
             <div className="Geist flex-1 overflow-y-auto">
               <div className="flex flex-col-reverse gap-4">
                 <p
-                  className={`text-stone-500 transition-opacity delay-300 duration-200 ease-out ${savedQuotes.length === 0 ? "opacity-100" : "opacity-0"}`}
+                  className={`text-stone-400 transition-opacity delay-300 duration-200 ease-out ${savedQuotes.length === 0 ? "opacity-100" : "opacity-0"}`}
                 >
                   No saved quotes yet.
                 </p>
@@ -73,16 +73,16 @@ export default function VaulDrawer({
                       animate={{ opacity: 1, height: "auto" }}
                       exit={{ opacity: 0, height: 0, scale: 0.95 }}
                       transition={{ duration: 0.2, ease: "easeOut" }}
-                      className="group relative rounded-lg border border-stone-700 bg-stone-800 p-4"
+                      className="group relative rounded-2xl border border-stone-800 bg-stone-900 p-4"
                     >
-                      <p className="mb-2 pr-6 text-sm text-orange-100">
+                      <p className="mb-2 pr-6 text-sm text-orange-50">
                         <span className="Prata">«</span> {quote.quote}{" "}
                         <span className="Prata">»</span>
                       </p>
                       <div className="flex items-center justify-between">
                         <button
                           onClick={() => onRemoveQuote?.(quote)}
-                          className="cursor-pointer rounded-md p-1 text-stone-500 opacity-0 transition-all duration-200 ease-out group-hover:opacity-100 hover:bg-stone-700 hover:text-red-400"
+                          className="cursor-pointer rounded-full p-1 text-stone-400 opacity-0 transition-all duration-200 ease-out group-hover:opacity-100 hover:bg-stone-800 hover:text-red-400"
                         >
                           <svg
                             width="15"
