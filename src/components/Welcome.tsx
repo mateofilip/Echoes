@@ -71,6 +71,9 @@ export default function Welcome() {
   const [flipIndex, setFlipIndex] = useState(0);
   const toolbarRef = useRef<ToolbarRef>(null);
 
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isStackOpen, setIsStackOpen] = useState(false);
+
   useEffect(() => {
     getQuote();
   }, []);
@@ -93,6 +96,15 @@ export default function Welcome() {
       } else if (e.key.toLowerCase() === "r") {
         e.preventDefault();
         toolbarRef.current?.triggerReload();
+      } else if (e.key.toLowerCase() === "s") {
+        e.preventDefault();
+        toolbarRef.current?.triggerSave();
+      } else if (e.key.toLowerCase() === "d") {
+        e.preventDefault();
+        setIsDrawerOpen((prev) => !prev);
+      } else if (e.key.toLowerCase() === "i") {
+        e.preventDefault();
+        setIsStackOpen((prev) => !prev);
       }
     };
     window.addEventListener("keydown", onKeyDown);
@@ -233,8 +245,8 @@ export default function Welcome() {
         />
       </main>
 
-      <StackInfo />
-      <VaulDrawer savedQuotes={savedQuotes} onRemoveQuote={removeQuote} />
+      <StackInfo open={isStackOpen} onOpenChange={setIsStackOpen} />
+      <VaulDrawer savedQuotes={savedQuotes} onRemoveQuote={removeQuote} open={isDrawerOpen} onOpenChange={setIsDrawerOpen} />
     </>
   );
 }

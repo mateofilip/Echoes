@@ -21,6 +21,7 @@ interface ToolbarRef {
   triggerReload: () => void;
   triggerPrev: () => void;
   triggerNext: () => void;
+  triggerSave: () => void;
 }
 
 const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
@@ -45,6 +46,7 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
       triggerReload: () => setIsReloadingButton(true),
       triggerPrev: () => canGoPrevious && setIsPrevAnimating(true),
       triggerNext: () => canGoNext && setIsNextAnimating(true),
+      triggerSave: () => setIsSaveAnimating(true),
     }));
 
     useEffect(() => {
@@ -68,13 +70,20 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
       }
     }, [isNextAnimating]);
 
+    useEffect(() => {
+      if (isSaveAnimating) {
+        onToggleSaveQuote?.();
+        setTimeout(() => setIsSaveAnimating(false), 500);
+      }
+    }, [isSaveAnimating]);
+
     return (
       <div className="absolute right-1/2 bottom-4 left-1/2 flex justify-center gap-2 text-xs">
         <motion.button
           onClick={() => setIsReloadingButton(true)}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className={`group relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 p-3 text-white shadow-lg transition-all hover:scale-110 hover:bg-stone-800 active:scale-95`}
+          className={`group relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 p-3 text-white shadow-lg transition-all hover:scale-110 hover:bg-stone-800 focus:outline-none active:scale-95`}
         >
           <motion.svg
             xmlns="http://www.w3.org/2000/svg"
@@ -110,7 +119,7 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
           onClick={() => canGoPrevious && setIsPrevAnimating(true)}
           whileHover={canGoPrevious ? { scale: 1.05 } : undefined}
           whileTap={canGoPrevious ? { scale: 0.95 } : undefined}
-          className="group relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 p-3 text-white shadow-lg transition-all hover:scale-110 hover:bg-stone-800 active:scale-95 disabled:pointer-events-none disabled:border-stone-700 disabled:text-stone-600"
+          className="group relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 p-3 text-white shadow-lg transition-all hover:scale-110 hover:bg-stone-800 focus:outline-none active:scale-95 disabled:pointer-events-none disabled:border-stone-700 disabled:text-stone-600"
           disabled={!canGoPrevious}
         >
           <motion.svg
@@ -147,7 +156,7 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
           onClick={() => canGoNext && setIsNextAnimating(true)}
           whileHover={canGoNext ? { scale: 1.05 } : undefined}
           whileTap={canGoNext ? { scale: 0.95 } : undefined}
-          className="group relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 p-3 text-white shadow-lg transition-all hover:scale-110 hover:bg-stone-800 active:scale-95 disabled:pointer-events-none disabled:text-stone-600"
+          className="group relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 p-3 text-white shadow-lg transition-all hover:scale-110 hover:bg-stone-800 focus:outline-none active:scale-95 disabled:pointer-events-none disabled:text-stone-600"
           disabled={!canGoNext}
         >
           <motion.svg
@@ -179,14 +188,10 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
         </motion.button>
 
         <motion.button
-          onClick={() => {
-            setIsSaveAnimating(true);
-            onToggleSaveQuote?.();
-            setTimeout(() => setIsSaveAnimating(false), 500);
-          }}
+          onClick={() => setIsSaveAnimating(true)}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className="group relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 p-3 text-white shadow-lg transition-all hover:scale-110 hover:bg-stone-800 active:scale-95"
+          className="group relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 p-3 text-white shadow-lg transition-all hover:scale-110 hover:bg-stone-800 focus:outline-none active:scale-95"
         >
           <motion.svg
             xmlns="http://www.w3.org/2000/svg"

@@ -1,19 +1,40 @@
 import { useState, useEffect, useRef } from "react";
 
-export default function StackInfo() {
+interface StackInfoProps {
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+}
+
+export default function StackInfo({ open, onOpenChange }: StackInfoProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (open !== undefined) {
+      if (open) {
+        setIsOpen(true);
+      } else {
+        setIsAnimating(false);
+        setTimeout(() => setIsOpen(false), 200);
+      }
+    }
+  }, [open]);
+
+  useEffect(() => {
     if (isOpen) {
-      setIsAnimating(true);
+      requestAnimationFrame(() => setIsAnimating(true));
     }
   }, [isOpen]);
 
   const handleClose = () => {
-    setIsAnimating(false);
-    setTimeout(() => setIsOpen(false), 200);
+    if (open !== undefined) {
+      setIsAnimating(false);
+      setTimeout(() => onOpenChange?.(false), 200);
+    } else {
+      setIsAnimating(false);
+      setTimeout(() => setIsOpen(false), 200);
+    }
   };
 
   useEffect(() => {
@@ -46,8 +67,10 @@ export default function StackInfo() {
   return (
     <>
       <button
-        onClick={() => setIsOpen(true)}
-        className="group fixed right-4 bottom-4 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 text-white shadow-lg transition-all hover:scale-110 hover:bg-stone-800 active:scale-95"
+        onClick={() => {
+          open !== undefined ? onOpenChange?.(true) : setIsOpen(true);
+        }}
+        className="group fixed right-4 bottom-4 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 text-white shadow-lg transition-all hover:scale-110 hover:bg-stone-800 focus:outline-none active:scale-95"
         aria-label="View Tech Stack"
       >
         <svg

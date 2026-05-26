@@ -5,16 +5,20 @@ import type { Quote } from "../types/Quote";
 interface VaulDrawerProps {
   savedQuotes: Quote[];
   onRemoveQuote?: (quote: Quote) => void;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }
 
 export default function VaulDrawer({
   savedQuotes,
   onRemoveQuote,
+  open,
+  onOpenChange,
 }: VaulDrawerProps) {
   return (
-    <Drawer.Root direction="right">
+    <Drawer.Root direction="right" open={open} onOpenChange={onOpenChange}>
       <Drawer.Trigger asChild>
-        <button className="group fixed bottom-4 left-4 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 text-white shadow-lg transition-all hover:scale-110 hover:bg-stone-800 active:scale-95">
+        <button className="group fixed bottom-4 left-4 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 text-white shadow-lg transition-all hover:scale-110 hover:bg-stone-800 focus:outline-none active:scale-95">
           <svg
             width="15"
             height="15"
