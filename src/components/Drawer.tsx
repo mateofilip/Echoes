@@ -82,7 +82,7 @@ export default function VaulDrawer({
                       <div className="flex items-center justify-between">
                         <button
                           onClick={() => onRemoveQuote?.(quote)}
-                          className="cursor-pointer rounded-full p-1 text-stone-400 opacity-0 transition-all duration-200 ease-out group-hover:opacity-100 hover:bg-stone-800 hover:text-red-400"
+                          className="cursor-pointer rounded-full p-1 text-stone-400 opacity-100 transition-all duration-200 ease-out group-hover:opacity-100 hover:bg-stone-800 hover:text-red-400 md:opacity-0"
                         >
                           <svg
                             width="15"
