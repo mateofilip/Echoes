@@ -2,7 +2,6 @@ import {
   forwardRef,
   useEffect,
   useImperativeHandle,
-  useRef,
   useState,
 } from "react";
 import { motion } from "motion/react";
@@ -37,50 +36,29 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
     },
     ref,
   ) => {
-    const [isReloadingButton, setIsReloadingButton] = useState(false);
-    const [isPrevAnimating, setIsPrevAnimating] = useState(false);
-    const [isNextAnimating, setIsNextAnimating] = useState(false);
-    const [isSaveAnimating, setIsSaveAnimating] = useState(false);
+    const [activeButton, setActiveButton] = useState<string | null>(null);
 
     useImperativeHandle(ref, () => ({
-      triggerReload: () => setIsReloadingButton(true),
-      triggerPrev: () => canGoPrevious && setIsPrevAnimating(true),
-      triggerNext: () => canGoNext && setIsNextAnimating(true),
-      triggerSave: () => setIsSaveAnimating(true),
-    }));
+      triggerReload: () => setActiveButton("reload"),
+      triggerPrev: () => canGoPrevious && setActiveButton("prev"),
+      triggerNext: () => canGoNext && setActiveButton("next"),
+      triggerSave: () => setActiveButton("save"),
+    }), [canGoPrevious, canGoNext]);
 
     useEffect(() => {
-      if (isReloadingButton) {
-        onNewQuote?.();
-        setTimeout(() => setIsReloadingButton(false), 500);
-      }
-    }, [isReloadingButton]);
-
-    useEffect(() => {
-      if (isPrevAnimating) {
-        onPreviousQuote?.();
-        setTimeout(() => setIsPrevAnimating(false), 500);
-      }
-    }, [isPrevAnimating]);
-
-    useEffect(() => {
-      if (isNextAnimating) {
-        onNextQuote?.();
-        setTimeout(() => setIsNextAnimating(false), 500);
-      }
-    }, [isNextAnimating]);
-
-    useEffect(() => {
-      if (isSaveAnimating) {
-        onToggleSaveQuote?.();
-        setTimeout(() => setIsSaveAnimating(false), 500);
-      }
-    }, [isSaveAnimating]);
+      if (!activeButton) return;
+      if (activeButton === "reload") onNewQuote?.();
+      else if (activeButton === "prev") onPreviousQuote?.();
+      else if (activeButton === "next") onNextQuote?.();
+      else if (activeButton === "save") onToggleSaveQuote?.();
+      const timeout = setTimeout(() => setActiveButton(null), 500);
+      return () => clearTimeout(timeout);
+    }, [activeButton]);
 
     return (
       <div className="absolute right-1/2 bottom-4 left-1/2 flex justify-center gap-2 text-xs">
         <motion.button
-          onClick={() => setIsReloadingButton(true)}
+          onClick={() => setActiveButton("reload")}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           className={`group relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 p-3 text-white shadow-lg transition-all hover:scale-110 hover:bg-stone-800 focus:outline-none active:scale-95`}
@@ -91,8 +69,8 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
             height="20"
             fill="none"
             animate={{
-              rotate: isReloadingButton ? 240 : 0,
-              scale: isReloadingButton ? 1.25 : 1,
+              rotate: activeButton === "reload" ? 240 : 0,
+              scale: activeButton === "reload" ? 1.25 : 1,
             }}
             transition={{ duration: 0.2, ease: "easeOut" }}
             viewBox="0 0 15 15"
@@ -116,7 +94,7 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
         </motion.button>
 
         <motion.button
-          onClick={() => canGoPrevious && setIsPrevAnimating(true)}
+          onClick={() => canGoPrevious && setActiveButton("prev")}
           whileHover={canGoPrevious ? { scale: 1.05 } : undefined}
           whileTap={canGoPrevious ? { scale: 0.95 } : undefined}
           className="group relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 p-3 text-white shadow-lg transition-all hover:scale-110 hover:bg-stone-800 focus:outline-none active:scale-95 disabled:pointer-events-none disabled:border-stone-700 disabled:text-stone-600"
@@ -128,7 +106,7 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
             height="20"
             fill="none"
             animate={{
-              scale: isPrevAnimating ? 1.25 : 1,
+              scale: activeButton === "prev" ? 1.25 : 1,
             }}
             transition={{ duration: 0.2, ease: "easeOut" }}
             viewBox="0 0 15 15"
@@ -153,7 +131,7 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
         </motion.button>
 
         <motion.button
-          onClick={() => canGoNext && setIsNextAnimating(true)}
+          onClick={() => canGoNext && setActiveButton("next")}
           whileHover={canGoNext ? { scale: 1.05 } : undefined}
           whileTap={canGoNext ? { scale: 0.95 } : undefined}
           className="group relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 p-3 text-white shadow-lg transition-all hover:scale-110 hover:bg-stone-800 focus:outline-none active:scale-95 disabled:pointer-events-none disabled:text-stone-600"
@@ -164,7 +142,7 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
             width="20"
             height="20"
             fill="none"
-            animate={{ scale: isNextAnimating ? 1.25 : 1 }}
+            animate={{ scale: activeButton === "next" ? 1.25 : 1 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
             viewBox="0 0 15 15"
           >
@@ -188,7 +166,7 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
         </motion.button>
 
         <motion.button
-          onClick={() => setIsSaveAnimating(true)}
+          onClick={() => setActiveButton("save")}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           className="group relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 p-3 text-white shadow-lg transition-all hover:scale-110 hover:bg-stone-800 focus:outline-none active:scale-95"
@@ -199,7 +177,7 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
             height="20"
             fill="none"
             animate={{
-              scale: isSaveAnimating ? 1.25 : 1,
+              scale: activeButton === "save" ? 1.25 : 1,
             }}
             transition={{ duration: 0.2, ease: "easeOut" }}
             viewBox="0 0 15 15"

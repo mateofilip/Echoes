@@ -12,7 +12,6 @@ const STORAGE_KEY = "echoes-saved-quotes";
 export default function Welcome() {
   const [quotes, setQuotes] = useState<Quote[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isLoading, setIsLoading] = useState(true);
   const [isAuthorHovered, setIsAuthorHovered] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(true);
   const [savedQuotes, setSavedQuotes] = useState<Quote[]>(() => {
@@ -34,7 +33,8 @@ export default function Welcome() {
     let newSaved: Quote[];
     if (isAlreadySaved) {
       newSaved = savedQuotes.filter(
-        (q) => !(q.quote === currentQuote.quote && q.author === currentQuote.author),
+        (q) =>
+          !(q.quote === currentQuote.quote && q.author === currentQuote.author),
       );
     } else {
       newSaved = [...savedQuotes, currentQuote];
@@ -115,7 +115,6 @@ export default function Welcome() {
 
   const getQuote = async () => {
     try {
-      setIsLoading(true);
       setIsTransitioning(true);
 
       const { data, error } = await supabase
@@ -134,34 +133,29 @@ export default function Welcome() {
 
       setQuotes([{ quote: data.quote, author: data.author }, ...quotes]);
       setCurrentIndex(0);
-      setIsTransitioning(false);
-      setTimeout(() => setIsLoading(false), 450);
+      setTimeout(() => setIsTransitioning(false), 450);
     } catch (error) {
       console.error(error);
       setQuotes([
         { quote: "Oops... Something went wrong.", author: "Unknown" },
       ]);
-      setIsLoading(false);
+      setIsTransitioning(false);
     }
   };
 
   const getPreviousQuote = () => {
     if (currentIndex < quotes.length - 1) {
-      setIsLoading(true);
       setIsTransitioning(true);
       setCurrentIndex(currentIndex + 1);
-      setTimeout(() => setIsTransitioning(false), 200);
-      setIsLoading(false);
+      setTimeout(() => setIsTransitioning(false), 300);
     }
   };
 
   const getNextQuote = () => {
     if (currentIndex > 0) {
-      setIsLoading(true);
       setIsTransitioning(true);
       setCurrentIndex(currentIndex - 1);
-      setTimeout(() => setIsTransitioning(false), 200);
-      setIsLoading(false);
+      setTimeout(() => setIsTransitioning(false), 300);
     }
   };
 
@@ -174,7 +168,7 @@ export default function Welcome() {
       <main className="flex h-dvh w-dvw flex-col justify-center px-5 sm:px-16 md:px-28 lg:px-52 xl:px-96 2xl:px-120">
         <div className="relative flex h-2/3 flex-col justify-center gap-10 p-10">
           <div
-            className={`absolute inset-0 -z-10 overflow-hidden rounded-3xl p-4 transition-all duration-300 ${isAuthorHovered || isTransitioning ? "blur-none" : "blur-3xl"}`}
+            className={`absolute inset-0 -z-10 overflow-hidden rounded-3xl p-4 transition-all duration-300 will-change-transform ${isAuthorHovered || isTransitioning ? "blur-none" : "blur-3xl"}`}
           >
             <div
               className={`absolute inset-0 h-full mask-[url(/mask.avif)] mask-contain mask-center mask-no-repeat ${maskFlips[flipIndex].mask}`}
@@ -190,8 +184,7 @@ export default function Welcome() {
                 animate={{ opacity: isTransitioning ? 0 : 1, scale: 1 }}
                 transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
                 className={`h-full w-full object-cover ${maskFlips[flipIndex].img}`}
-                loading="eager"
-                fetchPriority="high"
+                loading="lazy"
                 decoding="async"
               />
             </div>
@@ -201,7 +194,10 @@ export default function Welcome() {
             <motion.p
               key={quotes[currentIndex]?.quote}
               initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: isLoading || isAuthorHovered ? 0 : 1, y: 0 }}
+              animate={{
+                opacity: isTransitioning || isAuthorHovered ? 0 : 1,
+                y: 0,
+              }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
               className="variableSize text-center text-shadow-lg/30"
@@ -218,7 +214,7 @@ export default function Welcome() {
               target="_blank"
               rel="noopener noreferrer"
               initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: isLoading ? 0 : 1, x: 0 }}
+              animate={{ opacity: isTransitioning ? 0 : 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
               onMouseEnter={() => setIsAuthorHovered(true)}
@@ -246,7 +242,12 @@ export default function Welcome() {
       </main>
 
       <StackInfo open={isStackOpen} onOpenChange={setIsStackOpen} />
-      <VaulDrawer savedQuotes={savedQuotes} onRemoveQuote={removeQuote} open={isDrawerOpen} onOpenChange={setIsDrawerOpen} />
+      <VaulDrawer
+        savedQuotes={savedQuotes}
+        onRemoveQuote={removeQuote}
+        open={isDrawerOpen}
+        onOpenChange={setIsDrawerOpen}
+      />
     </>
   );
 }

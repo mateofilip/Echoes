@@ -68,7 +68,6 @@ export default function VaulDrawer({
                   {savedQuotes.map((quote) => (
                     <motion.div
                       key={quote.quote + quote.author}
-                      layout
                       initial={{ opacity: 0, height: 0 }}
                       animate={{ opacity: 1, height: "auto" }}
                       exit={{ opacity: 0, height: 0, scale: 0.95 }}
