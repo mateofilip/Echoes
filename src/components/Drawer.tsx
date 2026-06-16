@@ -52,7 +52,7 @@ export default function VaulDrawer({
             { "--initial-transform": "calc(100% + 8px)" } as React.CSSProperties
           }
         >
-          <div className="flex h-full w-full grow flex-col rounded-2xl bg-stone-950 p-5">
+          <div className="flex h-full w-full grow flex-col rounded-2xl bg-stone-900/40 p-5 backdrop-blur-xs">
             <Drawer.Title className="Geist mb-4 text-xl font-semibold text-orange-200">
               Saved Quotes ({savedQuotes.length})
             </Drawer.Title>
