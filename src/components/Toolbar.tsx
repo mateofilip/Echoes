@@ -1,5 +1,5 @@
 import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
-import { motion } from "motion/react";
+import { useReducedMotion } from "motion/react";
 
 interface QuoteToolbarProps {
   canGoPrevious: boolean;
@@ -32,6 +32,7 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
     ref,
   ) => {
     const [activeButton, setActiveButton] = useState<string | null>(null);
+    const prefersReducedMotion = useReducedMotion();
 
     useImperativeHandle(
       ref,
@@ -50,28 +51,22 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
       else if (activeButton === "prev") onPreviousQuote?.();
       else if (activeButton === "next") onNextQuote?.();
       else if (activeButton === "save") onToggleSaveQuote?.();
-      const timeout = setTimeout(() => setActiveButton(null), 500);
+      const timeout = setTimeout(() => setActiveButton(null), 200);
       return () => clearTimeout(timeout);
     }, [activeButton]);
 
     return (
       <div className="absolute right-1/2 bottom-4 left-1/2 flex justify-center gap-2 text-xs">
-        <motion.button
+        <button
           onClick={() => setActiveButton("reload")}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className={`group relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 p-3 text-white shadow-lg transition-all duration-200 hover:scale-110 hover:bg-stone-800 focus:outline-none active:scale-95`}
+          className="group relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 p-3 text-white shadow-lg transition duration-200 hover:scale-110 hover:bg-stone-800 focus:outline-none active:scale-95 motion-reduce:transition-none motion-reduce:hover:scale-100 motion-reduce:active:scale-100"
         >
-          <motion.svg
+          <svg
             xmlns="http://www.w3.org/2000/svg"
             width="20"
             height="20"
             fill="none"
-            animate={{
-              rotate: activeButton === "reload" ? 240 : 0,
-              scale: activeButton === "reload" ? 1.25 : 1,
-            }}
-            transition={{ duration: 0.2, ease: "easeOut" }}
+            className={`transition-transform duration-200 ${!prefersReducedMotion && activeButton === "reload" ? "scale-125 rotate-[240deg]" : ""}`}
             viewBox="0 0 15 15"
           >
             <path
@@ -80,8 +75,8 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
               d="M1.85 7.5c0-2.835 2.21-5.65 5.65-5.65 2.778 0 4.152 2.056 4.737 3.15H10.5a.5.5 0 0 0 0 1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-1 0v1.813C12.296 3.071 10.666.85 7.5.85 3.437.85.85 4.185.85 7.5s2.587 6.65 6.65 6.65c1.944 0 3.562-.77 4.714-1.942a6.8 6.8 0 0 0 1.428-2.167.5.5 0 1 0-.925-.38 5.8 5.8 0 0 1-1.216 1.846c-.971.99-2.336 1.643-4.001 1.643-3.44 0-5.65-2.815-5.65-5.65"
               clipRule="evenodd"
             />
-          </motion.svg>
-          <div className="font-alte-haas pointer-events-none invisible absolute bottom-10 flex translate-y-2 flex-col items-center opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-hover:delay-300">
+          </svg>
+          <div className="font-alte-haas pointer-events-none invisible absolute bottom-10 flex translate-y-2 flex-col items-center opacity-0 transition-[opacity,transform] delay-200 duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 motion-reduce:transition-none">
             <div className="flex items-center gap-2 rounded-full border border-stone-800 bg-stone-950 px-3 py-2 text-[10px] whitespace-nowrap text-white">
               New Quote
               <span className="inline-grid w-fit place-items-center rounded-lg border border-stone-700 bg-stone-800 px-2 py-1 font-mono">
@@ -90,24 +85,19 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
             </div>
             <div className="h-2 w-2 -translate-y-1 rotate-45 rounded-br-sm border-r border-b border-stone-800 bg-stone-950 shadow-lg"></div>
           </div>
-        </motion.button>
+        </button>
 
-        <motion.button
+        <button
           onClick={() => canGoPrevious && setActiveButton("prev")}
-          whileHover={canGoPrevious ? { scale: 1.05 } : undefined}
-          whileTap={canGoPrevious ? { scale: 0.95 } : undefined}
-          className="group relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 p-3 text-white shadow-lg transition-all duration-200 hover:scale-110 hover:bg-stone-800 focus:outline-none active:scale-95 disabled:pointer-events-none disabled:border-stone-700 disabled:text-stone-600"
+          className="group relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 p-3 text-white shadow-lg transition duration-200 hover:scale-110 hover:bg-stone-800 focus:outline-none active:scale-95 disabled:pointer-events-none disabled:border-stone-700 disabled:text-stone-600 motion-reduce:transition-none motion-reduce:hover:scale-100 motion-reduce:active:scale-100"
           disabled={!canGoPrevious}
         >
-          <motion.svg
+          <svg
             xmlns="http://www.w3.org/2000/svg"
             width="20"
             height="20"
             fill="none"
-            animate={{
-              scale: activeButton === "prev" ? 1.25 : 1,
-            }}
-            transition={{ duration: 0.2, ease: "easeOut" }}
+            className={`transition-transform duration-200 ${!prefersReducedMotion && activeButton === "prev" ? "scale-125" : ""}`}
             viewBox="0 0 15 15"
           >
             <path
@@ -116,9 +106,9 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
               d="M4.854 2.146a.5.5 0 0 1 0 .708L3.707 4H9a4.5 4.5 0 1 1 0 9H5a.5.5 0 0 1 0-1h4a3.5 3.5 0 1 0 0-7H3.707l1.147 1.146a.5.5 0 1 1-.708.708l-2-2a.5.5 0 0 1 0-.708l2-2a.5.5 0 0 1 .708 0"
               clipRule="evenodd"
             />
-          </motion.svg>
+          </svg>
 
-          <div className="font-alte-haas pointer-events-none invisible absolute bottom-10 flex translate-y-2 flex-col items-center opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-hover:delay-300">
+          <div className="font-alte-haas pointer-events-none invisible absolute bottom-10 flex translate-y-2 flex-col items-center opacity-0 transition-[opacity,transform] delay-200 duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 motion-reduce:transition-none">
             <div className="flex items-center gap-2 rounded-full border border-stone-800 bg-stone-950 px-3 py-2 text-[10px] whitespace-nowrap text-white">
               Previous Quote
               <span className="inline-grid w-fit place-items-center rounded-lg border border-stone-700 bg-stone-800 px-2 py-1 font-mono">
@@ -127,22 +117,19 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
             </div>
             <div className="h-2 w-2 -translate-y-1 rotate-45 rounded-br-sm border-r border-b border-stone-800 bg-stone-950 shadow-lg"></div>
           </div>
-        </motion.button>
+        </button>
 
-        <motion.button
+        <button
           onClick={() => canGoNext && setActiveButton("next")}
-          whileHover={canGoNext ? { scale: 1.05 } : undefined}
-          whileTap={canGoNext ? { scale: 0.95 } : undefined}
-          className="group relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 p-3 text-white shadow-lg transition-all duration-200 hover:scale-110 hover:bg-stone-800 focus:outline-none active:scale-95 disabled:pointer-events-none disabled:border-stone-700 disabled:text-stone-600"
+          className="group relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 p-3 text-white shadow-lg transition duration-200 hover:scale-110 hover:bg-stone-800 focus:outline-none active:scale-95 disabled:pointer-events-none disabled:border-stone-700 disabled:text-stone-600 motion-reduce:transition-none motion-reduce:hover:scale-100 motion-reduce:active:scale-100"
           disabled={!canGoNext}
         >
-          <motion.svg
+          <svg
             xmlns="http://www.w3.org/2000/svg"
             width="20"
             height="20"
             fill="none"
-            animate={{ scale: activeButton === "next" ? 1.25 : 1 }}
-            transition={{ duration: 0.2, ease: "easeOut" }}
+            className={`transition-transform duration-200 ${!prefersReducedMotion && activeButton === "next" ? "scale-125" : ""}`}
             viewBox="0 0 15 15"
           >
             <path
@@ -151,9 +138,9 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
               d="M8.146 3.146a.5.5 0 0 1 .708 0l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L11.293 8H2.5a.5.5 0 0 1 0-1h8.793L8.146 3.854a.5.5 0 0 1 0-.708"
               clipRule="evenodd"
             />
-          </motion.svg>
+          </svg>
 
-          <div className="font-alte-haas pointer-events-none invisible absolute bottom-10 flex translate-y-2 flex-col items-center opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-hover:delay-300">
+          <div className="font-alte-haas pointer-events-none invisible absolute bottom-10 flex translate-y-2 flex-col items-center opacity-0 transition-[opacity,transform] delay-200 duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 motion-reduce:transition-none">
             <div className="flex items-center gap-2 rounded-full border border-stone-800 bg-stone-950 px-3 py-2 text-[10px] whitespace-nowrap text-white">
               Next Quote
               <span className="inline-grid w-fit place-items-center rounded-lg border border-stone-700 bg-stone-800 px-2 py-1 font-mono">
@@ -162,23 +149,18 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
             </div>
             <div className="h-2 w-2 -translate-y-1 rotate-45 rounded-br-sm border-r border-b border-stone-800 bg-stone-950 shadow-lg"></div>
           </div>
-        </motion.button>
+        </button>
 
-        <motion.button
+        <button
           onClick={() => setActiveButton("save")}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="group relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 p-3 text-white shadow-lg transition-all duration-200 hover:scale-110 hover:bg-stone-800 focus:outline-none active:scale-95"
+          className="group relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 p-3 text-white shadow-lg transition duration-200 hover:scale-110 hover:bg-stone-800 focus:outline-none active:scale-95 motion-reduce:transition-none motion-reduce:hover:scale-100 motion-reduce:active:scale-100"
         >
-          <motion.svg
+          <svg
             xmlns="http://www.w3.org/2000/svg"
             width="20"
             height="20"
             fill="none"
-            animate={{
-              scale: activeButton === "save" ? 1.25 : 1,
-            }}
-            transition={{ duration: 0.2, ease: "easeOut" }}
+            className={`transition-transform duration-200 ${!prefersReducedMotion && activeButton === "save" ? "scale-125" : ""}`}
             viewBox="0 0 15 15"
           >
             {isSaved ? (
@@ -196,8 +178,8 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
                 clip-rule="evenodd"
               ></path>
             )}
-          </motion.svg>
-          <div className="font-alte-haas pointer-events-none invisible absolute bottom-10 flex translate-y-2 flex-col items-center opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-hover:delay-300">
+          </svg>
+          <div className="font-alte-haas pointer-events-none invisible absolute bottom-10 flex translate-y-2 flex-col items-center opacity-0 transition-[opacity,transform] delay-200 duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 motion-reduce:transition-none">
             <div className="flex items-center gap-2 rounded-full border border-stone-800 bg-stone-950 px-3 py-2 text-[10px] whitespace-nowrap text-white">
               {isSaved ? "Remove from Favorites" : "Save Quote"}
               <span className="inline-grid w-fit place-items-center rounded-lg border border-stone-700 bg-stone-800 px-2 py-1 font-mono">
@@ -206,7 +188,7 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
             </div>
             <div className="h-2 w-2 -translate-y-1 rotate-45 rounded-br-sm border-r border-b border-stone-800 bg-stone-950 shadow-lg"></div>
           </div>
-        </motion.button>
+        </button>
       </div>
     );
   },

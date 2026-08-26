@@ -2,6 +2,9 @@
 
 @theme {
   --font-alte-haas: "Alte Haas Grotesk", Arial, system-ui, sans-serif;
+  --font-redaction: "Redaction", Times, serif;
+  --font-prata: "Prata", Times, serif;
+  --text-quote: clamp(1rem, 2vw + 1rem, 2.25rem);
 }
 
 @font-face {
@@ -33,16 +36,4 @@
   font-weight: normal;
   font-style: normal;
   font-display: swap;
-}
-
-.Redaction {
-  font-family: "Redaction", Times, serif;
-}
-
-.Prata {
-  font-family: "Prata", Times, serif;
-}
-
-.variableSize {
-  font-size: clamp(1rem, 2vw + 1rem, 2.25rem);
 }

@@ -139,7 +139,7 @@ export default function VaulDrawer({
         <button
           type="button"
           aria-label="View saved quotes"
-          className="group fixed bottom-4 left-4 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 text-white shadow-lg transition-all duration-200 hover:scale-110 hover:border-stone-700 hover:bg-stone-800 focus-visible:ring-2 focus-visible:ring-orange-200/70 focus-visible:ring-offset-2 focus-visible:ring-offset-stone-950 focus-visible:outline-none active:scale-95"
+          className="group fixed bottom-4 left-4 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 text-white shadow-lg transition-[background-color,border-color,color,transform] duration-200 hover:scale-110 hover:border-stone-700 hover:bg-stone-800 focus-visible:ring-2 focus-visible:ring-orange-200/70 focus-visible:ring-offset-2 focus-visible:ring-offset-stone-950 focus-visible:outline-none active:scale-95"
         >
           <svg
             width="15"
@@ -155,7 +155,7 @@ export default function VaulDrawer({
               clip-rule="evenodd"
             ></path>
           </svg>
-          <div className="font-alte-haas pointer-events-none visible absolute bottom-10 -left-1 flex translate-y-2 flex-col items-start opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-hover:delay-300">
+          <div className="font-alte-haas pointer-events-none visible absolute bottom-10 -left-1 flex translate-y-2 flex-col items-start opacity-0 transition-[opacity,transform] delay-200 duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 motion-reduce:transition-none">
             <div className="flex items-center gap-2 rounded-full border border-stone-800 bg-stone-950 px-3 py-2 text-[10px] whitespace-nowrap text-white">
               Saved Quotes ({displayedQuotes.length})
               <span className="float-end inline-grid w-fit place-items-center rounded-lg border border-stone-700 bg-stone-800 px-2 py-1 font-mono">
@@ -167,9 +167,9 @@ export default function VaulDrawer({
         </button>
       </Drawer.Trigger>
       <Drawer.Portal>
-        <Drawer.Overlay className="fixed inset-0 bg-stone-950/75 backdrop-blur-[2px] data-[state=closed]:![animation-duration:200ms] data-[state=open]:![animation-duration:200ms]" />
-        <Drawer.Content className="fixed top-4 right-4 bottom-4 z-10 flex w-[calc(100vw-2rem)] overflow-x-hidden outline-none data-[state=closed]:![animation-duration:200ms] data-[state=open]:![animation-duration:200ms] sm:w-[420px]">
-          <div className="flex h-full w-full grow flex-col overflow-hidden rounded-3xl border border-stone-800/90 bg-stone-950/95 p-5 shadow-2xl ring-1 shadow-black/40 ring-white/5 backdrop-blur-2xl ring-inset sm:p-6">
+        <Drawer.Overlay className="fixed inset-0 bg-stone-950/80 data-[state=closed]:![animation-duration:200ms] data-[state=open]:![animation-duration:200ms] motion-reduce:![animation-duration:0ms]" />
+        <Drawer.Content className="fixed top-4 right-4 bottom-4 z-10 flex w-[calc(100vw-2rem)] overflow-x-hidden outline-none data-[state=closed]:![animation-duration:200ms] data-[state=open]:![animation-duration:200ms] motion-reduce:![animation-duration:0ms] sm:w-[420px]">
+          <div className="flex h-full w-full grow flex-col overflow-hidden rounded-3xl border border-stone-800/90 bg-stone-950 p-5 shadow-2xl ring-1 shadow-black/40 ring-white/5 ring-inset sm:p-6">
             <div className="flex items-center justify-between gap-4 border-b border-stone-800/80 pb-5">
               <div>
                 <Drawer.Title className="font-alte-haas text-xl leading-none font-semibold tracking-tight text-orange-100 sm:text-2xl">
@@ -188,7 +188,7 @@ export default function VaulDrawer({
                   <button
                     type="button"
                     aria-label="Close saved quotes"
-                    className="inline-flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-stone-800 text-stone-400 transition-all duration-200 hover:border-stone-700 hover:bg-stone-800 hover:text-orange-100 focus-visible:ring-2 focus-visible:ring-orange-200/70 focus-visible:outline-none active:scale-95"
+                    className="inline-flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-stone-800 text-stone-400 transition-[background-color,border-color,color,transform] duration-200 hover:border-stone-700 hover:bg-stone-800 hover:text-orange-100 focus-visible:ring-2 focus-visible:ring-orange-200/70 focus-visible:outline-none active:scale-95"
                   >
                     <svg
                       width="16"
@@ -233,11 +233,7 @@ export default function VaulDrawer({
                   )}
               </AnimatePresence>
 
-              <motion.div
-                layout
-                transition={cardTransition}
-                className="flex w-full flex-col gap-3 pb-1"
-              >
+              <div className="flex w-full flex-col gap-3 pb-1">
                 <AnimatePresence
                   initial={false}
                   mode="popLayout"
@@ -256,15 +252,14 @@ export default function VaulDrawer({
                     >
                       <motion.article
                         variants={cardVariants}
-                        style={{ transformOrigin: "center top" }}
                         className="group relative origin-top overflow-hidden rounded-2xl border border-stone-800/90 bg-stone-900/60 p-5 shadow-lg shadow-black/10 transition-colors delay-0 duration-200 ease-out hover:border-orange-200/30 hover:bg-stone-900/85"
                       >
                         <p className="pr-8 text-[0.95rem] leading-7 text-orange-50">
-                          <span className="Prata mr-1 text-lg text-orange-200/70">
+                          <span className="font-prata mr-1 text-lg text-orange-200/70">
                             «
                           </span>
                           {quote.quote}
-                          <span className="Prata ml-1 text-lg text-orange-200/70">
+                          <span className="font-prata ml-1 text-lg text-orange-200/70">
                             »
                           </span>
                         </p>
@@ -277,7 +272,7 @@ export default function VaulDrawer({
                             type="button"
                             onClick={() => requestRemoveQuote(quote)}
                             aria-label={`Remove quote by ${quote.author}`}
-                            className="inline-flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full border border-stone-800 text-stone-500 transition-all delay-0 duration-200 ease-out hover:border-red-400/30 hover:bg-red-400/10 hover:text-red-300 focus-visible:ring-2 focus-visible:ring-orange-200/70 focus-visible:outline-none active:scale-95"
+                            className="inline-flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full border border-stone-800 text-stone-500 transition-[background-color,border-color,color,transform] delay-0 duration-200 ease-out hover:border-red-400/30 hover:bg-red-400/10 hover:text-red-300 focus-visible:ring-2 focus-visible:ring-orange-200/70 focus-visible:outline-none active:scale-95"
                           >
                             <svg
                               width="15"
@@ -300,7 +295,7 @@ export default function VaulDrawer({
                     </motion.div>
                   ))}
                 </AnimatePresence>
-              </motion.div>
+              </div>
             </div>
           </div>
         </Drawer.Content>

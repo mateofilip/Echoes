@@ -1,11 +1,11 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { Quote } from "../types/Quote";
 import { supabase } from "../db/supabase";
 import StackInfo from "./StackInfo.tsx";
 import QuoteToolbar, { type ToolbarRef } from "./Toolbar.tsx";
 import VaulDrawer from "./Drawer.tsx";
 
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 
 const STORAGE_KEY = "echoes-saved-quotes";
 
@@ -73,6 +73,32 @@ export default function Welcome() {
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isStackOpen, setIsStackOpen] = useState(false);
+  const prefersReducedMotion = useReducedMotion();
+  const transitionTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null,
+  );
+
+  const scheduleTransitionEnd = () => {
+    if (transitionTimeoutRef.current) {
+      clearTimeout(transitionTimeoutRef.current);
+    }
+
+    transitionTimeoutRef.current = setTimeout(
+      () => {
+        setIsTransitioning(false);
+        transitionTimeoutRef.current = null;
+      },
+      prefersReducedMotion ? 0 : 200,
+    );
+  };
+
+  useEffect(() => {
+    return () => {
+      if (transitionTimeoutRef.current) {
+        clearTimeout(transitionTimeoutRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     getQuote();
@@ -133,7 +159,7 @@ export default function Welcome() {
 
       setQuotes([{ quote: data.quote, author: data.author }, ...quotes]);
       setCurrentIndex(0);
-      setTimeout(() => setIsTransitioning(false), 450);
+      scheduleTransitionEnd();
     } catch (error) {
       console.error(error);
       setQuotes([
@@ -147,7 +173,7 @@ export default function Welcome() {
     if (currentIndex < quotes.length - 1) {
       setIsTransitioning(true);
       setCurrentIndex(currentIndex + 1);
-      setTimeout(() => setIsTransitioning(false), 300);
+      scheduleTransitionEnd();
     }
   };
 
@@ -155,21 +181,19 @@ export default function Welcome() {
     if (currentIndex > 0) {
       setIsTransitioning(true);
       setCurrentIndex(currentIndex - 1);
-      setTimeout(() => setIsTransitioning(false), 300);
+      scheduleTransitionEnd();
     }
   };
 
   return (
     <>
-      <h1 className="Redaction fixed top-0 right-0 left-0 mt-15 text-center text-4xl font-bold">
+      <h1 className="font-redaction fixed top-0 right-0 left-0 mt-15 text-center text-4xl font-bold">
         Echoes
       </h1>
 
       <main className="flex h-dvh w-dvw flex-col justify-center px-5 sm:px-16 md:px-28 lg:px-52 xl:px-96 2xl:px-120">
         <div className="relative flex h-2/3 flex-col justify-center gap-10 p-10">
-          <div
-            className={`absolute inset-0 -z-10 overflow-hidden rounded-3xl p-4 transition-all duration-300 will-change-transform ${isAuthorHovered || isTransitioning ? "blur-none" : "blur-3xl"}`}
-          >
+          <div className="absolute inset-0 -z-10 overflow-hidden rounded-3xl p-4 blur-sm">
             <div
               className={`absolute inset-0 h-full mask-[url(/mask.avif)] mask-contain mask-center mask-no-repeat ${maskFlips[flipIndex].mask}`}
             >
@@ -180,11 +204,15 @@ export default function Welcome() {
                   e.currentTarget.src = `/authors/${quotes[currentIndex]?.author?.toLowerCase().replace(/\s+/g, "-")}.avif`;
                 }}
                 alt={quotes[currentIndex]?.author || "Author"}
-                initial={{ opacity: 0, scale: 1.1 }}
-                animate={{ opacity: isTransitioning ? 0 : 1, scale: 1 }}
-                transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+                initial={prefersReducedMotion ? false : { opacity: 0 }}
+                animate={{ opacity: isTransitioning ? 0 : 1 }}
+                transition={{
+                  duration: prefersReducedMotion ? 0 : 0.2,
+                  ease: [0.25, 0.1, 0.25, 1],
+                }}
                 className={`h-full w-full object-cover ${maskFlips[flipIndex].img}`}
-                loading="lazy"
+                loading="eager"
+                fetchPriority="high"
                 decoding="async"
               />
             </div>
@@ -193,14 +221,17 @@ export default function Welcome() {
           <AnimatePresence mode="wait">
             <motion.p
               key={quotes[currentIndex]?.quote}
-              initial={{ opacity: 0, y: 20 }}
+              initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
               animate={{
                 opacity: isTransitioning || isAuthorHovered ? 0 : 1,
                 y: 0,
               }}
               exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-              className="variableSize text-center text-shadow-lg/30"
+              transition={{
+                duration: prefersReducedMotion ? 0 : 0.2,
+                ease: [0.25, 0.1, 0.25, 1],
+              }}
+              className="text-quote text-center text-shadow-lg/30"
             >
               <span>«&nbsp;</span>
               {quotes[currentIndex]?.quote || "Loading..."}
@@ -213,13 +244,16 @@ export default function Welcome() {
               href={`https://www.google.com/search?q=${encodeURIComponent(quotes[currentIndex]?.author || "")}`}
               target="_blank"
               rel="noopener noreferrer"
-              initial={{ opacity: 0, x: 20 }}
+              initial={prefersReducedMotion ? false : { opacity: 0, x: 20 }}
               animate={{ opacity: isTransitioning ? 0 : 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+              transition={{
+                duration: prefersReducedMotion ? 0 : 0.2,
+                ease: [0.25, 0.1, 0.25, 1],
+              }}
               onMouseEnter={() => setIsAuthorHovered(true)}
               onMouseLeave={() => setIsAuthorHovered(false)}
-              className={`ml-auto w-fit rounded-lg px-3 py-2 text-xl text-shadow-lg/30 hover:backdrop-blur-xs md:text-2xl ${isAuthorHovered ? "backdrop-blur-sm" : ""}`}
+              className="ml-auto w-fit rounded-lg px-3 py-2 text-xl text-shadow-lg/30 hover:bg-stone-950/20 md:text-2xl"
             >
               —{" "}
               <span className="underline decoration-1">
