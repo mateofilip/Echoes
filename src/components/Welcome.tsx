@@ -5,7 +5,14 @@ import StackInfo from "./StackInfo.tsx";
 import QuoteToolbar, { type ToolbarRef } from "./Toolbar.tsx";
 import VaulDrawer from "./Drawer.tsx";
 
-import { motion, AnimatePresence, useReducedMotion } from "motion/react";
+import {
+  motion,
+  AnimatePresence,
+  useReducedMotion,
+  useMotionValue,
+  useSpring,
+  useTransform,
+} from "motion/react";
 
 const STORAGE_KEY = "echoes-saved-quotes";
 
@@ -25,16 +32,13 @@ export default function Welcome() {
   const toggleSaveQuote = () => {
     const currentQuote = quotes[currentIndex];
     if (!currentQuote) return;
-
     const isAlreadySaved = savedQuotes.some(
       (q) => q.quote === currentQuote.quote && q.author === currentQuote.author,
     );
-
     let newSaved: Quote[];
     if (isAlreadySaved) {
       newSaved = savedQuotes.filter(
-        (q) =>
-          !(q.quote === currentQuote.quote && q.author === currentQuote.author),
+        (q) => !(q.quote === currentQuote.quote && q.author === currentQuote.author),
       );
     } else {
       newSaved = [...savedQuotes, currentQuote];
@@ -70,19 +74,38 @@ export default function Welcome() {
   );
   const [flipIndex, setFlipIndex] = useState(0);
   const toolbarRef = useRef<ToolbarRef>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isStackOpen, setIsStackOpen] = useState(false);
   const prefersReducedMotion = useReducedMotion();
-  const transitionTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
-    null,
-  );
+  const transitionTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Apple: 1:1 tracking — parallax follows pointer, decomposed X/Y springs
+  const mx = useMotionValue(0);
+  const my = useMotionValue(0);
+  const springX = useSpring(mx, { stiffness: 90, damping: 22, mass: 0.6 });
+  const springY = useSpring(my, { stiffness: 90, damping: 22, mass: 0.6 });
+  const imageX = useTransform(springX, (v) => v * 14);
+  const imageY = useTransform(springY, (v) => v * 10);
+
+  const handlePointerMove = (e: React.PointerEvent) => {
+    if (prefersReducedMotion || isTransitioning) return;
+    const el = cardRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const nx = (e.clientX - rect.left) / rect.width - 0.5;
+    const ny = (e.clientY - rect.top) / rect.height - 0.5;
+    mx.set(nx);
+    my.set(ny);
+  };
+  const handlePointerLeaveCard = () => {
+    mx.set(0);
+    my.set(0);
+  };
 
   const scheduleTransitionEnd = () => {
-    if (transitionTimeoutRef.current) {
-      clearTimeout(transitionTimeoutRef.current);
-    }
-
+    if (transitionTimeoutRef.current) clearTimeout(transitionTimeoutRef.current);
     transitionTimeoutRef.current = setTimeout(
       () => {
         setIsTransitioning(false);
@@ -94,9 +117,7 @@ export default function Welcome() {
 
   useEffect(() => {
     return () => {
-      if (transitionTimeoutRef.current) {
-        clearTimeout(transitionTimeoutRef.current);
-      }
+      if (transitionTimeoutRef.current) clearTimeout(transitionTimeoutRef.current);
     };
   }, []);
 
@@ -105,9 +126,7 @@ export default function Welcome() {
   }, []);
 
   useEffect(() => {
-    if (quotes[currentIndex]?.author) {
-      setFlipIndex(Math.floor(Math.random() * 4));
-    }
+    if (quotes[currentIndex]?.author) setFlipIndex(Math.floor(Math.random() * 4));
   }, [quotes[currentIndex]?.author]);
 
   useEffect(() => {
@@ -134,37 +153,22 @@ export default function Welcome() {
       }
     };
     window.addEventListener("keydown", onKeyDown);
-    return () => {
-      window.removeEventListener("keydown", onKeyDown);
-    };
+    return () => window.removeEventListener("keydown", onKeyDown);
   }, []);
 
   const getQuote = async () => {
     try {
       setIsTransitioning(true);
-
-      const { data, error } = await supabase
-        .rpc("get_random_quote")
-        .single<{ quote: string; author: string }>();
-
+      const { data, error } = await supabase.rpc("get_random_quote").single<{ quote: string; author: string }>();
       if (!data) throw new Error(error?.message || "Unknown error");
-
-      const isDuplicate = quotes.some(
-        (q) => q.quote === data.quote && q.author === data.author,
-      );
-
-      if (isDuplicate) {
-        return getQuote();
-      }
-
+      const isDuplicate = quotes.some((q) => q.quote === data.quote && q.author === data.author);
+      if (isDuplicate) return getQuote();
       setQuotes([{ quote: data.quote, author: data.author }, ...quotes]);
       setCurrentIndex(0);
       scheduleTransitionEnd();
     } catch (error) {
       console.error(error);
-      setQuotes([
-        { quote: "Oops... Something went wrong.", author: "Unknown" },
-      ]);
+      setQuotes([{ quote: "Oops... Something went wrong.", author: "Unknown" }]);
       setIsTransitioning(false);
     }
   };
@@ -176,7 +180,6 @@ export default function Welcome() {
       scheduleTransitionEnd();
     }
   };
-
   const getNextQuote = () => {
     if (currentIndex > 0) {
       setIsTransitioning(true);
@@ -185,7 +188,7 @@ export default function Welcome() {
     }
   };
 
-  // Apple: 500ms for text/button, materialize blur+scale together
+  // Apple: critically damped springs, interruptible from presentation value
   const bgSpring = prefersReducedMotion
     ? { duration: 0 }
     : { type: "spring" as const, bounce: 0, duration: 0.5 };
@@ -195,105 +198,115 @@ export default function Welcome() {
 
   return (
     <>
-      <h1 className="font-redaction fixed top-0 right-0 left-0 mt-15 text-center text-4xl font-bold">
+      <h1 className="font-redaction fixed top-0 right-0 left-0 mt-15 text-center text-4xl font-bold tracking-[-0.02em] leading-none">
         Echoes
       </h1>
 
       <main className="flex h-dvh w-dvw flex-col justify-center px-5 sm:px-16 md:px-28 lg:px-52 xl:px-96 2xl:px-120">
-        <div className="relative flex h-2/3 flex-col justify-center gap-10 p-10">
-          <motion.div
-            animate={{
-              filter: isAuthorHovered ? "blur(0px)" : "blur(8px)",
-              scale: isAuthorHovered ? 1.03 : 1,
-            }}
-            transition={bgSpring}
-            className="absolute inset-0 -z-10 origin-center overflow-hidden rounded-3xl p-4 will-change-transform transform-gpu"
-          >
-            <div
-              className={`absolute inset-0 h-full mask-[url(/mask.avif)] mask-contain mask-center mask-no-repeat ${maskFlips[flipIndex].mask}`}
+        {/* Reading this as: editorial quote experience for reflective readers, with a calm editorial language, leaning toward Tailwind + motion */}
+        <div
+          ref={cardRef}
+          onPointerMove={handlePointerMove}
+          onPointerLeave={handlePointerLeaveCard}
+          className="relative flex h-2/3 items-center justify-center p-10"
+        >
+          {/* Background image — 3xl blur, materialize — no p-4 to avoid blur fringing at rounded edge */}
+          <div className="absolute inset-0 -z-10">
+            <motion.div
+              animate={{
+                filter: isAuthorHovered ? "blur(0px)" : "blur(64px)",
+                scale: isAuthorHovered ? 1.04 : 1,
+                opacity: isTransitioning ? 0.55 : 1,
+              }}
+              transition={bgSpring}
+              className="absolute inset-0 origin-center will-change-transform"
             >
-              <motion.img
-                key={quotes[currentIndex]?.author}
-                src={`/authors/${quotes[currentIndex]?.author?.toLowerCase().replace(/\s+/g, "-")}-placeholder.avif`}
-                onLoad={(e) => {
-                  e.currentTarget.src = `/authors/${quotes[currentIndex]?.author?.toLowerCase().replace(/\s+/g, "-")}.avif`;
-                }}
-                alt={quotes[currentIndex]?.author || "Author"}
-                initial={prefersReducedMotion ? false : { opacity: 0 }}
-                animate={{ opacity: isTransitioning ? 0 : 1 }}
-                transition={{
-                  duration: prefersReducedMotion ? 0 : 0.2,
-                  ease: [0.25, 0.1, 0.25, 1],
-                }}
-                className={`h-full w-full object-cover will-change-transform ${maskFlips[flipIndex].img}`}
-                loading="eager"
-                fetchPriority="high"
-                decoding="async"
-              />
-            </div>
+              <motion.div style={{ x: imageX, y: imageY }} className="absolute inset-0 will-change-transform">
+              <div
+                className={`absolute inset-0 h-full mask-[url(/mask.avif)] mask-contain mask-center mask-no-repeat ${maskFlips[flipIndex].mask}`}
+              >
+                <motion.img
+                  key={`${quotes[currentIndex]?.quote}-${quotes[currentIndex]?.author}`}
+                  src={`/authors/${quotes[currentIndex]?.author?.toLowerCase().replace(/\s+/g, "-")}-placeholder.avif`}
+                  onLoad={(e) => {
+                    e.currentTarget.src = `/authors/${quotes[currentIndex]?.author?.toLowerCase().replace(/\s+/g, "-")}.avif`;
+                  }}
+                  alt={quotes[currentIndex]?.author || "Author"}
+                  initial={prefersReducedMotion ? false : { opacity: 0 }}
+                  animate={{ opacity: isTransitioning ? 0 : 1 }}
+                  transition={{ duration: prefersReducedMotion ? 0 : 0.5, ease: [0.25, 0.1, 0.25, 1] }}
+                  className={`h-full w-full object-cover will-change-transform ${maskFlips[flipIndex].img}`}
+                  loading="eager"
+                  fetchPriority="high"
+                  decoding="async"
+                />
+              </div>
+            </motion.div>
           </motion.div>
+          </div>
 
-          <AnimatePresence mode="wait">
-            <motion.p
-              key={quotes[currentIndex]?.quote}
-              initial={
-                prefersReducedMotion
-                  ? false
-                  : { opacity: 0, y: 14, filter: "blur(8px)", scale: 0.98 }
-              }
-              animate={{
-                opacity: isTransitioning || isAuthorHovered ? 0 : 1,
-                y: isTransitioning || isAuthorHovered ? -8 : 0,
-                filter:
-                  isTransitioning || isAuthorHovered ? "blur(8px)" : "blur(0px)",
-                scale: isTransitioning || isAuthorHovered ? 0.98 : 1,
-              }}
-              exit={
-                prefersReducedMotion
-                  ? { opacity: 0 }
-                  : { opacity: 0, y: -10, filter: "blur(8px)", scale: 0.98 }
-              }
-              transition={textSpring}
-              className="text-quote text-center will-change-transform text-shadow-lg/30"
-            >
-              <span>«&nbsp;</span>
-              {quotes[currentIndex]?.quote || "Loading..."}
-              <span>&nbsp;»</span>
-            </motion.p>
-          </AnimatePresence>
-          <AnimatePresence mode="wait">
-            <motion.a
-              key={quotes[currentIndex]?.author}
-              href={`https://www.google.com/search?q=${encodeURIComponent(quotes[currentIndex]?.author || "")}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              initial={
-                prefersReducedMotion ? false : { opacity: 0, x: 16, filter: "blur(6px)" }
-              }
-              animate={{
-                opacity: isTransitioning ? 0 : 1,
-                x: 0,
-                filter: "blur(0px)",
-                scale: 1,
-              }}
-              exit={
-                prefersReducedMotion
-                  ? { opacity: 0 }
-                  : { opacity: 0, x: -12, filter: "blur(6px)" }
-              }
-              transition={textSpring}
-              onMouseEnter={() => setIsAuthorHovered(true)}
-              onMouseLeave={() => setIsAuthorHovered(false)}
-              onFocus={() => setIsAuthorHovered(true)}
-              onBlur={() => setIsAuthorHovered(false)}
-              className="ml-auto w-fit rounded-lg px-3 py-2 text-xl will-change-transform text-shadow-lg/30 hover:bg-stone-950/20 md:text-2xl"
-            >
-              —{" "}
-              <span className="underline decoration-1">
-                {quotes[currentIndex]?.author || "Loading..."}
-              </span>
-            </motion.a>
-          </AnimatePresence>
+          <div className="relative flex w-full max-w-3xl flex-col items-center">
+            <AnimatePresence mode="wait">
+              <motion.p
+                key={quotes[currentIndex]?.quote}
+                initial={
+                  prefersReducedMotion
+                    ? false
+                    : { opacity: 0, y: 16, filter: "blur(10px)", scale: 0.97 }
+                }
+                animate={{
+                  opacity: isTransitioning || isAuthorHovered ? 0 : 1,
+                  y: isTransitioning || isAuthorHovered ? -10 : 0,
+                  filter: isTransitioning || isAuthorHovered ? "blur(10px)" : "blur(0px)",
+                  scale: isTransitioning || isAuthorHovered ? 0.97 : 1,
+                }}
+                exit={
+                  prefersReducedMotion
+                    ? { opacity: 0 }
+                    : { opacity: 0, y: -12, filter: "blur(10px)", scale: 0.97 }
+                }
+                transition={textSpring}
+                className="text-quote max-w-[22ch] text-center text-[clamp(1.1rem,2vw+0.9rem,2.1rem)] leading-[1.25] font-[450] tracking-[-0.015em] will-change-transform [text-wrap:balance] text-shadow-lg/30"
+                style={{ fontOpticalSizing: "auto" } as any}
+              >
+                <span className="mr-1 align-super text-lg font-normal tracking-normal opacity-60">“</span>
+                {quotes[currentIndex]?.quote || "Loading..."}
+                <span className="ml-1 align-super text-lg font-normal tracking-normal opacity-60">”</span>
+              </motion.p>
+            </AnimatePresence>
+
+            <AnimatePresence mode="wait">
+              <motion.a
+                key={`${quotes[currentIndex]?.quote}-${quotes[currentIndex]?.author}`}
+                href={`https://www.google.com/search?q=${encodeURIComponent(quotes[currentIndex]?.author || "")}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                initial={prefersReducedMotion ? false : { opacity: 0, x: 12, filter: "blur(8px)" }}
+                animate={{ opacity: isTransitioning ? 0 : 1, x: 0, filter: "blur(0px)" }}
+                exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, x: -12, filter: "blur(8px)" }}
+                transition={textSpring}
+                onPointerEnter={() => setIsAuthorHovered(true)}
+                onPointerLeave={() => setIsAuthorHovered(false)}
+                onFocus={() => setIsAuthorHovered(true)}
+                onBlur={() => setIsAuthorHovered(false)}
+                className="group/author absolute top-[calc(100%+1.5rem)] right-0 inline-flex items-center gap-2 will-change-transform text-shadow-lg/30 focus-visible:outline-none"
+              >
+                <span className="text-xl leading-none md:text-2xl" aria-hidden>
+                  —
+                </span>
+                <span className="relative text-xl leading-none tracking-[-0.01em] font-medium md:text-2xl">
+                  <span>{quotes[currentIndex]?.author || "Loading..."}</span>
+                  <motion.span
+                    aria-hidden
+                    className="absolute -bottom-1 left-0 h-px w-full origin-left bg-current"
+                    initial={{ scaleX: 0 }}
+                    animate={{ scaleX: isAuthorHovered ? 1 : 0 }}
+                    transition={textSpring}
+                  />
+                </span>
+              </motion.a>
+            </AnimatePresence>
+          </div>
         </div>
 
         <QuoteToolbar
@@ -309,12 +322,7 @@ export default function Welcome() {
       </main>
 
       <StackInfo open={isStackOpen} onOpenChange={setIsStackOpen} />
-      <VaulDrawer
-        savedQuotes={savedQuotes}
-        onRemoveQuote={removeQuote}
-        open={isDrawerOpen}
-        onOpenChange={setIsDrawerOpen}
-      />
+      <VaulDrawer savedQuotes={savedQuotes} onRemoveQuote={removeQuote} open={isDrawerOpen} onOpenChange={setIsDrawerOpen} />
     </>
   );
 }
