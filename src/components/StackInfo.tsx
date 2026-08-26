@@ -70,7 +70,7 @@ export default function StackInfo({ open, onOpenChange }: StackInfoProps) {
         onClick={() => {
           open !== undefined ? onOpenChange?.(true) : setIsOpen(true);
         }}
-        className="group fixed right-4 bottom-4 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 text-white shadow-lg transition-all hover:scale-110 hover:bg-stone-800 focus:outline-none active:scale-95"
+        className="group fixed right-4 bottom-4 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 text-white shadow-lg transition-all duration-200 hover:scale-110 hover:bg-stone-800 focus:outline-none active:scale-95"
         aria-label="View Tech Stack"
       >
         <svg
@@ -88,7 +88,7 @@ export default function StackInfo({ open, onOpenChange }: StackInfoProps) {
           <path d="M12 16v-4" />
           <path d="M12 8h.01" />
         </svg>
-        <div className="Geist visible absolute -right-1 bottom-10 flex translate-y-2 flex-col items-end opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-hover:delay-300">
+        <div className="Geist pointer-events-none visible absolute -right-1 bottom-10 flex translate-y-2 flex-col items-end opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-hover:delay-300">
           <div className="flex items-center gap-2 rounded-full border border-stone-800 bg-stone-950 px-3 py-2 text-[10px] whitespace-nowrap text-white">
             Tech Stack
             <span className="float-end inline-grid w-fit place-items-center rounded-lg border border-stone-700 bg-stone-800 px-2 py-1 font-mono">
@@ -115,7 +115,7 @@ export default function StackInfo({ open, onOpenChange }: StackInfoProps) {
               <h2 className="text-xl font-bold text-white">Tech Stack</h2>
               <button
                 onClick={handleClose}
-                className="cursor-pointer rounded-full p-1 text-white transition-all hover:bg-stone-800 active:scale-95"
+                className="cursor-pointer rounded-full p-1 text-white transition-all duration-200 hover:bg-stone-800 active:scale-95"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

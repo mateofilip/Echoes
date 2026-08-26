@@ -1,9 +1,4 @@
-import {
-  forwardRef,
-  useEffect,
-  useImperativeHandle,
-  useState,
-} from "react";
+import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { motion } from "motion/react";
 
 interface QuoteToolbarProps {
@@ -38,12 +33,16 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
   ) => {
     const [activeButton, setActiveButton] = useState<string | null>(null);
 
-    useImperativeHandle(ref, () => ({
-      triggerReload: () => setActiveButton("reload"),
-      triggerPrev: () => canGoPrevious && setActiveButton("prev"),
-      triggerNext: () => canGoNext && setActiveButton("next"),
-      triggerSave: () => setActiveButton("save"),
-    }), [canGoPrevious, canGoNext]);
+    useImperativeHandle(
+      ref,
+      () => ({
+        triggerReload: () => setActiveButton("reload"),
+        triggerPrev: () => canGoPrevious && setActiveButton("prev"),
+        triggerNext: () => canGoNext && setActiveButton("next"),
+        triggerSave: () => setActiveButton("save"),
+      }),
+      [canGoPrevious, canGoNext],
+    );
 
     useEffect(() => {
       if (!activeButton) return;
@@ -61,7 +60,7 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
           onClick={() => setActiveButton("reload")}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className={`group relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 p-3 text-white shadow-lg transition-all hover:scale-110 hover:bg-stone-800 focus:outline-none active:scale-95`}
+          className={`group relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 p-3 text-white shadow-lg transition-all duration-200 hover:scale-110 hover:bg-stone-800 focus:outline-none active:scale-95`}
         >
           <motion.svg
             xmlns="http://www.w3.org/2000/svg"
@@ -82,7 +81,7 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
               clipRule="evenodd"
             />
           </motion.svg>
-          <div className="Geist invisible absolute bottom-10 flex translate-y-2 flex-col items-center opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-hover:delay-300">
+          <div className="Geist pointer-events-none invisible absolute bottom-10 flex translate-y-2 flex-col items-center opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-hover:delay-300">
             <div className="flex items-center gap-2 rounded-full border border-stone-800 bg-stone-950 px-3 py-2 text-[10px] whitespace-nowrap text-white">
               New Quote
               <span className="inline-grid w-fit place-items-center rounded-lg border border-stone-700 bg-stone-800 px-2 py-1 font-mono">
@@ -97,7 +96,7 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
           onClick={() => canGoPrevious && setActiveButton("prev")}
           whileHover={canGoPrevious ? { scale: 1.05 } : undefined}
           whileTap={canGoPrevious ? { scale: 0.95 } : undefined}
-          className="group relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 p-3 text-white shadow-lg transition-all hover:scale-110 hover:bg-stone-800 focus:outline-none active:scale-95 disabled:pointer-events-none disabled:border-stone-700 disabled:text-stone-600"
+          className="group relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 p-3 text-white shadow-lg transition-all duration-200 hover:scale-110 hover:bg-stone-800 focus:outline-none active:scale-95 disabled:pointer-events-none disabled:border-stone-700 disabled:text-stone-600"
           disabled={!canGoPrevious}
         >
           <motion.svg
@@ -119,7 +118,7 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
             />
           </motion.svg>
 
-          <div className="Geist invisible absolute bottom-10 flex translate-y-2 flex-col items-center opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-hover:delay-300">
+          <div className="Geist pointer-events-none invisible absolute bottom-10 flex translate-y-2 flex-col items-center opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-hover:delay-300">
             <div className="flex items-center gap-2 rounded-full border border-stone-800 bg-stone-950 px-3 py-2 text-[10px] whitespace-nowrap text-white">
               Previous Quote
               <span className="inline-grid w-fit place-items-center rounded-lg border border-stone-700 bg-stone-800 px-2 py-1 font-mono">
@@ -134,7 +133,7 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
           onClick={() => canGoNext && setActiveButton("next")}
           whileHover={canGoNext ? { scale: 1.05 } : undefined}
           whileTap={canGoNext ? { scale: 0.95 } : undefined}
-          className="group relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 p-3 text-white shadow-lg transition-all hover:scale-110 hover:bg-stone-800 focus:outline-none active:scale-95 disabled:pointer-events-none disabled:text-stone-600"
+          className="group relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 p-3 text-white shadow-lg transition-all duration-200 hover:scale-110 hover:bg-stone-800 focus:outline-none active:scale-95 disabled:pointer-events-none disabled:border-stone-700 disabled:text-stone-600"
           disabled={!canGoNext}
         >
           <motion.svg
@@ -154,7 +153,7 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
             />
           </motion.svg>
 
-          <div className="Geist invisible absolute bottom-10 flex translate-y-2 flex-col items-center opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-hover:delay-300">
+          <div className="Geist pointer-events-none invisible absolute bottom-10 flex translate-y-2 flex-col items-center opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-hover:delay-300">
             <div className="flex items-center gap-2 rounded-full border border-stone-800 bg-stone-950 px-3 py-2 text-[10px] whitespace-nowrap text-white">
               Next Quote
               <span className="inline-grid w-fit place-items-center rounded-lg border border-stone-700 bg-stone-800 px-2 py-1 font-mono">
@@ -169,7 +168,7 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
           onClick={() => setActiveButton("save")}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className="group relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 p-3 text-white shadow-lg transition-all hover:scale-110 hover:bg-stone-800 focus:outline-none active:scale-95"
+          className="group relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 p-3 text-white shadow-lg transition-all duration-200 hover:scale-110 hover:bg-stone-800 focus:outline-none active:scale-95"
         >
           <motion.svg
             xmlns="http://www.w3.org/2000/svg"
@@ -198,7 +197,7 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
               ></path>
             )}
           </motion.svg>
-          <div className="Geist invisible absolute bottom-10 flex translate-y-2 flex-col items-center opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-hover:delay-300">
+          <div className="Geist pointer-events-none invisible absolute bottom-10 flex translate-y-2 flex-col items-center opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-hover:delay-300">
             <div className="flex items-center gap-2 rounded-full border border-stone-800 bg-stone-950 px-3 py-2 text-[10px] whitespace-nowrap text-white">
               {isSaved ? "Remove from Favorites" : "Save Quote"}
               <span className="inline-grid w-fit place-items-center rounded-lg border border-stone-700 bg-stone-800 px-2 py-1 font-mono">
