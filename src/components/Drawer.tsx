@@ -25,6 +25,7 @@ export default function VaulDrawer({
     () => new Set(),
   );
   const prefersReducedMotion = useReducedMotion();
+  const [isTooltipHovered, setIsTooltipHovered] = useState(false);
   const displayedQuotes = savedQuotes.filter(
     (quote) => !pendingRemovalKeys.has(getQuoteKey(quote)),
   );
@@ -133,13 +134,28 @@ export default function VaulDrawer({
     setPendingRemovalKeys(new Set());
   };
 
+  const pressSpring = prefersReducedMotion
+    ? { duration: 0 }
+    : { type: "spring" as const, bounce: 0, duration: 0.5 };
+
   return (
     <Drawer.Root direction="right" open={open} onOpenChange={onOpenChange}>
       <Drawer.Trigger asChild>
-        <button
+        <motion.button
           type="button"
           aria-label="View saved quotes"
-          className="group fixed bottom-4 left-4 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 text-white shadow-lg transition-[background-color,border-color,color,transform] duration-200 hover:scale-110 hover:border-stone-700 hover:bg-stone-800 focus-visible:ring-2 focus-visible:ring-orange-200/70 focus-visible:ring-offset-2 focus-visible:ring-offset-stone-950 focus-visible:outline-none active:scale-95"
+          onPointerEnter={(e) => {
+            if (e.pointerType !== "mouse") return;
+            setIsTooltipHovered(true);
+          }}
+          onPointerLeave={(e) => {
+            if (e.pointerType !== "mouse") return;
+            setIsTooltipHovered(false);
+          }}
+          whileHover={prefersReducedMotion ? undefined : { scale: 1.1 }}
+          whileTap={prefersReducedMotion ? undefined : { scale: 0.95 }}
+          transition={pressSpring}
+          className="group fixed bottom-4 left-4 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 text-white shadow-lg transition-[background-color,border-color,color] duration-200 hover:border-stone-700 hover:bg-stone-800 focus-visible:ring-2 focus-visible:ring-orange-200/70 focus-visible:ring-offset-2 focus-visible:ring-offset-stone-950 focus-visible:outline-none"
         >
           <svg
             width="15"
@@ -155,16 +171,34 @@ export default function VaulDrawer({
               clip-rule="evenodd"
             ></path>
           </svg>
-          <div className="font-alte-haas pointer-events-none visible absolute bottom-10 -left-1 flex translate-y-2 flex-col items-start opacity-0 transition-[opacity,transform] delay-200 duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 motion-reduce:transition-none">
-            <div className="flex items-center gap-2 rounded-full border border-stone-800 bg-stone-950 px-3 py-2 text-[10px] whitespace-nowrap text-white">
+          <motion.div
+            initial={false}
+            animate={{
+              opacity: isTooltipHovered ? 1 : 0,
+              scale: isTooltipHovered ? 1 : 0.92,
+              y: isTooltipHovered ? 0 : 4,
+            }}
+            transition={
+              prefersReducedMotion
+                ? { duration: 0 }
+                : {
+                    type: "spring",
+                    bounce: 0,
+                    duration: 0.2,
+                    delay: isTooltipHovered ? 0.2 : 0,
+                  }
+            }
+            className="font-alte-haas pointer-events-none absolute bottom-10 -left-1 flex origin-bottom-left flex-col items-start will-change-transform"
+          >
+            <div className="flex items-center gap-2 rounded-full border border-stone-800 bg-stone-950 px-3 py-2 text-[10px] whitespace-nowrap text-white shadow-xl">
               Saved Quotes ({displayedQuotes.length})
               <span className="float-end inline-grid w-fit place-items-center rounded-lg border border-stone-700 bg-stone-800 px-2 py-1 font-mono">
                 D
               </span>
             </div>
             <div className="ml-5 h-2 w-2 -translate-y-1 rotate-45 rounded-br-sm border-r border-b border-stone-800 bg-stone-950 shadow-lg"></div>
-          </div>
-        </button>
+          </motion.div>
+        </motion.button>
       </Drawer.Trigger>
       <Drawer.Portal>
         <Drawer.Overlay className="fixed inset-0 bg-stone-950/80 data-[state=closed]:![animation-duration:200ms] data-[state=open]:![animation-duration:200ms] motion-reduce:![animation-duration:0ms]" />

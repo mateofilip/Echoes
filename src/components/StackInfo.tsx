@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useReducedMotion } from "motion/react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 
 interface StackInfoProps {
   open?: boolean;
@@ -7,86 +7,60 @@ interface StackInfoProps {
 }
 
 export default function StackInfo({ open, onOpenChange }: StackInfoProps) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isAnimating, setIsAnimating] = useState(false);
+  const [internalOpen, setInternalOpen] = useState(false);
+  const [isTooltipHovered, setIsTooltipHovered] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
   const prefersReducedMotion = useReducedMotion();
-  const closeDelay = prefersReducedMotion ? 0 : 200;
-  const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const scheduleClose = (callback: () => void) => {
-    if (closeTimeoutRef.current) {
-      clearTimeout(closeTimeoutRef.current);
-    }
+  const isControlled = open !== undefined;
+  const isOpen = isControlled ? (open as boolean) : internalOpen;
 
-    closeTimeoutRef.current = setTimeout(() => {
-      callback();
-      closeTimeoutRef.current = null;
-    }, closeDelay);
+  const handleOpen = () => {
+    if (isControlled) onOpenChange?.(true);
+    else setInternalOpen(true);
   };
 
-  useEffect(() => {
-    if (open !== undefined) {
-      if (open) {
-        if (closeTimeoutRef.current) {
-          clearTimeout(closeTimeoutRef.current);
-          closeTimeoutRef.current = null;
-        }
-        setIsOpen(true);
-      } else {
-        setIsAnimating(false);
-        scheduleClose(() => setIsOpen(false));
-      }
-    }
-  }, [closeDelay, open]);
+  const handleClose = () => {
+    if (isControlled) onOpenChange?.(false);
+    else setInternalOpen(false);
+  };
 
   useEffect(() => {
     if (!isOpen) return;
-    if (prefersReducedMotion) {
-      setIsAnimating(true);
-      return;
-    }
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") handleClose();
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [isOpen, isControlled]);
 
-    const frame = requestAnimationFrame(() => setIsAnimating(true));
-    return () => cancelAnimationFrame(frame);
+  useEffect(() => {
+    if (!isOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      if (prefersReducedMotion) {
+        document.body.style.overflow = prev;
+      } else {
+        const t = setTimeout(() => {
+          document.body.style.overflow = prev;
+        }, 500);
+        return () => clearTimeout(t);
+      }
+    };
   }, [isOpen, prefersReducedMotion]);
 
-  const handleClose = () => {
-    if (open !== undefined) {
-      setIsAnimating(false);
-      scheduleClose(() => onOpenChange?.(false));
-    } else {
-      setIsAnimating(false);
-      scheduleClose(() => setIsOpen(false));
-    }
-  };
+  // Apple: critically damped, symmetric, interruptible — 500ms for modal so it doesn't feel too quick
+  const overlaySpring = prefersReducedMotion
+    ? { duration: 0 }
+    : { type: "spring" as const, bounce: 0, duration: 0.2 };
+  const modalSpring = prefersReducedMotion
+    ? { duration: 0 }
+    : { type: "spring" as const, bounce: 0, duration: 0.2 };
 
-  useEffect(() => {
-    return () => {
-      if (closeTimeoutRef.current) {
-        clearTimeout(closeTimeoutRef.current);
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        modalRef.current &&
-        !modalRef.current.contains(event.target as Node)
-      ) {
-        handleClose();
-      }
-    };
-
-    if (isOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isOpen]);
+  const pressSpring = prefersReducedMotion
+    ? { duration: 0 }
+    : { type: "spring" as const, bounce: 0, duration: 0.2 };
 
   const stack = [
     { name: "Astro", description: "Web Framework" },
@@ -98,11 +72,20 @@ export default function StackInfo({ open, onOpenChange }: StackInfoProps) {
 
   return (
     <>
-      <button
-        onClick={() => {
-          open !== undefined ? onOpenChange?.(true) : setIsOpen(true);
+      <motion.button
+        onClick={handleOpen}
+        onPointerEnter={(e) => {
+          if (e.pointerType !== "mouse") return;
+          setIsTooltipHovered(true);
         }}
-        className="group fixed right-4 bottom-4 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 text-white shadow-lg transition-[background-color,border-color,transform] duration-200 hover:scale-110 hover:bg-stone-800 focus:outline-none active:scale-95 motion-reduce:transition-none motion-reduce:hover:scale-100 motion-reduce:active:scale-100"
+        onPointerLeave={(e) => {
+          if (e.pointerType !== "mouse") return;
+          setIsTooltipHovered(false);
+        }}
+        whileHover={prefersReducedMotion ? undefined : { scale: 1.1 }}
+        whileTap={prefersReducedMotion ? undefined : { scale: 0.95 }}
+        transition={pressSpring}
+        className="group fixed right-4 bottom-4 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 text-white shadow-lg transition-colors duration-200 hover:bg-stone-800 focus:outline-none motion-reduce:transition-none"
         aria-label="View Tech Stack"
       >
         <svg
@@ -120,34 +103,79 @@ export default function StackInfo({ open, onOpenChange }: StackInfoProps) {
           <path d="M12 16v-4" />
           <path d="M12 8h.01" />
         </svg>
-        <div className="font-alte-haas pointer-events-none visible absolute -right-1 bottom-10 flex translate-y-2 flex-col items-end opacity-0 transition-[opacity,transform] delay-200 duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 motion-reduce:transition-none">
-          <div className="flex items-center gap-2 rounded-full border border-stone-800 bg-stone-950 px-3 py-2 text-[10px] whitespace-nowrap text-white">
+        <motion.div
+          initial={false}
+          animate={{
+            opacity: isTooltipHovered ? 1 : 0,
+            scale: isTooltipHovered ? 1 : 0.92,
+            y: isTooltipHovered ? 0 : 4,
+          }}
+          transition={
+            prefersReducedMotion
+              ? { duration: 0 }
+              : {
+                  type: "spring",
+                  bounce: 0,
+                  duration: 0.2,
+                  delay: isTooltipHovered ? 0.2 : 0,
+                }
+          }
+          className="font-alte-haas pointer-events-none absolute -right-1 bottom-10 flex origin-bottom-right flex-col items-end will-change-transform"
+        >
+          <div className="flex items-center gap-2 rounded-full border border-stone-800 bg-stone-950 px-3 py-2 text-[10px] whitespace-nowrap text-white shadow-xl">
             Tech Stack
             <span className="float-end inline-grid w-fit place-items-center rounded-lg border border-stone-700 bg-stone-800 px-2 py-1 font-mono">
               I
             </span>
           </div>
           <div className="mr-5 h-2 w-2 -translate-y-1 rotate-45 rounded-br-sm border-r border-b border-stone-800 bg-stone-950 shadow-lg"></div>
-        </div>
-      </button>
+        </motion.div>
+      </motion.button>
 
-      {isOpen && (
-        <div
-          className={`font-alte-haas fixed inset-0 flex items-center justify-center bg-black/60 p-4 transition-opacity duration-200 motion-reduce:transition-none ${
-            isAnimating ? "opacity-100" : "opacity-0"
-          }`}
-        >
-          <div
+      {/* Backdrop — dims to focus, separate from modal so exit isn't doubled */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            key="stack-backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={overlaySpring}
+            className="fixed inset-0 z-50 bg-black/70 backdrop-blur-md motion-reduce:backdrop-blur-none"
+            onClick={handleClose}
+            aria-hidden="true"
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Modal — single motion card, fixed centered, no wrapper opacity so exit mirrors enter 1:1 */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            key="stack-modal"
             ref={modalRef}
-            className={`w-full max-w-sm rounded-2xl border border-stone-800 bg-stone-950/95 p-6 shadow-2xl transition-[opacity,transform] duration-200 motion-reduce:transition-none ${
-              isAnimating ? "scale-100 opacity-100" : "scale-95 opacity-0"
-            }`}
+            initial={
+              prefersReducedMotion
+                ? { opacity: 1, scale: 1, y: 0, filter: "blur(0px)" }
+                : { opacity: 0, scale: 0.88, y: 12, filter: "blur(10px)" }
+            }
+            animate={{ opacity: 1, scale: 1, y: 0, filter: "blur(0px)" }}
+            exit={
+              prefersReducedMotion
+                ? { opacity: 0, scale: 1, y: 0, filter: "blur(0px)" }
+                : { opacity: 0, scale: 0.88, y: 12, filter: "blur(10px)" }
+            }
+            transition={modalSpring}
+            onClick={(e) => e.stopPropagation()}
+            className="font-alte-haas fixed left-1/2 top-1/2 z-50 w-[calc(100%-2rem)] max-w-sm -translate-x-1/2 -translate-y-1/2 origin-center rounded-2xl border border-stone-800 bg-stone-950 p-6 shadow-2xl ring-1 ring-white/10 will-change-transform"
+            aria-modal="true"
+            role="dialog"
           >
             <div className="mb-6 flex items-center justify-between">
-              <h2 className="text-xl font-bold text-white">Tech Stack</h2>
+              <h2 className="text-xl font-bold tracking-tight text-white">Tech Stack</h2>
               <button
                 onClick={handleClose}
-                className="cursor-pointer rounded-full p-1 text-white transition-[background-color,transform] duration-200 hover:bg-stone-800 active:scale-95"
+                className="cursor-pointer rounded-full p-1 text-white transition duration-200 hover:bg-stone-800 active:scale-95"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -169,11 +197,9 @@ export default function StackInfo({ open, onOpenChange }: StackInfoProps) {
               {stack.map((item) => (
                 <li
                   key={item.name}
-                  className="flex items-center justify-between rounded-xl border border-stone-800 bg-stone-900/50 p-3 transition-colors duration-200 ease-out hover:bg-stone-800/50"
+                  className="flex items-center justify-between rounded-xl border border-stone-800 bg-stone-900/50 p-3 transition duration-200 hover:bg-stone-800/50"
                 >
-                  <span className="font-semibold text-slate-100">
-                    {item.name}
-                  </span>
+                  <span className="font-semibold text-slate-100">{item.name}</span>
                   <span className="rounded-full bg-orange-200/10 px-2 py-1 text-xs font-medium text-orange-200">
                     {item.description}
                   </span>
@@ -183,9 +209,10 @@ export default function StackInfo({ open, onOpenChange }: StackInfoProps) {
             <div className="mt-6 text-center">
               <p className="text-xs text-neutral-500">Built with ❤️ by Mateo</p>
             </div>
-          </div>
-        </div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
     </>
   );
 }

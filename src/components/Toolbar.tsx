@@ -1,5 +1,5 @@
 import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
-import { useReducedMotion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 
 interface QuoteToolbarProps {
   canGoPrevious: boolean;
@@ -32,6 +32,7 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
     ref,
   ) => {
     const [activeButton, setActiveButton] = useState<string | null>(null);
+    const [hovered, setHovered] = useState<string | null>(null);
     const prefersReducedMotion = useReducedMotion();
 
     useImperativeHandle(
@@ -55,19 +56,61 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
       return () => clearTimeout(timeout);
     }, [activeButton]);
 
+    const getTooltipProps = (isHovered: boolean) => ({
+      initial: false as const,
+      animate: {
+        opacity: isHovered ? 1 : 0,
+        scale: isHovered ? 1 : 0.92,
+        y: isHovered ? 0 : 4,
+      },
+      transition: prefersReducedMotion
+        ? { duration: 0 }
+        : {
+            type: "spring" as const,
+            bounce: 0,
+            duration: 0.2,
+            delay: isHovered ? 0.2 : 0,
+          },
+    });
+
+    // Apple 500ms critically damped springs for press feedback
+    const buttonSpring = prefersReducedMotion
+      ? { duration: 0 }
+      : { type: "spring" as const, bounce: 0, duration: 0.5 };
+    const iconSpring = prefersReducedMotion
+      ? { duration: 0 }
+      : { type: "spring" as const, bounce: 0, duration: 0.5 };
+
     return (
       <div className="absolute right-1/2 bottom-4 left-1/2 flex justify-center gap-2 text-xs">
-        <button
+        <motion.button
           onClick={() => setActiveButton("reload")}
-          className="group relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 p-3 text-white shadow-lg transition duration-200 hover:scale-110 hover:bg-stone-800 focus:outline-none active:scale-95 motion-reduce:transition-none motion-reduce:hover:scale-100 motion-reduce:active:scale-100"
+          onPointerEnter={(e) => {
+            if (e.pointerType !== "mouse") return;
+            setHovered("reload");
+          }}
+          onPointerLeave={(e) => {
+            if (e.pointerType !== "mouse") return;
+            setHovered((v) => (v === "reload" ? null : v));
+          }}
+          whileHover={prefersReducedMotion ? undefined : { scale: 1.1 }}
+          whileTap={prefersReducedMotion ? undefined : { scale: 0.95 }}
+          transition={buttonSpring}
+          className="group relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 p-3 text-white shadow-lg transition-colors duration-200 hover:bg-stone-800 focus:outline-none disabled:pointer-events-none motion-reduce:transition-none"
         >
-          <svg
+          <motion.svg
             xmlns="http://www.w3.org/2000/svg"
             width="20"
             height="20"
             fill="none"
-            className={`transition-transform duration-200 ${!prefersReducedMotion && activeButton === "reload" ? "scale-125 rotate-[240deg]" : ""}`}
             viewBox="0 0 15 15"
+            animate={
+              !prefersReducedMotion && activeButton === "reload"
+                ? { scale: 1.25, rotate: 240 }
+                : { scale: 1, rotate: 0 }
+            }
+            transition={iconSpring}
+            className="will-change-transform"
           >
             <path
               fill="currentColor"
@@ -75,30 +118,54 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
               d="M1.85 7.5c0-2.835 2.21-5.65 5.65-5.65 2.778 0 4.152 2.056 4.737 3.15H10.5a.5.5 0 0 0 0 1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-1 0v1.813C12.296 3.071 10.666.85 7.5.85 3.437.85.85 4.185.85 7.5s2.587 6.65 6.65 6.65c1.944 0 3.562-.77 4.714-1.942a6.8 6.8 0 0 0 1.428-2.167.5.5 0 1 0-.925-.38 5.8 5.8 0 0 1-1.216 1.846c-.971.99-2.336 1.643-4.001 1.643-3.44 0-5.65-2.815-5.65-5.65"
               clipRule="evenodd"
             />
-          </svg>
-          <div className="font-alte-haas pointer-events-none invisible absolute bottom-10 flex translate-y-2 flex-col items-center opacity-0 transition-[opacity,transform] delay-200 duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 motion-reduce:transition-none">
-            <div className="flex items-center gap-2 rounded-full border border-stone-800 bg-stone-950 px-3 py-2 text-[10px] whitespace-nowrap text-white">
+          </motion.svg>
+          <motion.div
+            {...getTooltipProps(hovered === "reload")}
+            className="font-alte-haas pointer-events-none absolute bottom-10 flex origin-bottom flex-col items-center will-change-transform"
+          >
+            <div className="flex items-center gap-2 rounded-full border border-stone-800 bg-stone-950 px-3 py-2 text-[10px] whitespace-nowrap text-white shadow-xl">
               New Quote
               <span className="inline-grid w-fit place-items-center rounded-lg border border-stone-700 bg-stone-800 px-2 py-1 font-mono">
                 R
               </span>
             </div>
             <div className="h-2 w-2 -translate-y-1 rotate-45 rounded-br-sm border-r border-b border-stone-800 bg-stone-950 shadow-lg"></div>
-          </div>
-        </button>
+          </motion.div>
+        </motion.button>
 
-        <button
+        <motion.button
           onClick={() => canGoPrevious && setActiveButton("prev")}
-          className="group relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 p-3 text-white shadow-lg transition duration-200 hover:scale-110 hover:bg-stone-800 focus:outline-none active:scale-95 disabled:pointer-events-none disabled:border-stone-700 disabled:text-stone-600 motion-reduce:transition-none motion-reduce:hover:scale-100 motion-reduce:active:scale-100"
+          onPointerEnter={(e) => {
+            if (e.pointerType !== "mouse") return;
+            setHovered("prev");
+          }}
+          onPointerLeave={(e) => {
+            if (e.pointerType !== "mouse") return;
+            setHovered((v) => (v === "prev" ? null : v));
+          }}
+          whileHover={
+            prefersReducedMotion || !canGoPrevious ? undefined : { scale: 1.1 }
+          }
+          whileTap={
+            prefersReducedMotion || !canGoPrevious ? undefined : { scale: 0.95 }
+          }
+          transition={buttonSpring}
+          className="group relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 p-3 text-white shadow-lg transition-colors duration-200 hover:bg-stone-800 focus:outline-none disabled:pointer-events-none disabled:border-stone-700 disabled:text-stone-600 motion-reduce:transition-none"
           disabled={!canGoPrevious}
         >
-          <svg
+          <motion.svg
             xmlns="http://www.w3.org/2000/svg"
             width="20"
             height="20"
             fill="none"
-            className={`transition-transform duration-200 ${!prefersReducedMotion && activeButton === "prev" ? "scale-125" : ""}`}
             viewBox="0 0 15 15"
+            animate={
+              !prefersReducedMotion && activeButton === "prev"
+                ? { scale: 1.25 }
+                : { scale: 1 }
+            }
+            transition={iconSpring}
+            className="will-change-transform"
           >
             <path
               fill="currentColor"
@@ -106,31 +173,55 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
               d="M4.854 2.146a.5.5 0 0 1 0 .708L3.707 4H9a4.5 4.5 0 1 1 0 9H5a.5.5 0 0 1 0-1h4a3.5 3.5 0 1 0 0-7H3.707l1.147 1.146a.5.5 0 1 1-.708.708l-2-2a.5.5 0 0 1 0-.708l2-2a.5.5 0 0 1 .708 0"
               clipRule="evenodd"
             />
-          </svg>
+          </motion.svg>
 
-          <div className="font-alte-haas pointer-events-none invisible absolute bottom-10 flex translate-y-2 flex-col items-center opacity-0 transition-[opacity,transform] delay-200 duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 motion-reduce:transition-none">
-            <div className="flex items-center gap-2 rounded-full border border-stone-800 bg-stone-950 px-3 py-2 text-[10px] whitespace-nowrap text-white">
+          <motion.div
+            {...getTooltipProps(hovered === "prev")}
+            className="font-alte-haas pointer-events-none absolute bottom-10 flex origin-bottom flex-col items-center will-change-transform"
+          >
+            <div className="flex items-center gap-2 rounded-full border border-stone-800 bg-stone-950 px-3 py-2 text-[10px] whitespace-nowrap text-white shadow-xl">
               Previous Quote
               <span className="inline-grid w-fit place-items-center rounded-lg border border-stone-700 bg-stone-800 px-2 py-1 font-mono">
                 ←
               </span>
             </div>
             <div className="h-2 w-2 -translate-y-1 rotate-45 rounded-br-sm border-r border-b border-stone-800 bg-stone-950 shadow-lg"></div>
-          </div>
-        </button>
+          </motion.div>
+        </motion.button>
 
-        <button
+        <motion.button
           onClick={() => canGoNext && setActiveButton("next")}
-          className="group relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 p-3 text-white shadow-lg transition duration-200 hover:scale-110 hover:bg-stone-800 focus:outline-none active:scale-95 disabled:pointer-events-none disabled:border-stone-700 disabled:text-stone-600 motion-reduce:transition-none motion-reduce:hover:scale-100 motion-reduce:active:scale-100"
+          onPointerEnter={(e) => {
+            if (e.pointerType !== "mouse") return;
+            setHovered("next");
+          }}
+          onPointerLeave={(e) => {
+            if (e.pointerType !== "mouse") return;
+            setHovered((v) => (v === "next" ? null : v));
+          }}
+          whileHover={
+            prefersReducedMotion || !canGoNext ? undefined : { scale: 1.1 }
+          }
+          whileTap={
+            prefersReducedMotion || !canGoNext ? undefined : { scale: 0.95 }
+          }
+          transition={buttonSpring}
+          className="group relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 p-3 text-white shadow-lg transition-colors duration-200 hover:bg-stone-800 focus:outline-none disabled:pointer-events-none disabled:border-stone-700 disabled:text-stone-600 motion-reduce:transition-none"
           disabled={!canGoNext}
         >
-          <svg
+          <motion.svg
             xmlns="http://www.w3.org/2000/svg"
             width="20"
             height="20"
             fill="none"
-            className={`transition-transform duration-200 ${!prefersReducedMotion && activeButton === "next" ? "scale-125" : ""}`}
             viewBox="0 0 15 15"
+            animate={
+              !prefersReducedMotion && activeButton === "next"
+                ? { scale: 1.25 }
+                : { scale: 1 }
+            }
+            transition={iconSpring}
+            className="will-change-transform"
           >
             <path
               fill="currentColor"
@@ -138,30 +229,50 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
               d="M8.146 3.146a.5.5 0 0 1 .708 0l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L11.293 8H2.5a.5.5 0 0 1 0-1h8.793L8.146 3.854a.5.5 0 0 1 0-.708"
               clipRule="evenodd"
             />
-          </svg>
+          </motion.svg>
 
-          <div className="font-alte-haas pointer-events-none invisible absolute bottom-10 flex translate-y-2 flex-col items-center opacity-0 transition-[opacity,transform] delay-200 duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 motion-reduce:transition-none">
-            <div className="flex items-center gap-2 rounded-full border border-stone-800 bg-stone-950 px-3 py-2 text-[10px] whitespace-nowrap text-white">
+          <motion.div
+            {...getTooltipProps(hovered === "next")}
+            className="font-alte-haas pointer-events-none absolute bottom-10 flex origin-bottom flex-col items-center will-change-transform"
+          >
+            <div className="flex items-center gap-2 rounded-full border border-stone-800 bg-stone-950 px-3 py-2 text-[10px] whitespace-nowrap text-white shadow-xl">
               Next Quote
               <span className="inline-grid w-fit place-items-center rounded-lg border border-stone-700 bg-stone-800 px-2 py-1 font-mono">
                 →
               </span>
             </div>
             <div className="h-2 w-2 -translate-y-1 rotate-45 rounded-br-sm border-r border-b border-stone-800 bg-stone-950 shadow-lg"></div>
-          </div>
-        </button>
+          </motion.div>
+        </motion.button>
 
-        <button
+        <motion.button
           onClick={() => setActiveButton("save")}
-          className="group relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 p-3 text-white shadow-lg transition duration-200 hover:scale-110 hover:bg-stone-800 focus:outline-none active:scale-95 motion-reduce:transition-none motion-reduce:hover:scale-100 motion-reduce:active:scale-100"
+          onPointerEnter={(e) => {
+            if (e.pointerType !== "mouse") return;
+            setHovered("save");
+          }}
+          onPointerLeave={(e) => {
+            if (e.pointerType !== "mouse") return;
+            setHovered((v) => (v === "save" ? null : v));
+          }}
+          whileHover={prefersReducedMotion ? undefined : { scale: 1.1 }}
+          whileTap={prefersReducedMotion ? undefined : { scale: 0.95 }}
+          transition={buttonSpring}
+          className="group relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 p-3 text-white shadow-lg transition-colors duration-200 hover:bg-stone-800 focus:outline-none motion-reduce:transition-none"
         >
-          <svg
+          <motion.svg
             xmlns="http://www.w3.org/2000/svg"
             width="20"
             height="20"
             fill="none"
-            className={`transition-transform duration-200 ${!prefersReducedMotion && activeButton === "save" ? "scale-125" : ""}`}
             viewBox="0 0 15 15"
+            animate={
+              !prefersReducedMotion && activeButton === "save"
+                ? { scale: 1.25 }
+                : { scale: 1 }
+            }
+            transition={iconSpring}
+            className="will-change-transform"
           >
             {isSaved ? (
               <path
@@ -178,17 +289,20 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
                 clip-rule="evenodd"
               ></path>
             )}
-          </svg>
-          <div className="font-alte-haas pointer-events-none invisible absolute bottom-10 flex translate-y-2 flex-col items-center opacity-0 transition-[opacity,transform] delay-200 duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 motion-reduce:transition-none">
-            <div className="flex items-center gap-2 rounded-full border border-stone-800 bg-stone-950 px-3 py-2 text-[10px] whitespace-nowrap text-white">
+          </motion.svg>
+          <motion.div
+            {...getTooltipProps(hovered === "save")}
+            className="font-alte-haas pointer-events-none absolute bottom-10 flex origin-bottom flex-col items-center will-change-transform"
+          >
+            <div className="flex items-center gap-2 rounded-full border border-stone-800 bg-stone-950 px-3 py-2 text-[10px] whitespace-nowrap text-white shadow-xl">
               {isSaved ? "Remove from Favorites" : "Save Quote"}
               <span className="inline-grid w-fit place-items-center rounded-lg border border-stone-700 bg-stone-800 px-2 py-1 font-mono">
                 S
               </span>
             </div>
             <div className="h-2 w-2 -translate-y-1 rotate-45 rounded-br-sm border-r border-b border-stone-800 bg-stone-950 shadow-lg"></div>
-          </div>
-        </button>
+          </motion.div>
+        </motion.button>
       </div>
     );
   },

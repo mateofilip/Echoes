@@ -185,6 +185,14 @@ export default function Welcome() {
     }
   };
 
+  // Apple: 500ms for text/button, materialize blur+scale together
+  const bgSpring = prefersReducedMotion
+    ? { duration: 0 }
+    : { type: "spring" as const, bounce: 0, duration: 0.5 };
+  const textSpring = prefersReducedMotion
+    ? { duration: 0 }
+    : { type: "spring" as const, bounce: 0, duration: 0.5 };
+
   return (
     <>
       <h1 className="font-redaction fixed top-0 right-0 left-0 mt-15 text-center text-4xl font-bold">
@@ -193,7 +201,14 @@ export default function Welcome() {
 
       <main className="flex h-dvh w-dvw flex-col justify-center px-5 sm:px-16 md:px-28 lg:px-52 xl:px-96 2xl:px-120">
         <div className="relative flex h-2/3 flex-col justify-center gap-10 p-10">
-          <div className="absolute inset-0 -z-10 overflow-hidden rounded-3xl p-4 blur-sm">
+          <motion.div
+            animate={{
+              filter: isAuthorHovered ? "blur(0px)" : "blur(8px)",
+              scale: isAuthorHovered ? 1.03 : 1,
+            }}
+            transition={bgSpring}
+            className="absolute inset-0 -z-10 origin-center overflow-hidden rounded-3xl p-4 will-change-transform transform-gpu"
+          >
             <div
               className={`absolute inset-0 h-full mask-[url(/mask.avif)] mask-contain mask-center mask-no-repeat ${maskFlips[flipIndex].mask}`}
             >
@@ -210,28 +225,36 @@ export default function Welcome() {
                   duration: prefersReducedMotion ? 0 : 0.2,
                   ease: [0.25, 0.1, 0.25, 1],
                 }}
-                className={`h-full w-full object-cover ${maskFlips[flipIndex].img}`}
+                className={`h-full w-full object-cover will-change-transform ${maskFlips[flipIndex].img}`}
                 loading="eager"
                 fetchPriority="high"
                 decoding="async"
               />
             </div>
-          </div>
+          </motion.div>
 
           <AnimatePresence mode="wait">
             <motion.p
               key={quotes[currentIndex]?.quote}
-              initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
+              initial={
+                prefersReducedMotion
+                  ? false
+                  : { opacity: 0, y: 14, filter: "blur(8px)", scale: 0.98 }
+              }
               animate={{
                 opacity: isTransitioning || isAuthorHovered ? 0 : 1,
-                y: 0,
+                y: isTransitioning || isAuthorHovered ? -8 : 0,
+                filter:
+                  isTransitioning || isAuthorHovered ? "blur(8px)" : "blur(0px)",
+                scale: isTransitioning || isAuthorHovered ? 0.98 : 1,
               }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{
-                duration: prefersReducedMotion ? 0 : 0.2,
-                ease: [0.25, 0.1, 0.25, 1],
-              }}
-              className="text-quote text-center text-shadow-lg/30"
+              exit={
+                prefersReducedMotion
+                  ? { opacity: 0 }
+                  : { opacity: 0, y: -10, filter: "blur(8px)", scale: 0.98 }
+              }
+              transition={textSpring}
+              className="text-quote text-center will-change-transform text-shadow-lg/30"
             >
               <span>«&nbsp;</span>
               {quotes[currentIndex]?.quote || "Loading..."}
@@ -244,16 +267,26 @@ export default function Welcome() {
               href={`https://www.google.com/search?q=${encodeURIComponent(quotes[currentIndex]?.author || "")}`}
               target="_blank"
               rel="noopener noreferrer"
-              initial={prefersReducedMotion ? false : { opacity: 0, x: 20 }}
-              animate={{ opacity: isTransitioning ? 0 : 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{
-                duration: prefersReducedMotion ? 0 : 0.2,
-                ease: [0.25, 0.1, 0.25, 1],
+              initial={
+                prefersReducedMotion ? false : { opacity: 0, x: 16, filter: "blur(6px)" }
+              }
+              animate={{
+                opacity: isTransitioning ? 0 : 1,
+                x: 0,
+                filter: "blur(0px)",
+                scale: 1,
               }}
+              exit={
+                prefersReducedMotion
+                  ? { opacity: 0 }
+                  : { opacity: 0, x: -12, filter: "blur(6px)" }
+              }
+              transition={textSpring}
               onMouseEnter={() => setIsAuthorHovered(true)}
               onMouseLeave={() => setIsAuthorHovered(false)}
-              className="ml-auto w-fit rounded-lg px-3 py-2 text-xl text-shadow-lg/30 hover:bg-stone-950/20 md:text-2xl"
+              onFocus={() => setIsAuthorHovered(true)}
+              onBlur={() => setIsAuthorHovered(false)}
+              className="ml-auto w-fit rounded-lg px-3 py-2 text-xl will-change-transform text-shadow-lg/30 hover:bg-stone-950/20 md:text-2xl"
             >
               —{" "}
               <span className="underline decoration-1">
