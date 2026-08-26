@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Drawer } from "vaul";
+import { Archive, X, Trash2 } from "lucide-react";
 import type { Quote } from "../types/Quote";
 
 const getQuoteKey = (quote: Quote) => `${quote.quote}\u0000${quote.author}`;
@@ -13,6 +14,7 @@ interface VaulDrawerProps {
   onRemoveQuote?: (quote: Quote) => void;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
+  hideTrigger?: boolean;
 }
 
 export default function VaulDrawer({
@@ -20,6 +22,7 @@ export default function VaulDrawer({
   onRemoveQuote,
   open,
   onOpenChange,
+  hideTrigger,
 }: VaulDrawerProps) {
   const [pendingRemovalKeys, setPendingRemovalKeys] = useState<Set<string>>(
     () => new Set(),
@@ -140,66 +143,55 @@ export default function VaulDrawer({
 
   return (
     <Drawer.Root direction="right" open={open} onOpenChange={onOpenChange}>
-      <Drawer.Trigger asChild>
-        <motion.button
-          type="button"
-          aria-label="View saved quotes"
-          onPointerEnter={(e) => {
-            if (e.pointerType !== "mouse") return;
-            setIsTooltipHovered(true);
-          }}
-          onPointerLeave={(e) => {
-            if (e.pointerType !== "mouse") return;
-            setIsTooltipHovered(false);
-          }}
-          whileHover={prefersReducedMotion ? undefined : { scale: 1.1 }}
-          whileTap={prefersReducedMotion ? undefined : { scale: 0.95 }}
-          transition={pressSpring}
-          className="group fixed bottom-4 left-4 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 text-white shadow-lg transition-[background-color,border-color,color] duration-200 hover:border-stone-700 hover:bg-stone-800 focus-visible:ring-2 focus-visible:ring-orange-200/70 focus-visible:ring-offset-2 focus-visible:ring-offset-stone-950 focus-visible:outline-none"
-        >
-          <svg
-            width="15"
-            height="15"
-            viewBox="0 0 15 15"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M3.30902 1C2.93025 1 2.58398 1.214 2.41459 1.55279L1.05279 4.27639C1.01807 4.34582 1 4.42238 1 4.5V13C1 13.5523 1.44772 14 2 14H13C13.5523 14 14 13.5523 14 13V4.5C14 4.42238 13.9819 4.34582 13.9472 4.27639L12.5854 1.55281C12.416 1.21403 12.0698 1.00003 11.691 1.00003L7.5 1.00001L3.30902 1ZM3.30902 2L7 2.00001V4H2.30902L3.30902 2ZM8 4V2.00002L11.691 2.00003L12.691 4H8ZM7.5 5H13V13H2V5H7.5ZM5.5 7C5.22386 7 5 7.22386 5 7.5C5 7.77614 5.22386 8 5.5 8H9.5C9.77614 8 10 7.77614 10 7.5C10 7.22386 9.77614 7 9.5 7H5.5Z"
-              fill="currentColor"
-              fill-rule="evenodd"
-              clip-rule="evenodd"
-            ></path>
-          </svg>
-          <motion.div
-            initial={false}
-            animate={{
-              opacity: isTooltipHovered ? 1 : 0,
-              scale: isTooltipHovered ? 1 : 0.92,
-              y: isTooltipHovered ? 0 : 4,
+      {!hideTrigger && (
+        <Drawer.Trigger asChild>
+          <motion.button
+            type="button"
+            aria-label="View saved quotes"
+            onPointerEnter={(e) => {
+              if (e.pointerType !== "mouse") return;
+              setIsTooltipHovered(true);
             }}
-            transition={
-              prefersReducedMotion
-                ? { duration: 0 }
-                : {
-                    type: "spring",
-                    bounce: 0,
-                    duration: 0.2,
-                    delay: isTooltipHovered ? 0.2 : 0,
-                  }
-            }
-            className="font-alte-haas pointer-events-none absolute bottom-10 -left-1 flex origin-bottom-left flex-col items-start will-change-transform"
+            onPointerLeave={(e) => {
+              if (e.pointerType !== "mouse") return;
+              setIsTooltipHovered(false);
+            }}
+            whileHover={prefersReducedMotion ? undefined : { scale: 1.1 }}
+            whileTap={prefersReducedMotion ? undefined : { scale: 0.95 }}
+            transition={pressSpring}
+            className="group fixed bottom-4 left-4 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 text-white shadow-lg transition-[background-color,border-color,color] duration-200 hover:border-stone-700 hover:bg-stone-800 focus-visible:ring-2 focus-visible:ring-orange-200/70 focus-visible:ring-offset-2 focus-visible:ring-offset-stone-950 focus-visible:outline-none"
           >
-            <div className="flex items-center gap-2 rounded-full border border-stone-800 bg-stone-950 px-3 py-2 text-[10px] whitespace-nowrap text-white shadow-xl">
-              Saved Quotes ({displayedQuotes.length})
-              <span className="float-end inline-grid w-fit place-items-center rounded-lg border border-stone-700 bg-stone-800 px-2 py-1 font-mono">
-                D
-              </span>
-            </div>
-            <div className="ml-5 h-2 w-2 -translate-y-1 rotate-45 rounded-br-sm border-r border-b border-stone-800 bg-stone-950 shadow-lg"></div>
-          </motion.div>
-        </motion.button>
-      </Drawer.Trigger>
+            <Archive size={18} strokeWidth={1.9} />
+            <motion.div
+              initial={false}
+              animate={{
+                opacity: isTooltipHovered ? 1 : 0,
+                scale: isTooltipHovered ? 1 : 0.92,
+                y: isTooltipHovered ? 0 : 4,
+              }}
+              transition={
+                prefersReducedMotion
+                  ? { duration: 0 }
+                  : {
+                      type: "spring",
+                      bounce: 0,
+                      duration: 0.2,
+                      delay: isTooltipHovered ? 0.2 : 0,
+                    }
+              }
+              className="font-alte-haas pointer-events-none absolute bottom-10 -left-1 flex origin-bottom-left flex-col items-start will-change-transform"
+            >
+              <div className="flex items-center gap-2 rounded-full border border-stone-800 bg-stone-950 px-3 py-2 text-[10px] whitespace-nowrap text-white shadow-xl">
+                Saved Quotes ({displayedQuotes.length})
+                <span className="float-end inline-grid w-fit place-items-center rounded-lg border border-stone-700 bg-stone-800 px-2 py-1 font-mono">
+                  D
+                </span>
+              </div>
+              <div className="ml-5 h-2 w-2 -translate-y-1 rotate-45 rounded-br-sm border-r border-b border-stone-800 bg-stone-950 shadow-lg"></div>
+            </motion.div>
+          </motion.button>
+        </Drawer.Trigger>
+      )}
       <Drawer.Portal>
         <Drawer.Overlay className="fixed inset-0 bg-stone-950/80 data-[state=closed]:![animation-duration:200ms] data-[state=open]:![animation-duration:200ms] motion-reduce:![animation-duration:0ms]" />
         <Drawer.Content className="fixed top-4 right-4 bottom-4 z-10 flex w-[calc(100vw-2rem)] overflow-x-hidden outline-none data-[state=closed]:![animation-duration:200ms] data-[state=open]:![animation-duration:200ms] motion-reduce:![animation-duration:0ms] sm:w-[420px]">
@@ -224,20 +216,7 @@ export default function VaulDrawer({
                     aria-label="Close saved quotes"
                     className="inline-flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-stone-800 text-stone-400 transition-[background-color,border-color,color,transform] duration-200 hover:border-stone-700 hover:bg-stone-800 hover:text-orange-100 focus-visible:ring-2 focus-visible:ring-orange-200/70 focus-visible:outline-none active:scale-95"
                   >
-                    <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      aria-hidden="true"
-                    >
-                      <path d="M18 6 6 18" />
-                      <path d="m6 6 12 12" />
-                    </svg>
+                    <X size={16} strokeWidth={1.9} aria-hidden="true" />
                   </button>
                 </Drawer.Close>
               </div>
@@ -308,21 +287,7 @@ export default function VaulDrawer({
                             aria-label={`Remove quote by ${quote.author}`}
                             className="inline-flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full border border-stone-800 text-stone-500 transition-[background-color,border-color,color,transform] delay-0 duration-200 ease-out hover:border-red-400/30 hover:bg-red-400/10 hover:text-red-300 focus-visible:ring-2 focus-visible:ring-orange-200/70 focus-visible:outline-none active:scale-95"
                           >
-                            <svg
-                              width="15"
-                              height="15"
-                              viewBox="0 0 15 15"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                              aria-hidden="true"
-                            >
-                              <path
-                                d="M5.5 1C5.22386 1 5 1.22386 5 1.5C5 1.77614 5.22386 2 5.5 2H9.5C9.77614 2 10 1.77614 10 1.5C10 1.22386 9.77614 1 9.5 1H5.5ZM3 3.5C3 3.22386 3.22386 3 3.5 3H5H10H11.5C11.7761 3 12 3.22386 12 3.5C12 3.77614 11.7761 4 11.5 4H11V12C11 12.5523 10.5523 13 10 13H5C4.44772 13 4 12.5523 4 12V4L3.5 4C3.22386 4 3 3.77614 3 3.5ZM5 4H10V12H5V4Z"
-                                fill="currentColor"
-                                fillRule="evenodd"
-                                clipRule="evenodd"
-                              ></path>
-                            </svg>
+                            <Trash2 size={14} strokeWidth={1.9} aria-hidden="true" />
                           </button>
                         </div>
                       </motion.article>

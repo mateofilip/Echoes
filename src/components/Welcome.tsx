@@ -319,11 +319,14 @@ export default function Welcome() {
           isSaved={isCurrentQuoteSaved}
           canGoPrevious={currentIndex < quotes.length - 1}
           canGoNext={currentIndex > 0}
+          drawerCount={savedQuotes.length}
+          onToggleDrawer={() => setIsDrawerOpen((v) => !v)}
+          onToggleStack={() => setIsStackOpen((v) => !v)}
         />
       </main>
 
-      <StackInfo open={isStackOpen} onOpenChange={setIsStackOpen} />
-      <VaulDrawer savedQuotes={savedQuotes} onRemoveQuote={removeQuote} open={isDrawerOpen} onOpenChange={setIsDrawerOpen} />
+      <StackInfo open={isStackOpen} onOpenChange={setIsStackOpen} hideTrigger />
+      <VaulDrawer savedQuotes={savedQuotes} onRemoveQuote={removeQuote} open={isDrawerOpen} onOpenChange={setIsDrawerOpen} hideTrigger />
       <FirefoxNotice />
     </>
   );

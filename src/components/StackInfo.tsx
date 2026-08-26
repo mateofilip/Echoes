@@ -1,12 +1,14 @@
 import { useState, useEffect, useRef } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { Info, X } from "lucide-react";
 
 interface StackInfoProps {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
+  hideTrigger?: boolean;
 }
 
-export default function StackInfo({ open, onOpenChange }: StackInfoProps) {
+export default function StackInfo({ open, onOpenChange, hideTrigger }: StackInfoProps) {
   const [internalOpen, setInternalOpen] = useState(false);
   const [isTooltipHovered, setIsTooltipHovered] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
@@ -72,65 +74,53 @@ export default function StackInfo({ open, onOpenChange }: StackInfoProps) {
 
   return (
     <>
-      <motion.button
-        onClick={handleOpen}
-        onPointerEnter={(e) => {
-          if (e.pointerType !== "mouse") return;
-          setIsTooltipHovered(true);
-        }}
-        onPointerLeave={(e) => {
-          if (e.pointerType !== "mouse") return;
-          setIsTooltipHovered(false);
-        }}
-        whileHover={prefersReducedMotion ? undefined : { scale: 1.1 }}
-        whileTap={prefersReducedMotion ? undefined : { scale: 0.95 }}
-        transition={pressSpring}
-        className="group fixed right-4 bottom-4 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 text-white shadow-lg transition-colors duration-200 hover:bg-stone-800 focus:outline-none motion-reduce:transition-none"
-        aria-label="View Tech Stack"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <circle cx="12" cy="12" r="10" />
-          <path d="M12 16v-4" />
-          <path d="M12 8h.01" />
-        </svg>
-        <motion.div
-          initial={false}
-          animate={{
-            opacity: isTooltipHovered ? 1 : 0,
-            scale: isTooltipHovered ? 1 : 0.92,
-            y: isTooltipHovered ? 0 : 4,
+      {!hideTrigger && (
+        <motion.button
+          onClick={handleOpen}
+          onPointerEnter={(e) => {
+            if (e.pointerType !== "mouse") return;
+            setIsTooltipHovered(true);
           }}
-          transition={
-            prefersReducedMotion
-              ? { duration: 0 }
-              : {
-                  type: "spring",
-                  bounce: 0,
-                  duration: 0.2,
-                  delay: isTooltipHovered ? 0.2 : 0,
-                }
-          }
-          className="font-alte-haas pointer-events-none absolute -right-1 bottom-10 flex origin-bottom-right flex-col items-end will-change-transform"
+          onPointerLeave={(e) => {
+            if (e.pointerType !== "mouse") return;
+            setIsTooltipHovered(false);
+          }}
+          whileHover={prefersReducedMotion ? undefined : { scale: 1.1 }}
+          whileTap={prefersReducedMotion ? undefined : { scale: 0.95 }}
+          transition={pressSpring}
+          className="group fixed right-4 bottom-4 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-stone-800 bg-stone-900 text-white shadow-lg transition-colors duration-200 hover:bg-stone-800 focus:outline-none motion-reduce:transition-none"
+          aria-label="View Tech Stack"
         >
-          <div className="flex items-center gap-2 rounded-full border border-stone-800 bg-stone-950 px-3 py-2 text-[10px] whitespace-nowrap text-white shadow-xl">
-            Tech Stack
-            <span className="float-end inline-grid w-fit place-items-center rounded-lg border border-stone-700 bg-stone-800 px-2 py-1 font-mono">
-              I
-            </span>
-          </div>
-          <div className="mr-5 h-2 w-2 -translate-y-1 rotate-45 rounded-br-sm border-r border-b border-stone-800 bg-stone-950 shadow-lg"></div>
-        </motion.div>
-      </motion.button>
+          <Info size={20} strokeWidth={1.9} />
+          <motion.div
+            initial={false}
+            animate={{
+              opacity: isTooltipHovered ? 1 : 0,
+              scale: isTooltipHovered ? 1 : 0.92,
+              y: isTooltipHovered ? 0 : 4,
+            }}
+            transition={
+              prefersReducedMotion
+                ? { duration: 0 }
+                : {
+                    type: "spring",
+                    bounce: 0,
+                    duration: 0.2,
+                    delay: isTooltipHovered ? 0.2 : 0,
+                  }
+            }
+            className="font-alte-haas pointer-events-none absolute -right-1 bottom-10 flex origin-bottom-right flex-col items-end will-change-transform"
+          >
+            <div className="flex items-center gap-2 rounded-full border border-stone-800 bg-stone-950 px-3 py-2 text-[10px] whitespace-nowrap text-white shadow-xl">
+              Tech Stack
+              <span className="float-end inline-grid w-fit place-items-center rounded-lg border border-stone-700 bg-stone-800 px-2 py-1 font-mono">
+                I
+              </span>
+            </div>
+            <div className="mr-5 h-2 w-2 -translate-y-1 rotate-45 rounded-br-sm border-r border-b border-stone-800 bg-stone-950 shadow-lg"></div>
+          </motion.div>
+        </motion.button>
+      )}
 
       {/* Backdrop — dims to focus, separate from modal so exit isn't doubled */}
       <AnimatePresence>
@@ -175,22 +165,9 @@ export default function StackInfo({ open, onOpenChange }: StackInfoProps) {
               <h2 className="text-xl font-bold tracking-tight text-white">Tech Stack</h2>
               <button
                 onClick={handleClose}
-                className="cursor-pointer rounded-full p-1 text-white transition duration-200 hover:bg-stone-800 active:scale-95"
+                className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-full text-white transition duration-200 hover:bg-stone-800 active:scale-95"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M18 6 6 18" />
-                  <path d="m6 6 12 12" />
-                </svg>
+                <X size={18} strokeWidth={1.9} />
               </button>
             </div>
             <ul className="space-y-3">

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
+import { X, Copy, Check } from "lucide-react";
 
 export default function FirefoxNotice() {
   const [visible, setVisible] = useState(false);
@@ -70,17 +71,14 @@ export default function FirefoxNotice() {
                 <h2 id="firefox-title" className="text-base font-semibold leading-6 tracking-tight text-white">
                   Heads up!
                 </h2>
-                <button
-                  type="button"
-                  onClick={() => setVisible(false)}
-                  aria-label="Close"
-                  className="flex h-7 w-7 shrink-0 cursor-pointer items-center justify-center rounded-full text-stone-500 transition duration-200 hover:bg-stone-900 hover:text-stone-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-700"
-                >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                    <path d="M18 6 6 18" />
-                    <path d="m6 6 12 12" />
-                  </svg>
-                </button>
+              <button
+                type="button"
+                onClick={() => setVisible(false)}
+                aria-label="Close"
+                className="flex h-7 w-7 shrink-0 cursor-pointer items-center justify-center rounded-full text-stone-500 transition duration-200 hover:bg-stone-900 hover:text-stone-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-700"
+              >
+                <X size={14} strokeWidth={2} aria-hidden="true" />
+              </button>
               </div>
 
               <div className="mt-2 text-sm leading-6 text-stone-300">
@@ -116,25 +114,20 @@ export default function FirefoxNotice() {
                         transition={overlayTransition}
                         className="inline-flex items-center gap-1.5"
                       >
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                          <path d="M5 12.5 10 17l9-9" />
-                        </svg>
-                        Copied!
-                      </motion.span>
-                    ) : (
-                      <motion.span
-                        key="copy"
-                        initial={prefersReducedMotion ? false : { opacity: 0, y: 4 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: -4 }}
-                        transition={overlayTransition}
-                        className="inline-flex items-center gap-1.5"
-                      >
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                          <rect x="9" y="9" width="10" height="10" rx="2" />
-                          <path d="M15 9V7a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2" />
-                        </svg>
-                        Copy link
+                      <Check size={14} strokeWidth={2.2} aria-hidden="true" />
+                      Copied!
+                    </motion.span>
+                  ) : (
+                    <motion.span
+                      key="copy"
+                      initial={prefersReducedMotion ? false : { opacity: 0, y: 4 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: -4 }}
+                      transition={overlayTransition}
+                      className="inline-flex items-center gap-1.5"
+                    >
+                      <Copy size={14} strokeWidth={1.7} aria-hidden="true" />
+                      Copy link
                       </motion.span>
                     )}
                   </AnimatePresence>
