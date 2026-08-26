@@ -4,6 +4,7 @@ import { supabase } from "../db/supabase";
 import StackInfo from "./StackInfo.tsx";
 import QuoteToolbar, { type ToolbarRef } from "./Toolbar.tsx";
 import VaulDrawer from "./Drawer.tsx";
+import FirefoxNotice from "./FirefoxNotice.tsx";
 
 import {
   motion,
@@ -323,6 +324,7 @@ export default function Welcome() {
 
       <StackInfo open={isStackOpen} onOpenChange={setIsStackOpen} />
       <VaulDrawer savedQuotes={savedQuotes} onRemoveQuote={removeQuote} open={isDrawerOpen} onOpenChange={setIsDrawerOpen} />
+      <FirefoxNotice />
     </>
   );
 }
