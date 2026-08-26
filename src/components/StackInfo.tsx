@@ -88,7 +88,7 @@ export default function StackInfo({ open, onOpenChange }: StackInfoProps) {
           <path d="M12 16v-4" />
           <path d="M12 8h.01" />
         </svg>
-        <div className="Geist pointer-events-none visible absolute -right-1 bottom-10 flex translate-y-2 flex-col items-end opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-hover:delay-300">
+        <div className="font-alte-haas pointer-events-none visible absolute -right-1 bottom-10 flex translate-y-2 flex-col items-end opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-hover:delay-300">
           <div className="flex items-center gap-2 rounded-full border border-stone-800 bg-stone-950 px-3 py-2 text-[10px] whitespace-nowrap text-white">
             Tech Stack
             <span className="float-end inline-grid w-fit place-items-center rounded-lg border border-stone-700 bg-stone-800 px-2 py-1 font-mono">
@@ -101,7 +101,7 @@ export default function StackInfo({ open, onOpenChange }: StackInfoProps) {
 
       {isOpen && (
         <div
-          className={`Geist fixed inset-0 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm transition-opacity duration-200 ${
+          className={`font-alte-haas fixed inset-0 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm transition-opacity duration-200 ${
             isAnimating ? "opacity-100" : "opacity-0"
           }`}
         >

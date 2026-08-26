@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+@theme {
+  --font-alte-haas: "Alte Haas Grotesk", Arial, system-ui, sans-serif;
+}
+
 @font-face {
   font-family: "Redaction";
   src: url("/Redaction-Bold.woff2") format("woff2");
@@ -8,9 +12,17 @@
   font-display: swap;
 }
 @font-face {
-  font-family: "Geist";
-  src: url("/Geist.ttf") format("truetype");
-  font-weight: normal;
+  font-family: "Alte Haas Grotesk";
+  src: url("/AlteHaasGroteskRegular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Alte Haas Grotesk";
+  src: url("/AlteHaasGroteskBold.ttf") format("truetype");
+  font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
@@ -25,10 +37,6 @@
 
 .Redaction {
   font-family: "Redaction", Times, serif;
-}
-
-.Geist {
-  font-family: "Geist", Times, Arial, system-ui, sans-serif;
 }
 
 .Prata {

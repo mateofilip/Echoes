@@ -81,7 +81,7 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
               clipRule="evenodd"
             />
           </motion.svg>
-          <div className="Geist pointer-events-none invisible absolute bottom-10 flex translate-y-2 flex-col items-center opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-hover:delay-300">
+          <div className="font-alte-haas pointer-events-none invisible absolute bottom-10 flex translate-y-2 flex-col items-center opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-hover:delay-300">
             <div className="flex items-center gap-2 rounded-full border border-stone-800 bg-stone-950 px-3 py-2 text-[10px] whitespace-nowrap text-white">
               New Quote
               <span className="inline-grid w-fit place-items-center rounded-lg border border-stone-700 bg-stone-800 px-2 py-1 font-mono">
@@ -118,7 +118,7 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
             />
           </motion.svg>
 
-          <div className="Geist pointer-events-none invisible absolute bottom-10 flex translate-y-2 flex-col items-center opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-hover:delay-300">
+          <div className="font-alte-haas pointer-events-none invisible absolute bottom-10 flex translate-y-2 flex-col items-center opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-hover:delay-300">
             <div className="flex items-center gap-2 rounded-full border border-stone-800 bg-stone-950 px-3 py-2 text-[10px] whitespace-nowrap text-white">
               Previous Quote
               <span className="inline-grid w-fit place-items-center rounded-lg border border-stone-700 bg-stone-800 px-2 py-1 font-mono">
@@ -153,7 +153,7 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
             />
           </motion.svg>
 
-          <div className="Geist pointer-events-none invisible absolute bottom-10 flex translate-y-2 flex-col items-center opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-hover:delay-300">
+          <div className="font-alte-haas pointer-events-none invisible absolute bottom-10 flex translate-y-2 flex-col items-center opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-hover:delay-300">
             <div className="flex items-center gap-2 rounded-full border border-stone-800 bg-stone-950 px-3 py-2 text-[10px] whitespace-nowrap text-white">
               Next Quote
               <span className="inline-grid w-fit place-items-center rounded-lg border border-stone-700 bg-stone-800 px-2 py-1 font-mono">
@@ -197,7 +197,7 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
               ></path>
             )}
           </motion.svg>
-          <div className="Geist pointer-events-none invisible absolute bottom-10 flex translate-y-2 flex-col items-center opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-hover:delay-300">
+          <div className="font-alte-haas pointer-events-none invisible absolute bottom-10 flex translate-y-2 flex-col items-center opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-hover:delay-300">
             <div className="flex items-center gap-2 rounded-full border border-stone-800 bg-stone-950 px-3 py-2 text-[10px] whitespace-nowrap text-white">
               {isSaved ? "Remove from Favorites" : "Save Quote"}
               <span className="inline-grid w-fit place-items-center rounded-lg border border-stone-700 bg-stone-800 px-2 py-1 font-mono">
