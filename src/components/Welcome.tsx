@@ -317,6 +317,7 @@ export default function Welcome() {
           drawerCount={savedQuotes.length}
           onToggleDrawer={() => setIsDrawerOpen((v) => !v)}
           onToggleStack={() => setIsStackOpen((v) => !v)}
+          hidden={isDrawerOpen}
         />
       </main>
 

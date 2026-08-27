@@ -13,6 +13,7 @@ interface QuoteToolbarProps {
   drawerCount?: number;
   onToggleDrawer?: () => void;
   onToggleStack?: () => void;
+  hidden?: boolean;
 }
 
 interface ToolbarRef {
@@ -35,6 +36,7 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
       drawerCount = 0,
       onToggleDrawer,
       onToggleStack,
+      hidden = false,
     },
     ref,
   ) => {
@@ -110,11 +112,17 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
       <div className="fixed bottom-4 left-1/2 z-40 flex -translate-x-1/2 justify-center">
         <motion.div
           initial={prefersReducedMotion ? false : { opacity: 0, y: 12, scale: 0.96, filter: "blur(8px)" }}
-          animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+          animate={
+            hidden
+              ? { opacity: 0, y: 12, scale: 0.96, filter: "blur(8px)" }
+              : { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }
+          }
           transition={pillSpring}
           className="flex items-center gap-1 rounded-full border border-stone-800 bg-stone-900 p-2 shadow-[0_16px_40px_-12px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.06)] will-change-transform"
+          style={{ pointerEvents: hidden ? "none" : "auto" }}
           role="toolbar"
           aria-label="Quote actions"
+          aria-hidden={hidden}
         >
           {/* Drawer — BookMarked */}
           <motion.button
