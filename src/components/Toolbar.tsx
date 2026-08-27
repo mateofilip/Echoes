@@ -278,7 +278,7 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
             <motion.span
               animate={
                 !prefersReducedMotion && activeButton === "save"
-                  ? { scale: 1.22, y: -2, rotate: -4 }
+                  ? { scale: 1.22, y: -2, rotate: isSaved ? 4 : -4 }
                   : { scale: 1, y: 0, rotate: 0 }
               }
               transition={iconPopSpring}

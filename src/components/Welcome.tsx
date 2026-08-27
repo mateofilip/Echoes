@@ -14,6 +14,7 @@ import {
   useSpring,
   useTransform,
 } from "motion/react";
+import { ArrowUpRight } from "lucide-react";
 
 const STORAGE_KEY = "echoes-saved-quotes";
 
@@ -77,7 +78,6 @@ export default function Welcome() {
   const prefersReducedMotion = useReducedMotion();
   const transitionTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Apple: 1:1 tracking — parallax follows pointer, decomposed X/Y springs
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
   const springX = useSpring(mx, { stiffness: 90, damping: 22, mass: 0.6 });
@@ -184,7 +184,6 @@ export default function Welcome() {
     }
   };
 
-  // Apple: critically damped springs, interruptible from presentation value
   const bgSpring = prefersReducedMotion
     ? { duration: 0 }
     : { type: "spring" as const, bounce: 0, duration: 0.5 };
@@ -199,15 +198,13 @@ export default function Welcome() {
       </h1>
 
       <main className="flex h-dvh w-dvw flex-col justify-center px-5 sm:px-16 md:px-28 lg:px-52 xl:px-96 2xl:px-120">
-        {/* Reading this as: editorial quote experience for reflective readers, with a calm editorial language, leaning toward Tailwind + motion */}
         <div
           ref={cardRef}
           onPointerMove={handlePointerMove}
           onPointerLeave={handlePointerLeaveCard}
           className="relative flex h-2/3 items-center justify-center p-10"
         >
-          {/* Background image — 3xl blur, materialize — no p-4 to avoid blur fringing at rounded edge */}
-          <div className="absolute inset-0 -z-10">
+          <div className="absolute -inset-2 -z-10">
             <motion.div
               animate={{
                 filter: isAuthorHovered ? "blur(0px)" : "blur(64px)",
@@ -285,18 +282,38 @@ export default function Welcome() {
                 onPointerLeave={() => setIsAuthorHovered(false)}
                 onFocus={() => setIsAuthorHovered(true)}
                 onBlur={() => setIsAuthorHovered(false)}
-                className="group/author absolute top-[calc(100%+1.5rem)] right-0 inline-flex items-center gap-2 will-change-transform text-shadow-lg/30 focus-visible:outline-none"
+                className="group/author absolute top-[calc(100%+2rem)] right-0 inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 will-change-transform text-shadow-lg/30 focus-visible:outline-none cursor-pointer"
               >
-                <span className="text-xl leading-none md:text-2xl" aria-hidden>
+                <AnimatePresence>
+                  {isAuthorHovered && (
+                    <motion.div
+                      key="highlight"
+                      initial={{ clipPath: "inset(0 100% 0 0)", opacity: 0, filter: "blur(4px)" }}
+                      animate={{ clipPath: "inset(0 0% 0 0)", opacity: 1, filter: "blur(0px)" }}
+                      exit={{ clipPath: "inset(0 100% 0 0)", opacity: 0, filter: "blur(4px)" }}
+                      transition={prefersReducedMotion ? { duration: 0 } : { type: "spring", bounce: 0, duration: 0.4 }}
+                      className="pointer-events-none absolute -inset-2 -z-10 bg-black mask-[url(/022.png)] mask-cover mask-center mask-no-repeat will-change-[clip-path,filter,opacity]"
+                    />
+                  )}
+                </AnimatePresence>
+                <span className="text-xl leading-none tracking-tight opacity-60 md:text-2xl" aria-hidden>
                   —
                 </span>
-                <span className="relative text-xl leading-none tracking-[-0.01em] font-medium md:text-2xl">
+                <span className="relative inline-flex items-center gap-1.5 text-xl leading-none tracking-[-0.01em] font-medium md:text-2xl">
                   <span>{quotes[currentIndex]?.author || "Loading..."}</span>
                   <motion.span
+                    animate={{ x: isAuthorHovered ? 2 : 0, y: isAuthorHovered ? -2 : 0 }}
+                    transition={textSpring}
+                    className="flex will-change-transform drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)]"
                     aria-hidden
-                    className="absolute -bottom-1 left-0 h-px w-full origin-left bg-current"
-                    initial={{ scaleX: 0 }}
-                    animate={{ scaleX: isAuthorHovered ? 1 : 0 }}
+                  >
+                    <ArrowUpRight size={12} strokeWidth={1.8} />
+                  </motion.span>
+                  <motion.span
+                    aria-hidden
+                    className="pointer-events-none absolute -bottom-1 left-0 h-px w-full origin-left bg-current shadow-[0_1px_4px_rgba(0,0,0,0.35)]"
+                    initial={false}
+                    animate={{ scaleX: isAuthorHovered ? 1 : 0, opacity: isAuthorHovered ? 1 : 0 }}
                     transition={textSpring}
                   />
                 </span>
