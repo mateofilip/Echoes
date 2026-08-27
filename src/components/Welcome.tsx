@@ -300,7 +300,7 @@ export default function Welcome() {
                   —
                 </span>
                 <span className="relative inline-flex items-center gap-1.5 text-xl leading-none tracking-[-0.01em] font-medium md:text-2xl">
-                  <span>{quotes[currentIndex]?.author || "Loading..."}</span>
+                  <span className="text-xl">{quotes[currentIndex]?.author || "Loading..."}</span>
                   <motion.span
                     animate={{ x: isAuthorHovered ? 2 : 0, y: isAuthorHovered ? -2 : 0 }}
                     transition={textSpring}

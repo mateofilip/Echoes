@@ -91,7 +91,7 @@ const QuoteToolbar = forwardRef<ToolbarRef, QuoteToolbarProps>(
       : { type: "spring" as const, bounce: 0, duration: 0.2 };
     const iconPopSpring = prefersReducedMotion
       ? { duration: 0 }
-      : { type: "spring" as const, bounce: 0.22, duration: 0.45 };
+      : { type: "spring" as const, bounce: 0.22, duration: 0.5 };
     const pillSpring = prefersReducedMotion
       ? { duration: 0 }
       : { type: "spring" as const, bounce: 0, duration: 0.2 };
