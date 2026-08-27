@@ -33,27 +33,22 @@ export default function Welcome() {
   const toggleSaveQuote = () => {
     const currentQuote = quotes[currentIndex];
     if (!currentQuote) return;
-    const isAlreadySaved = savedQuotes.some(
-      (q) => q.quote === currentQuote.quote && q.author === currentQuote.author,
-    );
-    let newSaved: Quote[];
-    if (isAlreadySaved) {
-      newSaved = savedQuotes.filter(
-        (q) => !(q.quote === currentQuote.quote && q.author === currentQuote.author),
-      );
-    } else {
-      newSaved = [...savedQuotes, currentQuote];
-    }
-    setSavedQuotes(newSaved);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(newSaved));
+    setSavedQuotes((prev) => {
+      const isAlreadySaved = prev.some((q) => q.quote === currentQuote.quote && q.author === currentQuote.author);
+      const newSaved = isAlreadySaved
+        ? prev.filter((q) => !(q.quote === currentQuote.quote && q.author === currentQuote.author))
+        : [...prev, currentQuote];
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(newSaved));
+      return newSaved;
+    });
   };
 
   const removeQuote = (quote: Quote) => {
-    const newSaved = savedQuotes.filter(
-      (q) => !(q.quote === quote.quote && q.author === quote.author),
-    );
-    setSavedQuotes(newSaved);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(newSaved));
+    setSavedQuotes((prev) => {
+      const newSaved = prev.filter((q) => !(q.quote === quote.quote && q.author === quote.author));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(newSaved));
+      return newSaved;
+    });
   };
 
   const isCurrentQuoteSaved = quotes[currentIndex]
@@ -164,7 +159,7 @@ export default function Welcome() {
       if (!data) throw new Error(error?.message || "Unknown error");
       const isDuplicate = quotes.some((q) => q.quote === data.quote && q.author === data.author);
       if (isDuplicate) return getQuote();
-      setQuotes([{ quote: data.quote, author: data.author }, ...quotes]);
+      setQuotes((prev) => [{ quote: data.quote, author: data.author }, ...prev]);
       setCurrentIndex(0);
       scheduleTransitionEnd();
     } catch (error) {
