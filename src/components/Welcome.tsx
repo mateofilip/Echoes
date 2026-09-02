@@ -128,6 +128,7 @@ export default function Welcome() {
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.repeat) return;
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
       if (e.key === "ArrowLeft") {
         e.preventDefault();
         toolbarRef.current?.triggerPrev();
