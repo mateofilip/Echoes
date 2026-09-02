@@ -297,7 +297,7 @@ export default function Welcome() {
                     />
                   )}
                 </AnimatePresence>
-                <span className="text-xl leading-none tracking-tight opacity-60 md:text-2xl" aria-hidden>
+                <span className="text-xl leading-none tracking-tight [text-shadow:0_1px_3px_rgba(0,0,0,0.7)] md:text-2xl" aria-hidden>
                   —
                 </span>
                 <span className="relative inline-flex items-center gap-1.5 text-xl leading-none tracking-[-0.01em] font-medium md:text-2xl">
@@ -305,7 +305,7 @@ export default function Welcome() {
                   <motion.span
                     animate={{ x: isAuthorHovered ? 2 : 0, y: isAuthorHovered ? -2 : 0 }}
                     transition={textSpring}
-                    className="flex will-change-transform drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)]"
+                    className="flex will-change-transform [text-shadow:0_1px_3px_rgba(0,0,0,0.7)]"
                     aria-hidden
                   >
                     <ArrowUpRight size={12} strokeWidth={1.8} />
