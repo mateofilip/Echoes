@@ -31,6 +31,8 @@ export default function Welcome() {
     return [];
   });
 
+  const authorSlug = quotes[currentIndex]?.author?.toLowerCase().replace(/\s+/g, "-") || "unknown";
+
   const toggleSaveQuote = () => {
     const currentQuote = quotes[currentIndex];
     if (!currentQuote) return;
@@ -221,9 +223,9 @@ export default function Welcome() {
               >
                 <motion.img
                   key={`${quotes[currentIndex]?.quote}-${quotes[currentIndex]?.author}`}
-                  src={`/authors/${quotes[currentIndex]?.author?.toLowerCase().replace(/\s+/g, "-")}-placeholder.avif`}
+                  src={`/authors/${authorSlug}-placeholder.avif`}
                   onLoad={(e) => {
-                    e.currentTarget.src = `/authors/${quotes[currentIndex]?.author?.toLowerCase().replace(/\s+/g, "-")}.avif`;
+                    e.currentTarget.src = `/authors/${authorSlug}.avif`;
                   }}
                   alt={quotes[currentIndex]?.author || "Author"}
                   initial={prefersReducedMotion ? false : { opacity: 0 }}
